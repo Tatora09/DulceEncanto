@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diseña tu Postre Personalizado | Dulce Encanto</title>
+  <meta name="description" content="Formulario interactivo para diseñar y cotizar tortas y postres personalizados en Dulce Encanto. Elige bizcocho, rellenos, porciones y temática.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra de Anuncios -->
+  <div class="top-announcement-bar">
+    ⏱️ <strong>Regla de Preparación:</strong> Todo postre personalizado requiere al menos 72 horas (3 días) de anticipación para garantizar calidad artesanal.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight active">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div class="section-header">
+      <span class="section-tag">Taller Creativo Dulce Encanto</span>
+      <h1>Diseña y Cotiza tu Postre a Medida</h1>
+      <p>Cuéntanos tu idea, elige sabores, rellenos e ingresa los datos para calcular el presupuesto en tiempo real.</p>
+    </div>
+
+    <div class="custom-builder-layout">
+      
+      <!-- Columna Izquierda: Formulario Interactivo (RF-04 / Sec 4.1) -->
+      <section class="form-card" id="form-section">
+        <div class="form-header-box">
+          <h2 style="font-size: 1.45rem; color: var(--color-texto-principal); margin: 0;">
+            🎂 Especificaciones de tu Pedido
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--color-texto-mutado); margin-top: 0.3rem;">
+            Campos marcados con <span class="required-star">*</span> son obligatorios.
+          </p>
+        </div>
+
+        <form id="customCakeForm" novalidate>
+          
+          <!-- Datos de Contacto del Solicitante -->
+          <div style="background-color: var(--color-crema-suave); border: 1px solid var(--color-borde-suave); border-radius: var(--radio-md); padding: 1.25rem; margin-bottom: 1.75rem;">
+            <h3 style="font-size: 1.05rem; margin-bottom: 0.75rem; color: var(--color-rosado-fuerte);">
+              👤 Datos del Solicitante
+            </h3>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="clienteNombre">Nombre Completo <span class="required-star">*</span></label>
+                <input type="text" id="clienteNombre" placeholder="Ej: Marcela González" required>
+              </div>
+              <div class="form-group">
+                <label for="clienteEmail">Correo Electrónico <span class="required-star">*</span></label>
+                <input type="email" id="clienteEmail" placeholder="ejemplo@gmail.com o @duoc.cl" required>
+                <span class="form-hint">Permitidos: @duoc.cl, @profesor.duoc.cl, @gmail.com</span>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="clienteTelefono">Teléfono de Contacto (WhatsApp)</label>
+              <input type="tel" id="clienteTelefono" placeholder="+56 9 1234 5678">
+            </div>
+          </div>
+
+          <!-- Tipo de Postre / Base (Select obligatorio) -->
+          <div class="form-group">
+            <label for="tipoPostre">Tipo de Postre / Base <span class="required-star">*</span></label>
+            <select id="tipoPostre" required>
+              <option value="">-- Seleccione una base --</option>
+              <option value="Torta Tradicional">Torta Tradicional</option>
+              <option value="Torta en Fondant">Torta en Fondant (Diseño 3D)</option>
+              <option value="Cupcakes Temáticos">Cupcakes Temáticos</option>
+              <option value="Pie / Tartaleta">Pie / Tartaleta</option>
+              <option value="Mesa de Dulces">Mesa de Dulces Completa</option>
+            </select>
+          </div>
+
+          <!-- Número de Porciones (Entero >= 6 y <= 150) -->
+          <div class="form-group">
+            <label for="numeroPorciones">Número de Porciones / Personas <span class="required-star">*</span></label>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              <input type="number" id="numeroPorciones" min="6" max="150" step="1" value="20" required style="width: 140px;">
+              <span class="form-hint" style="margin: 0;">Rango permitido: Entero entre <strong>6 y 150 porciones</strong>.</span>
+            </div>
+          </div>
+
+          <!-- Sabor del Bizcocho y Relleno Principal (Selects obligatorios) -->
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="saborBizcocho">Sabor del Bizcocho / Base <span class="required-star">*</span></label>
+              <select id="saborBizcocho" required>
+                <option value="">-- Seleccione Sabor --</option>
+                <option value="Vainilla Malla">Vainilla Malla</option>
+                <option value="Chocolate Cacao 70%">Chocolate Cacao 70%</option>
+                <option value="Red Velvet">Red Velvet</option>
+                <option value="Zanahoria & Nuez">Zanahoria &amp; Nuez</option>
+                <option value="Bizcocho Sin Azúcar (Keto)">Bizcocho Sin Azúcar (Keto)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="rellenoPrincipal">Relleno Principal <span class="required-star">*</span></label>
+              <select id="rellenoPrincipal" required>
+                <option value="">-- Seleccione Relleno --</option>
+                <option value="Manjar Artesanal">Manjar Artesanal</option>
+                <option value="Crema Pastelera & Lucuma">Crema Pastelera &amp; Lúcuma</option>
+                <option value="Ganache de Chocolate Menta">Ganache de Chocolate Menta</option>
+                <option value="Mermelada de Frambuesa Casera">Mermelada de Frambuesa Casera</option>
+                <option value="Crema Chantilly & Frutilla">Crema Chantilly &amp; Frutilla</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Fecha de Entrega / Retiro (Mínimo 72 hrs / 3 días) -->
+          <div class="form-group">
+            <label for="fechaEntrega">Fecha de Entrega / Retiro <span class="required-star">*</span></label>
+            <input type="date" id="fechaEntrega" required>
+            <span class="form-hint" id="fecha-hint">
+              📅 Debe ser al menos 3 días (72 hrs) posterior a la fecha actual.
+            </span>
+          </div>
+
+          <!-- Dedicatoria / Mensaje en la Torta (Opcional, máx 60 caracteres) -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label for="dedicatoria">Dedicatoria / Mensaje en la Torta <small style="font-weight: 400;">(Opcional)</small></label>
+              <span id="charCountDedicatoria" style="font-size: 0.78rem; color: var(--color-texto-mutado);">0 / 60</span>
+            </div>
+            <input type="text" id="dedicatoria" maxlength="60" placeholder="Ej: ¡Feliz Cumpleaños Mamá!">
+            <span class="form-hint">Máximo 60 caracteres (debido a limitaciones físicas del glaseado).</span>
+          </div>
+
+          <!-- Descripción de la Temática / Decoración (Obligatorio, 10 a 300 caracteres) -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label for="tematica">Descripción de la Temática / Decoración <span class="required-star">*</span></label>
+              <span id="charCountTematica" style="font-size: 0.78rem; color: var(--color-texto-mutado);">0 / 300</span>
+            </div>
+            <textarea id="tematica" rows="4" maxlength="300" placeholder="Describe colores, estilo de glaseado, motivos (ej: flores de azúcar, temática infantil, bodas, tonos pastel rosa y crema)..." required></textarea>
+            <span class="form-hint">Mínimo 10 y máximo 300 caracteres descriptivos.</span>
+          </div>
+
+          <!-- URL de Imagen de Referencia (Opcional) -->
+          <div class="form-group">
+            <label for="urlImagen">URL de Imagen de Referencia <small style="font-weight: 400;">(Opcional)</small></label>
+            <input type="url" id="urlImagen" placeholder="https://ejemplo.com/mi-diseño-favorito.jpg">
+            <span class="form-hint">Puedes pegar un enlace de Pinterest, Instagram o nube con tu idea gráfica.</span>
+          </div>
+
+          <!-- Acciones del Formulario -->
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-top: 2rem;">
+            <button type="button" class="btn btn-primary btn-lg btn-full" id="btn-agregar-carrito-custom">
+              🛒 Añadir Cotización al Carrito
+            </button>
+            <button type="submit" class="btn btn-secondary btn-lg btn-full" id="btn-enviar-solicitud-pasteleria">
+              📋 Enviar Solicitud Directa a la Pastelería
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- Columna Derecha: Tarjeta de Cotización en Vivo (Sticky) -->
+      <aside class="quote-sticky-card">
+        <h3 class="quote-title">🧾 Cotización Estimada</h3>
+        
+        <div style="text-align: center; margin-bottom: 1rem;">
+          <div style="font-size: 3rem; margin-bottom: 0.5rem;" id="preview-icon">🎂</div>
+          <h4 id="preview-tipo" style="color: var(--color-texto-principal); margin-bottom: 0.25rem;">Torta Tradicional</h4>
+          <span style="font-size: 0.85rem; color: var(--color-texto-mutado);" id="preview-porciones">20 porciones</span>
+        </div>
+
+        <ul class="quote-breakdown">
+          <li>
+            <span>Base seleccionada:</span>
+            <strong id="quote-base-nombre">Torta Tradicional</strong>
+          </li>
+          <li>
+            <span>Costo base de elaboración:</span>
+            <strong id="quote-base-precio">$18.000</strong>
+          </li>
+          <li>
+            <span>Bizcocho &amp; Relleno:</span>
+            <strong id="quote-sabores-texto">Por definir</strong>
+          </li>
+          <li>
+            <span>Porciones calculadas:</span>
+            <strong id="quote-porciones-calc">20 x $1.200</strong>
+          </li>
+          <li>
+            <span>Anticipación estimada:</span>
+            <strong id="quote-fecha-calc" style="color: var(--color-rosado-fuerte);">Mínimo 72 hrs</strong>
+          </li>
+        </ul>
+
+        <div class="quote-total-box">
+          <div class="quote-total-label">Total Cotización Estimada</div>
+          <div class="quote-total-price" id="quote-total-amount">$42.000</div>
+        </div>
+
+        <div style="background: var(--color-rosado-claro); border-radius: var(--radio-md); padding: 0.85rem; font-size: 0.8rem; color: var(--color-texto-secundario); border: 1px solid var(--color-rosado-pastel);">
+          💡 <strong>Nota del Maestro Pastelero:</strong> Esta cotización es un cálculo preliminar en tiempo real según ingredientes y porciones. Al agregarla al carrito o enviar tu solicitud, nuestro equipo confirmará los detalles de horneado.
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Expertos en convertir tus momentos inolvidables en dulces recuerdos.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Información</h4>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="blogs.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="admin/solicitudes.html">Ver Solicitudes (Admin)</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Horarios</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>🕒 Lun - Sáb: 08:30 a 20:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0 - RF-04</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Configuración de costos para motor de cotización en vivo
+    const COSTOS_BASE = {
+      "Torta Tradicional": 18000,
+      "Torta en Fondant": 25000,
+      "Cupcakes Temáticos": 14000,
+      "Pie / Tartaleta": 12000,
+      "Mesa de Dulces": 45000
+    };
+
+    const COSTO_PORCION = {
+      "Torta Tradicional": 1200,
+      "Torta en Fondant": 1600,
+      "Cupcakes Temáticos": 1100,
+      "Pie / Tartaleta": 950,
+      "Mesa de Dulces": 1500
+    };
+
+    let totalCotizacionActual = 42000;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      // Precargar usuario si hay sesión
+      const user = AuthService.obtenerUsuarioActual();
+      if (user) {
+        if (user.nombre) document.getElementById("clienteNombre").value = user.nombre;
+        if (user.email) document.getElementById("clienteEmail").value = user.email;
+        if (user.telefono) document.getElementById("clienteTelefono").value = user.telefono;
+      }
+
+      // Configurar fecha mínima en el selector (72 hrs / 3 días en el futuro)
+      configurarFechaMinimaInput();
+
+      // Listeners en tiempo real para cotización y validación
+      const form = document.getElementById("customCakeForm");
+      const tipoPostre = document.getElementById("tipoPostre");
+      const porciones = document.getElementById("numeroPorciones");
+      const bizcocho = document.getElementById("saborBizcocho");
+      const relleno = document.getElementById("rellenoPrincipal");
+      const fechaEntrega = document.getElementById("fechaEntrega");
+      const dedicatoria = document.getElementById("dedicatoria");
+      const tematica = document.getElementById("tematica");
+      const emailInput = document.getElementById("clienteEmail");
+
+      // Auto-calcular en cambios
+      [tipoPostre, porciones, bizcocho, relleno].forEach(elem => {
+        elem.addEventListener("change", recalcularCotizacion);
+        elem.addEventListener("input", recalcularCotizacion);
+      });
+
+      // Contadores de caracteres
+      dedicatoria.addEventListener("input", () => {
+        document.getElementById("charCountDedicatoria").textContent = `${dedicatoria.value.length} / 60`;
+        const res = validarDedicatoria(dedicatoria.value);
+        if (!res.valido) mostrarError(dedicatoria, res.mensaje);
+        else limpiarError(dedicatoria);
+      });
+
+      tematica.addEventListener("input", () => {
+        document.getElementById("charCountTematica").textContent = `${tematica.value.length} / 300`;
+        const res = validarTematica(tematica.value);
+        if (!res.valido) mostrarError(tematica, res.mensaje);
+        else limpiarError(tematica);
+      });
+
+      // Validación de email restringido
+      emailInput.addEventListener("blur", () => {
+        const res = validarEmailRestringido(emailInput.value);
+        if (!res.valido) mostrarError(emailInput, res.mensaje);
+        else limpiarError(emailInput);
+      });
+
+      // Validación de fecha 72 hrs
+      fechaEntrega.addEventListener("change", () => {
+        const res = validarFechaEntregaPostre(fechaEntrega.value);
+        if (!res.valido) mostrarError(fechaEntrega, res.mensaje);
+        else {
+          limpiarError(fechaEntrega);
+          document.getElementById("quote-fecha-calc").textContent = fechaEntrega.value;
+        }
+      });
+
+      // Botón Añadir al Carrito
+      document.getElementById("btn-agregar-carrito-custom").addEventListener("click", () => {
+        if (validarFormularioCompleto()) {
+          const cotizacionItem = construirObjetoCotizacion();
+          CarritoService.agregarItem(cotizacionItem, 1);
+          CarritoService.mostrarNotificacion("¡Cotización agregada a tu carrito con éxito!");
+          setTimeout(() => {
+            window.location.href = "carrito.html";
+          }, 900);
+        }
+      });
+
+      // Botón Enviar Solicitud a Pastelería
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (validarFormularioCompleto()) {
+          const solicitud = {
+            clienteNombre: document.getElementById("clienteNombre").value.trim(),
+            clienteEmail: document.getElementById("clienteEmail").value.trim(),
+            clienteTelefono: document.getElementById("clienteTelefono").value.trim(),
+            tipoPostre: tipoPostre.value,
+            porciones: parseInt(porciones.value, 10),
+            saborBizcocho: bizcocho.value,
+            rellenoPrincipal: relleno.value,
+            fechaEntrega: fechaEntrega.value,
+            dedicatoria: dedicatoria.value.trim(),
+            tematica: tematica.value.trim(),
+            urlImagen: document.getElementById("urlImagen").value.trim(),
+            precioEstimado: totalCotizacionActual
+          };
+
+          const guardada = ProductosService.guardarSolicitud(solicitud);
+          alert(`🎉 ¡Solicitud #${guardada.codigo} enviada con éxito a Dulce Encanto!\n\nNuestro equipo revisará el diseño para la fecha ${solicitud.fechaEntrega}. Puedes hacer seguimiento en el panel o con tu correo.`);
+          window.location.href = "admin/solicitudes.html";
+        }
+      });
+
+      recalcularCotizacion();
+    });
+
+    function configurarFechaMinimaInput() {
+      const fechaInput = document.getElementById("fechaEntrega");
+      const ahora = new Date();
+      // Sumar 3 días completos (72 horas)
+      const minDate = new Date(ahora.getTime() + (72 * 60 * 60 * 1000));
+      
+      const year = minDate.getFullYear();
+      const month = String(minDate.getMonth() + 1).padStart(2, '0');
+      const day = String(minDate.getDate()).padStart(2, '0');
+      
+      const minString = `${year}-${month}-${day}`;
+      fechaInput.min = minString;
+      fechaInput.value = minString;
+
+      const fechaLegible = minDate.toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit", year: "numeric" });
+      document.getElementById("fecha-hint").innerHTML = `📅 Mínimo 72 hrs. Fecha mínima seleccionable: <strong>${fechaLegible}</strong>.`;
+      document.getElementById("quote-fecha-calc").textContent = fechaLegible;
+    }
+
+    function recalcularCotizacion() {
+      const tipo = document.getElementById("tipoPostre").value || "Torta Tradicional";
+      const cantPorciones = parseInt(document.getElementById("numeroPorciones").value, 10) || 20;
+      const bizcocho = document.getElementById("saborBizcocho").value;
+      const relleno = document.getElementById("rellenoPrincipal").value;
+
+      const basePrice = COSTOS_BASE[tipo] || 18000;
+      const portionRate = COSTO_PORCION[tipo] || 1200;
+
+      // Recargo por ingredientes especiales (Keto sin azúcar)
+      let recargoEspecial = 0;
+      if (bizcocho === "Bizcocho Sin Azúcar (Keto)") {
+        recargoEspecial += 4500;
+      }
+
+      const total = basePrice + (cantPorciones * portionRate) + recargoEspecial;
+      totalCotizacionActual = total;
+
+      // Actualizar tarjeta en vivo
+      document.getElementById("preview-tipo").textContent = tipo;
+      document.getElementById("preview-porciones").textContent = `${cantPorciones} personas`;
+      document.getElementById("quote-base-nombre").textContent = tipo;
+      document.getElementById("quote-base-precio").textContent = `$${basePrice.toLocaleString("es-CL")}`;
+      document.getElementById("quote-porciones-calc").textContent = `${cantPorciones} x $${portionRate.toLocaleString("es-CL")}`;
+      document.getElementById("quote-sabores-texto").textContent = (bizcocho && relleno) ? `${bizcocho} / ${relleno}` : 'A definir';
+      document.getElementById("quote-total-amount").textContent = `$${total.toLocaleString("es-CL")}`;
+
+      // Icono
+      const iconMap = {
+        "Torta Tradicional": "🎂",
+        "Torta en Fondant": "✨",
+        "Cupcakes Temáticos": "🧁",
+        "Pie / Tartaleta": "🥧",
+        "Mesa de Dulces": "🍬"
+      };
+      document.getElementById("preview-icon").textContent = iconMap[tipo] || "🎂";
+    }
+
+    function validarFormularioCompleto() {
+      let esValido = true;
+
+      const clienteNombre = document.getElementById("clienteNombre");
+      if (!clienteNombre.value.trim()) {
+        mostrarError(clienteNombre, "El nombre del cliente es obligatorio.");
+        esValido = false;
+      } else {
+        limpiarError(clienteNombre);
+      }
+
+      const clienteEmail = document.getElementById("clienteEmail");
+      const resEmail = validarEmailRestringido(clienteEmail.value);
+      if (!resEmail.valido) {
+        mostrarError(clienteEmail, resEmail.mensaje);
+        esValido = false;
+      } else {
+        limpiarError(clienteEmail);
+      }
+
+      const tipoPostre = document.getElementById("tipoPostre");
+      if (!tipoPostre.value) {
+        mostrarError(tipoPostre, "Debe seleccionar un tipo de postre o base.");
+        esValido = false;
+      } else {
+        limpiarError(tipoPostre);
+      }
+
+      const porciones = document.getElementById("numeroPorciones");
+      const resPorciones = validarPorciones(porciones.value);
+      if (!resPorciones.valido) {
+        mostrarError(porciones, resPorciones.mensaje);
+        esValido = false;
+      } else {
+        limpiarError(porciones);
+      }
+
+      const bizcocho = document.getElementById("saborBizcocho");
+      if (!bizcocho.value) {
+        mostrarError(bizcocho, "Debe seleccionar un sabor de bizcocho o base.");
+        esValido = false;
+      } else {
+        limpiarError(bizcocho);
+      }
+
+      const relleno = document.getElementById("rellenoPrincipal");
+      if (!relleno.value) {
+        mostrarError(relleno, "Debe seleccionar un relleno principal.");
+        esValido = false;
+      } else {
+        limpiarError(relleno);
+      }
+
+      const fechaEntrega = document.getElementById("fechaEntrega");
+      const resFecha = validarFechaEntregaPostre(fechaEntrega.value);
+      if (!resFecha.valido) {
+        mostrarError(fechaEntrega, resFecha.mensaje);
+        esValido = false;
+      } else {
+        limpiarError(fechaEntrega);
+      }
+
+      const tematica = document.getElementById("tematica");
+      const resTematica = validarTematica(tematica.value);
+      if (!resTematica.valido) {
+        mostrarError(tematica, resTematica.mensaje);
+        esValido = false;
+      } else {
+        limpiarError(tematica);
+      }
+
+      const dedicatoria = document.getElementById("dedicatoria");
+      const resDed = validarDedicatoria(dedicatoria.value);
+      if (!resDed.valido) {
+        mostrarError(dedicatoria, resDed.mensaje);
+        esValido = false;
+      } else {
+        limpiarError(dedicatoria);
+      }
+
+      if (!esValido) {
+        const primerError = document.querySelector(".input-error");
+        if (primerError) primerError.focus();
+      }
+
+      return esValido;
+    }
+
+    function construirObjetoCotizacion() {
+      const tipo = document.getElementById("tipoPostre").value;
+      const porciones = document.getElementById("numeroPorciones").value;
+      const bizcocho = document.getElementById("saborBizcocho").value;
+      const relleno = document.getElementById("rellenoPrincipal").value;
+      const fecha = document.getElementById("fechaEntrega").value;
+      const dedicatoria = document.getElementById("dedicatoria").value.trim();
+      const tematica = document.getElementById("tematica").value.trim();
+      const urlImg = document.getElementById("urlImagen").value.trim();
+
+      return {
+        id: "custom-" + Date.now(),
+        nombre: `Postre Personalizado: ${tipo} (${porciones} porc.)`,
+        precio: totalCotizacionActual,
+        imagen: urlImg || "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=600&q=80",
+        categoria: "Personalizado",
+        porciones: `${porciones} porciones`,
+        opcionPorcion: `${porciones} porc. / Entrega: ${fecha}`,
+        esPersonalizado: true,
+        detallesPersonalizados: {
+          tipo,
+          porciones,
+          bizcocho,
+          relleno,
+          fechaEntrega: fecha,
+          dedicatoria,
+          tematica
+        }
+      };
+    }
+  </script>
+</body>
+</html>

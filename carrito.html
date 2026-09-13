@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras | Dulce Encanto</title>
+  <meta name="description" content="Revisa los productos de repostería y cotizaciones de postres personalizados en tu carrito de Dulce Encanto.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 ¡Envío gratis por compras sobre $35.000! Usa <strong>DULCE10</strong> o <strong>DUOCPASTEL</strong> para obtener descuentos exclusivos.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link active" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+      <span class="section-tag">Tus Delicias Seleccionadas</span>
+      <h1>Carrito de Compras</h1>
+    </div>
+
+    <!-- Contenedor si el carrito está vacío -->
+    <div id="cart-empty-view" style="display: none; text-align: center; padding: 4.5rem 1.5rem; background: #fff; border-radius: var(--radio-xl); border: 1.5px dashed var(--color-rosado-pastel); box-shadow: var(--sombra-card);">
+      <span style="font-size: 3.5rem; display: block; margin-bottom: 1rem;">🛍️</span>
+      <h2 style="margin-bottom: 0.5rem; color: var(--color-texto-principal);">Tu carrito está vacío</h2>
+      <p style="color: var(--color-texto-secundario); max-width: 480px; margin: 0 auto 1.5rem auto;">
+        Parece que aún no has agregado ninguna torta, kuchen o cotización de postre personalizado a tu pedido.
+      </p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="productos.html" class="btn btn-primary btn-lg">Explorar Catálogo de Tortas</a>
+        <a href="postre-personalizado.html" class="btn btn-secondary btn-lg">Diseñar Postre a Medida</a>
+      </div>
+    </div>
+
+    <!-- Contenedor con items -->
+    <div class="cart-layout" id="cart-filled-view">
+      
+      <!-- Tabla de Items (RF-05) -->
+      <section class="cart-table-wrapper">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.25rem; margin: 0;">Detalle de Productos y Postres</h2>
+          <button class="btn btn-sm btn-danger" onclick="confirmarVaciarCarrito()">
+            🗑️ Vaciar Carrito
+          </button>
+        </div>
+
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Producto / Postre</th>
+              <th>Precio Unitario</th>
+              <th>Cantidad</th>
+              <th>Subtotal</th>
+              <th>Quitar</th>
+            </tr>
+          </thead>
+          <tbody id="cart-table-body">
+            <!-- Renderizado por JS -->
+          </tbody>
+        </table>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <a href="productos.html" class="btn btn-secondary btn-sm">
+            ← Seguir Comprando
+          </a>
+          <span style="font-size: 0.85rem; color: var(--color-texto-mutado);">
+            🔒 Persistencia asegurada en tu navegador (LocalStorage)
+          </span>
+        </div>
+      </section>
+
+      <!-- Resumen del Pedido y Cupones -->
+      <aside class="order-summary-card">
+        <h3 style="font-size: 1.3rem; margin-bottom: 1.25rem; color: var(--color-texto-principal); border-bottom: 1px solid var(--color-borde-suave); padding-bottom: 0.75rem;">
+          Resumen del Pedido
+        </h3>
+
+        <!-- Aplicación de Cupón -->
+        <div style="margin-bottom: 1.5rem;">
+          <label for="cuponInput" style="font-size: 0.85rem; font-weight: 600;">¿Tienes un cupón de descuento?</label>
+          <div class="coupon-box">
+            <input type="text" id="cuponInput" placeholder="Ej: DULCE10 o DUOCPASTEL" style="text-transform: uppercase; font-size: 0.85rem;">
+            <button class="btn btn-secondary btn-sm" onclick="aplicarCuponCarrito()" style="white-space: nowrap;">
+              Aplicar
+            </button>
+          </div>
+          <div id="cupon-feedback" style="font-size: 0.8rem; margin-top: -0.5rem; margin-bottom: 0.5rem;"></div>
+          <div style="font-size: 0.75rem; color: var(--color-texto-mutado);">
+            Prueba: <code style="background: var(--color-crema); padding: 2px 5px; border-radius: 4px;">DULCE10</code> (10%), <code style="background: var(--color-crema); padding: 2px 5px; border-radius: 4px;">DUOCPASTEL</code> (20%)
+          </div>
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal Productos:</span>
+          <strong id="summary-subtotal">$0</strong>
+        </div>
+
+        <div class="summary-row" id="summary-discount-row" style="display: none; color: #2D6A4F;">
+          <span>
+            Descuento (<span id="summary-coupon-name"></span>):
+            <button onclick="removerCuponCarrito()" style="border: none; background: none; color: #dc3545; cursor: pointer; font-size: 0.75rem; text-decoration: underline; margin-left: 4px;">Quitar</button>
+          </span>
+          <strong id="summary-discount-amount">-$0</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Costo de Envío (Santiago):</span>
+          <strong id="summary-shipping">$3.500</strong>
+        </div>
+        <div id="shipping-progress-hint" style="font-size: 0.75rem; color: var(--color-texto-mutado); margin-bottom: 0.75rem;"></div>
+
+        <div class="summary-row total-row">
+          <span>Total a Pagar:</span>
+          <strong id="summary-total">$0</strong>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <button class="btn btn-primary btn-lg btn-full" id="btn-proceder-pago" onclick="abrirModalCheckout()">
+            💳 Proceder al Pago / Confirmar
+          </button>
+        </div>
+
+        <div style="margin-top: 1rem; text-align: center;">
+          <span style="font-size: 0.78rem; color: var(--color-texto-mutado);">
+            ✓ Aceptamos Webpay, Débito, Crédito y Transferencia Bancaria
+          </span>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Modal de Checkout Simulado -->
+  <div id="checkoutModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #fff; max-width: 500px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative;">
+      <button onclick="cerrarModalCheckout()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <span style="font-size: 3rem;">🎉</span>
+        <h2 style="font-size: 1.45rem; color: var(--color-texto-principal); margin: 0.5rem 0;">Confirmar Pedido</h2>
+        <p style="font-size: 0.88rem; color: var(--color-texto-secundario);">Revisa los datos de despacho antes de procesar tu compra.</p>
+      </div>
+
+      <div style="background: var(--color-crema-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.5rem; font-size: 0.9rem;">
+        <p style="margin-bottom: 0.35rem;"><strong>Total a Pagar:</strong> <span id="modal-checkout-total" style="color: var(--color-rosado-fuerte); font-weight: 700;"></span></p>
+        <p style="margin-bottom: 0;"><strong>Método de entrega:</strong> Retiro en Tienda Providencia o Despacho a domicilio.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="modalDireccion">Dirección de Despacho o Indicar "Retiro":</label>
+        <input type="text" id="modalDireccion" placeholder="Ej: Av. Los Leones 250, Depto 402" value="Despacho Santiago Centro">
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-full" onclick="completarPagoSimulado()">
+        Confirmar y Generar Orden #ENC-2026
+      </button>
+    </div>
+  </div>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Momentos dulces garantizados en cada pedido.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Ayuda</h4>
+        <ul class="footer-links">
+          <li><a href="contacto.html">Preguntas Frecuentes</a></li>
+          <li><a href="nosotros.html">Nuestra Historia</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      window.addEventListener("carritoActualizado", () => {
+        renderizarCarrito();
+      });
+
+      renderizarCarrito();
+    });
+
+    function renderizarCarrito() {
+      const items = CarritoService.obtenerItems();
+      const emptyView = document.getElementById("cart-empty-view");
+      const filledView = document.getElementById("cart-filled-view");
+      const tableBody = document.getElementById("cart-table-body");
+
+      if (items.length === 0) {
+        emptyView.style.display = "block";
+        filledView.style.display = "none";
+        return;
+      }
+
+      emptyView.style.display = "none";
+      filledView.style.display = "grid";
+
+      tableBody.innerHTML = items.map(item => {
+        const subtotalItem = item.precio * item.cantidad;
+        const subtotalFormatted = CarritoService.formatearPrecio(subtotalItem);
+        const unitFormatted = CarritoService.formatearPrecio(item.precio);
+
+        let detalleExtra = "";
+        if (item.esPersonalizado && item.detallesPersonalizados) {
+          const d = item.detallesPersonalizados;
+          detalleExtra = `
+            <div style="font-size: 0.78rem; background: var(--color-rosado-claro); padding: 4px 8px; border-radius: 6px; margin-top: 4px; border: 1px solid var(--color-rosado-pastel);">
+              <strong>Sabor:</strong> ${d.bizcocho} | <strong>Relleno:</strong> ${d.relleno}<br>
+              <strong>Entrega:</strong> ${d.fechaEntrega} | <strong>Temática:</strong> "${d.tematica.substring(0, 40)}..."
+              ${d.dedicatoria ? `<br><strong>Dedicatoria:</strong> <em>"${d.dedicatoria}"</em>` : ''}
+            </div>
+          `;
+        }
+
+        return `
+          <tr>
+            <td>
+              <div class="cart-product-info">
+                <img src="${item.imagen}" alt="${item.nombre}" class="cart-thumb">
+                <div>
+                  <div class="cart-item-title">${item.nombre}</div>
+                  <div class="cart-item-meta">
+                    ${item.opcionPorcion || item.porciones}
+                    ${item.esPersonalizado ? ' <span class="badge-discount" style="background: var(--color-rosado-medio); color: #fff;">Personalizado</span>' : ''}
+                  </div>
+                  ${detalleExtra}
+                </div>
+              </div>
+            </td>
+            <td>
+              <strong>${unitFormatted}</strong>
+            </td>
+            <td>
+              <div class="quantity-control">
+                <button type="button" class="btn-qty" onclick="cambiarCantidadItem('${item.id}', '${item.opcionPorcion || ''}', ${item.cantidad - 1})">-</button>
+                <span class="qty-display">${item.cantidad}</span>
+                <button type="button" class="btn-qty" onclick="cambiarCantidadItem('${item.id}', '${item.opcionPorcion || ''}', ${item.cantidad + 1})">+</button>
+              </div>
+            </td>
+            <td>
+              <strong style="color: var(--color-rosado-fuerte);">${subtotalFormatted}</strong>
+            </td>
+            <td>
+              <button class="btn-remove-item" onclick="eliminarItemCart('${item.id}', '${item.opcionPorcion || ''}')" title="Eliminar producto">
+                🗑️
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      // Actualizar Resumen Totales
+      const totales = CarritoService.calcularTotales();
+      document.getElementById("summary-subtotal").textContent = CarritoService.formatearPrecio(totales.subtotal);
+      
+      const discountRow = document.getElementById("summary-discount-row");
+      if (totales.cupon) {
+        discountRow.style.display = "flex";
+        document.getElementById("summary-coupon-name").textContent = `${totales.cupon.codigo} (-${totales.cupon.descuentoPct}%)`;
+        document.getElementById("summary-discount-amount").textContent = `-${CarritoService.formatearPrecio(totales.montoDescuento)}`;
+      } else {
+        discountRow.style.display = "none";
+      }
+
+      if (totales.costoEnvio === 0) {
+        document.getElementById("summary-shipping").innerHTML = '<span style="color: #2D6A4F; font-weight: 700;">¡GRATIS! 🎉</span>';
+        document.getElementById("shipping-progress-hint").textContent = "¡Felicitaciones! Tu compra supera $35.000 y cuenta con envío gratuito en Santiago.";
+      } else {
+        document.getElementById("summary-shipping").textContent = CarritoService.formatearPrecio(totales.costoEnvio);
+        const faltaParaEnvioGratis = 35000 - totales.subtotal;
+        document.getElementById("shipping-progress-hint").textContent = `Agrega $${faltaParaEnvioGratis.toLocaleString("es-CL")} más para desbloquear ENVÍO GRATIS.`;
+      }
+
+      document.getElementById("summary-total").textContent = CarritoService.formatearPrecio(totales.total);
+    }
+
+    function cambiarCantidadItem(id, opcionPorcion, nuevaCantidad) {
+      CarritoService.actualizarCantidad(id, opcionPorcion, nuevaCantidad);
+    }
+
+    function eliminarItemCart(id, opcionPorcion) {
+      if (confirm("¿Deseas quitar este postre del carrito?")) {
+        CarritoService.eliminarItem(id, opcionPorcion);
+      }
+    }
+
+    function confirmarVaciarCarrito() {
+      if (confirm("¿Estás seguro de que deseas vaciar todos los productos del carrito?")) {
+        CarritoService.vaciarCarrito();
+      }
+    }
+
+    function aplicarCuponCarrito() {
+      const input = document.getElementById("cuponInput");
+      const feedback = document.getElementById("cupon-feedback");
+      const codigo = input.value.trim();
+
+      const resultado = CarritoService.aplicarCupon(codigo);
+      if (resultado.valido) {
+        feedback.innerHTML = `<span style="color: #2D6A4F; font-weight: 600;">✓ ${resultado.mensaje}</span>`;
+        CarritoService.mostrarNotificacion(resultado.mensaje);
+        renderizarCarrito();
+      } else {
+        feedback.innerHTML = `<span style="color: #C9184A; font-weight: 600;">✗ ${resultado.mensaje}</span>`;
+      }
+    }
+
+    function removerCuponCarrito() {
+      CarritoService.eliminarCupon();
+      document.getElementById("cuponInput").value = "";
+      document.getElementById("cupon-feedback").innerHTML = "";
+      CarritoService.mostrarNotificacion("Cupón removido.");
+      renderizarCarrito();
+    }
+
+    function abrirModalCheckout() {
+      const totales = CarritoService.calcularTotales();
+      if (totales.total <= 0 && totales.subtotal === 0) {
+        alert("El carrito no tiene productos para procesar.");
+        return;
+      }
+      document.getElementById("modal-checkout-total").textContent = CarritoService.formatearPrecio(totales.total);
+      document.getElementById("checkoutModal").style.display = "flex";
+    }
+
+    function cerrarModalCheckout() {
+      document.getElementById("checkoutModal").style.display = "none";
+    }
+
+    function completarPagoSimulado() {
+      const direccion = document.getElementById("modalDireccion").value.trim();
+      if (!direccion) {
+        alert("Por favor indique una dirección o 'Retiro en tienda'.");
+        return;
+      }
+
+      const numOrden = "ENC-" + Math.floor(100000 + Math.random() * 900000);
+      alert(`🎉 ¡Pago y Pedido Exitoso!\n\nNúmero de Orden: #${numOrden}\nDirección: ${direccion}\n\nTe hemos enviado la confirmación a tu correo registrado. ¡Gracias por preferir Dulce Encanto!`);
+      
+      cerrarModalCheckout();
+      CarritoService.vaciarCarrito();
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Productos | Admin Dulce Encanto</title>
+  <meta name="description" content="CRUD completo de productos, inventario, precios y stock crítico en Dulce Encanto.">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body style="background-color: #F8F9FA;">
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="brand-logo" style="margin-bottom: 2rem;">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h2 style="font-size: 1.15rem; color: #fff; margin:0;">Dulce Encanto</h2>
+          <span style="font-size: 0.75rem; color: var(--color-rosado-pastel);">Panel de Control</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="admin-nav-list">
+          <li>
+            <a href="dashboard.html">
+              📊 <span>Dashboard &amp; Métricas</span>
+            </a>
+          </li>
+          <li>
+            <a href="productos.html" class="active">
+              🍰 <span>Gestión de Productos</span>
+            </a>
+          </li>
+          <li>
+            <a href="solicitudes.html">
+              🎂 <span>Solicitudes a Medida</span>
+            </a>
+          </li>
+          <li>
+            <a href="usuarios.html">
+              👥 <span>Gestión de Usuarios</span>
+            </a>
+          </li>
+          <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+            <a href="../index.html">
+              🏪 <span>Volver a la Tienda</span>
+            </a>
+          </li>
+          <li>
+            <a href="../login.html" onclick="AuthService.logout()">
+              🚪 <span>Cerrar Sesión</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="admin-main">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 style="font-size: 1.85rem; margin: 0; color: var(--color-texto-principal);">
+            Catálogo e Inventario de Pastelería
+          </h1>
+          <p style="margin: 0.25rem 0 0 0; color: var(--color-texto-secundario); font-size: 0.9rem;">
+            Administra precios, porciones, stock disponible y umbrales de alerta crítica.
+          </p>
+        </div>
+
+        <button class="btn btn-primary" onclick="abrirModalProducto()">
+          ➕ Nuevo Postre / Producto
+        </button>
+      </div>
+
+      <!-- Barra de Filtros y Búsqueda -->
+      <div class="admin-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
+          <input type="text" id="adminSearchInput" placeholder="🔍 Buscar por nombre o código..." style="padding: 0.6rem 1rem;">
+          
+          <select id="adminCategoryFilter" style="padding: 0.6rem 1rem;">
+            <option value="Todos">Todas las Categorías</option>
+            <option value="Tortas Tradicionales">Tortas Tradicionales</option>
+            <option value="Tortas en Fondant">Tortas en Fondant</option>
+            <option value="Postres Individuales">Postres Individuales</option>
+            <option value="Sin Azúcar / Keto">Sin Azúcar / Keto</option>
+            <option value="Bollería & Panadería">Bollería &amp; Panadería</option>
+          </select>
+
+          <select id="adminStockFilter" style="padding: 0.6rem 1rem;">
+            <option value="Todos">Todo el Stock</option>
+            <option value="Critico">⚠️ Solo Stock Crítico</option>
+            <option value="Normal">✓ Stock Normal</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabla de Productos (RF-08) -->
+      <div class="admin-card" style="padding: 0; overflow: hidden;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Código</th>
+              <th>Nombre del Postre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Porciones</th>
+              <th>Stock / Mínimo</th>
+              <th>Destacado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="admin-products-table-body">
+            <!-- Inyectado por JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para Crear / Editar Producto (CRUD) -->
+  <div id="productModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto;">
+    <div style="background: #fff; max-width: 680px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative; max-height: 90vh; overflow-y: auto;">
+      <button onclick="cerrarModalProducto()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      
+      <h2 id="modalTitle" style="font-size: 1.45rem; color: var(--color-texto-principal); margin: 0 0 1.25rem 0;">
+        Agregar Nuevo Postre
+      </h2>
+
+      <form id="productForm" novalidate>
+        <input type="hidden" id="prodId">
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prodCodigo">Código del Producto <span class="required-star">*</span></label>
+            <input type="text" id="prodCodigo" placeholder="Ej: TOR-005" required>
+            <span class="form-hint">Debe ser único en el sistema.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="prodCategoria">Categoría <span class="required-star">*</span></label>
+            <select id="prodCategoria" required>
+              <option value="Tortas Tradicionales">Tortas Tradicionales</option>
+              <option value="Tortas en Fondant">Tortas en Fondant</option>
+              <option value="Postres Individuales">Postres Individuales</option>
+              <option value="Sin Azúcar / Keto">Sin Azúcar / Keto</option>
+              <option value="Bollería & Panadería">Bollería &amp; Panadería</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="prodNombre">Nombre del Postre <span class="required-star">*</span></label>
+          <input type="text" id="prodNombre" placeholder="Ej: Torta Tres Leches con Merengue" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prodPrecio">Precio en CLP ($) <span class="required-star">*</span></label>
+            <input type="number" id="prodPrecio" min="500" step="100" placeholder="24000" required>
+          </div>
+
+          <div class="form-group">
+            <label for="prodPorciones">Porciones / Rendimiento <span class="required-star">*</span></label>
+            <input type="text" id="prodPorciones" placeholder="Ej: 15 a 20 personas" required>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prodStock">Stock Actual en Vitrina <span class="required-star">*</span></label>
+            <input type="number" id="prodStock" min="0" value="8" required>
+          </div>
+
+          <div class="form-group">
+            <label for="prodStockCritico">Stock Crítico (Alerta) <span class="required-star">*</span></label>
+            <input type="number" id="prodStockCritico" min="0" value="3" required>
+            <span class="form-hint">Dispara alerta si el stock es menor o igual a este valor.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="prodDescripcion">Descripción del Postre <span class="required-star">*</span></label>
+          <textarea id="prodDescripcion" rows="3" placeholder="Describe los sabores, textura y preparación..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="prodIngredientes">Ingredientes Principales (separados por coma)</label>
+          <input type="text" id="prodIngredientes" placeholder="Harina, huevos de campo, manjar artesanal, vainilla">
+        </div>
+
+        <div class="form-group">
+          <label for="prodAlergenos">Alérgenos (separados por coma)</label>
+          <input type="text" id="prodAlergenos" placeholder="Gluten, Lácteos, Huevos">
+        </div>
+
+        <div class="form-group">
+          <label for="prodImagen">URL de la Imagen <span class="required-star">*</span></label>
+          <input type="url" id="prodImagen" placeholder="https://images.unsplash.com/..." required>
+        </div>
+
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" id="prodDestacado" style="width: auto;">
+            <span>⭐ Destacar este postre en el Home principal</span>
+          </label>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModalProducto()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-guardar-producto">Guardar Postre</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/data-regiones.js"></script>
+  <script src="../js/validaciones.js"></script>
+  <script src="../js/data-productos.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("action") === "nuevo") {
+        abrirModalProducto();
+      } else if (params.get("edit")) {
+        editarProductoPorId(params.get("edit"));
+      }
+
+      // Listeners de filtros
+      document.getElementById("adminSearchInput").addEventListener("input", renderizarTabla);
+      document.getElementById("adminCategoryFilter").addEventListener("change", renderizarTabla);
+      document.getElementById("adminStockFilter").addEventListener("change", renderizarTabla);
+
+      // Submit del form
+      document.getElementById("productForm").addEventListener("submit", guardarProductoSubmit);
+
+      renderizarTabla();
+    });
+
+    function renderizarTabla() {
+      const search = document.getElementById("adminSearchInput").value.toLowerCase();
+      const categoria = document.getElementById("adminCategoryFilter").value;
+      const stockFiltro = document.getElementById("adminStockFilter").value;
+
+      let productos = ProductosService.obtenerProductos();
+
+      // Filtrar búsqueda
+      if (search) {
+        productos = productos.filter(p => 
+          p.nombre.toLowerCase().includes(search) || 
+          p.codigo.toLowerCase().includes(search)
+        );
+      }
+
+      // Filtrar categoría
+      if (categoria !== "Todos") {
+        productos = productos.filter(p => p.categoria === categoria);
+      }
+
+      // Filtrar stock
+      if (stockFiltro === "Critico") {
+        productos = productos.filter(p => p.stock <= p.stockCritico);
+      } else if (stockFiltro === "Normal") {
+        productos = productos.filter(p => p.stock > p.stockCritico);
+      }
+
+      const tbody = document.getElementById("admin-products-table-body");
+      if (productos.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--color-texto-mutado);">
+              No se encontraron productos con los filtros seleccionados.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = productos.map(p => {
+        const esCritico = p.stock <= p.stockCritico;
+        return `
+          <tr>
+            <td>
+              <img src="${p.imagen}" alt="${p.nombre}" style="width: 45px; height: 45px; border-radius: 6px; object-fit: cover;">
+            </td>
+            <td><strong>${p.codigo}</strong></td>
+            <td>
+              <div style="font-weight: 600;">${p.nombre}</div>
+              <small style="color: var(--color-texto-mutado);">${p.descripcion.substring(0, 45)}...</small>
+            </td>
+            <td><span class="tag-badge">${p.categoria}</span></td>
+            <td><strong>${CarritoService.formatearPrecio(p.precio)}</strong></td>
+            <td>${p.porciones}</td>
+            <td>
+              <span class="stock-badge ${esCritico ? 'stock-critical' : 'stock-ok'}">
+                ${p.stock} un. (Mín: ${p.stockCritico})
+              </span>
+            </td>
+            <td style="text-align: center;">
+              ${p.destacado ? '⭐ Sí' : '—'}
+            </td>
+            <td>
+              <div style="display: flex; gap: 0.4rem;">
+                <button class="btn btn-secondary btn-sm" onclick="editarProductoPorId('${p.id}')" title="Editar">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarProductoConfirm('${p.id}', '${p.nombre}')" title="Eliminar">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function abrirModalProducto() {
+      document.getElementById("productForm").reset();
+      document.getElementById("prodId").value = "";
+      document.getElementById("modalTitle").textContent = "Agregar Nuevo Postre al Catálogo";
+      document.getElementById("productModal").style.display = "flex";
+    }
+
+    function cerrarModalProducto() {
+      document.getElementById("productModal").style.display = "none";
+    }
+
+    function editarProductoPorId(id) {
+      const p = ProductosService.obtenerProductoPorId(id);
+      if (!p) return;
+
+      document.getElementById("prodId").value = p.id;
+      document.getElementById("prodCodigo").value = p.codigo;
+      document.getElementById("prodNombre").value = p.nombre;
+      document.getElementById("prodCategoria").value = p.categoria;
+      document.getElementById("prodPrecio").value = p.precio;
+      document.getElementById("prodPorciones").value = p.porciones;
+      document.getElementById("prodStock").value = p.stock;
+      document.getElementById("prodStockCritico").value = p.stockCritico;
+      document.getElementById("prodDescripcion").value = p.descripcion;
+      document.getElementById("prodIngredientes").value = (p.ingredientes || []).join(", ");
+      document.getElementById("prodAlergenos").value = (p.alergenos || []).join(", ");
+      document.getElementById("prodImagen").value = p.imagen;
+      document.getElementById("prodDestacado").checked = !!p.destacado;
+
+      document.getElementById("modalTitle").textContent = `Editar Postre: ${p.nombre}`;
+      document.getElementById("productModal").style.display = "flex";
+    }
+
+    function guardarProductoSubmit(e) {
+      e.preventDefault();
+      
+      const id = document.getElementById("prodId").value;
+      const codigo = document.getElementById("prodCodigo").value.trim();
+      const nombre = document.getElementById("prodNombre").value.trim();
+      const categoria = document.getElementById("prodCategoria").value;
+      const precio = parseInt(document.getElementById("prodPrecio").value, 10);
+      const porciones = document.getElementById("prodPorciones").value.trim();
+      const stock = parseInt(document.getElementById("prodStock").value, 10);
+      const stockCritico = parseInt(document.getElementById("prodStockCritico").value, 10);
+      const descripcion = document.getElementById("prodDescripcion").value.trim();
+      const ingredientesStr = document.getElementById("prodIngredientes").value.trim();
+      const alergenosStr = document.getElementById("prodAlergenos").value.trim();
+      const imagen = document.getElementById("prodImagen").value.trim();
+      const destacado = document.getElementById("prodDestacado").checked;
+
+      if (!codigo || !nombre || isNaN(precio) || precio <= 0 || !imagen) {
+        alert("Por favor completa los campos obligatorios con valores válidos.");
+        return;
+      }
+
+      const ingredientes = ingredientesStr ? ingredientesStr.split(",").map(s => s.trim()).filter(Boolean) : [];
+      const alergenos = alergenosStr ? alergenosStr.split(",").map(s => s.trim()).filter(Boolean) : [];
+
+      const datosProducto = {
+        codigo,
+        nombre,
+        categoria,
+        precio,
+        porciones,
+        stock,
+        stockCritico,
+        descripcion,
+        ingredientes,
+        alergenos,
+        imagen,
+        destacado
+      };
+
+      if (id) {
+        // Actualizar existente
+        ProductosService.actualizarProducto(id, datosProducto);
+        alert(`✓ Postre "${nombre}" actualizado con éxito.`);
+      } else {
+        // Crear nuevo
+        const nuevo = ProductosService.guardarProducto(datosProducto);
+        alert(`✓ Postre "${nombre}" creado con código ${nuevo.codigo}.`);
+      }
+
+      cerrarModalProducto();
+      renderizarTabla();
+    }
+
+    function eliminarProductoConfirm(id, nombre) {
+      if (confirm(`¿Estás seguro de que deseas eliminar permanentemente el postre "${nombre}" del catálogo?`)) {
+        ProductosService.eliminarProducto(id);
+        renderizarTabla();
+      }
+    }
+  </script>
+</body>
+</html>

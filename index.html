@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dulce Encanto | Panadería y Repostería Artesanal</title>
+  <meta name="description" content="Panadería y Repostería Dulce Encanto. Tortas artesanales, kuchenes, cupcakes y diseño de postres personalizados a medida con ingredientes 100% naturales.">
+  <meta property="og:title" content="Dulce Encanto | Panadería y Repostería Artesanal">
+  <meta property="og:description" content="Tortas artesanales, kuchenes, cupcakes y postres personalizados a pedido.">
+  <!-- Hoja de estilos externa única -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra de Anuncios Superior -->
+  <div class="top-announcement-bar">
+    🌸 ¡Envío gratis en Santiago por compras sobre $35.000! Usa el cupón <strong>DULCE10</strong> para 10% de descuento.
+  </div>
+
+  <!-- Barra de Simulación de Sesión / Demo RBAC -->
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header Principal -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo" id="logo-link">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link active">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Banner con Paleta Pastel Rosa y Crema -->
+    <section class="hero-banner">
+      <div class="hero-grid">
+        <div class="hero-text-content">
+          <div class="hero-tag">
+            <span>🍰 Repostería 100% Artesanal y Tradicional</span>
+          </div>
+          <h1 class="hero-title">
+            Momentos dulces hechos con <span>amor y dedicación</span>
+          </h1>
+          <p class="hero-subtitle">
+            Descubre nuestras tortas de hojarasca, kuchenes sureños, galletas horneadas hoy y nuestro exclusivo servicio de <strong>Postres Personalizados</strong> para tus celebraciones más especiales.
+          </p>
+          <div class="hero-buttons">
+            <a href="postre-personalizado.html" class="btn btn-primary btn-lg" id="btn-hero-personalizar">
+              🎂 Diseñar Postre a Medida
+            </a>
+            <a href="productos.html" class="btn btn-secondary btn-lg" id="btn-hero-catalogo">
+              Ver Catálogo Completo
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-card-visual">
+          <div class="hero-image-wrapper">
+            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80" alt="Torta Artesanal Dulce Encanto">
+          </div>
+          <div class="hero-floating-badge">
+            <span class="badge-icon">🍓</span>
+            <div class="badge-text">
+              <strong>Ingredientes Frescos</strong>
+              <span>Fruta natural &amp; Manjar de campo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categorías Destacadas -->
+    <section class="section-padding container">
+      <div class="section-header">
+        <span class="section-tag">Nuestras Especialidades</span>
+        <h2>Explora lo que horneamos hoy para ti</h2>
+        <p>Cada receta ha sido perfeccionada durante más de 20 años en nuestros hornos artesanales.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3.5rem;">
+        <a href="productos.html?cat=Tortas" style="background: #fff; padding: 1.5rem; border-radius: 16px; text-align: center; border: 1.5px solid var(--color-rosado-pastel); box-shadow: var(--sombra-card); display: block; text-decoration: none;">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🎂</span>
+          <h3 style="font-size: 1.15rem; color: var(--color-texto-principal);">Tortas Artesanales</h3>
+          <p style="font-size: 0.85rem; color: var(--color-texto-mutado); margin: 0;">Hojarasca, Selva Negra, Milhojas</p>
+        </a>
+        <a href="productos.html?cat=Kuchenes" style="background: #fff; padding: 1.5rem; border-radius: 16px; text-align: center; border: 1.5px solid var(--color-mantequilla); box-shadow: var(--sombra-card); display: block; text-decoration: none;">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🥧</span>
+          <h3 style="font-size: 1.15rem; color: var(--color-texto-principal);">Kuchenes &amp; Pies</h3>
+          <p style="font-size: 0.85rem; color: var(--color-texto-mutado); margin: 0;">Frambuesa sureña, Limón merengado</p>
+        </a>
+        <a href="productos.html?cat=Cupcakes" style="background: #fff; padding: 1.5rem; border-radius: 16px; text-align: center; border: 1.5px solid var(--color-rosado-pastel); box-shadow: var(--sombra-card); display: block; text-decoration: none;">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🧁</span>
+          <h3 style="font-size: 1.15rem; color: var(--color-texto-principal);">Cupcakes Temáticos</h3>
+          <p style="font-size: 0.85rem; color: var(--color-texto-mutado); margin: 0;">Red Velvet, Vainilla caramelizada</p>
+        </a>
+        <a href="productos.html?cat=Galletas" style="background: #fff; padding: 1.5rem; border-radius: 16px; text-align: center; border: 1.5px solid var(--color-menta-borde); box-shadow: var(--sombra-card); display: block; text-decoration: none;">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: 0.5rem;">🍪</span>
+          <h3 style="font-size: 1.15rem; color: var(--color-texto-principal);">Galletas &amp; Panes</h3>
+          <p style="font-size: 0.85rem; color: var(--color-texto-mutado); margin: 0;">Masa madre y surtidos finos</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Productos Destacados (Cargados dinámicamente) -->
+    <section class="section-padding" style="background-color: #FFFDF9; border-top: 1px solid var(--color-borde-suave); border-bottom: 1px solid var(--color-borde-suave);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Favoritos de la Casa</span>
+          <h2>Productos Más Solicitados</h2>
+          <p>Disfruta de nuestros clásicos recién horneados, listos para enviar a tu hogar.</p>
+        </div>
+
+        <div class="product-grid" id="featured-products-container">
+          <!-- Renderizado dinámico vía JS -->
+        </div>
+
+        <div style="text-align: center; margin-top: 2.5rem;">
+          <a href="productos.html" class="btn btn-secondary btn-lg" id="btn-ver-todo-catalogo">
+            Ver Todos los Productos del Catálogo →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Llamado especial: Módulo Postre Personalizado -->
+    <section class="container">
+      <div class="custom-cake-cta-banner">
+        <div class="custom-cake-cta-grid">
+          <div>
+            <span class="section-tag" style="color: var(--color-rosado-oscuro);">Servicio Exclusivo a Medida</span>
+            <h2 style="font-size: 2.1rem; color: var(--color-texto-principal);">
+              ¿Tienes una celebración en mente? Diseña tu torta personalizada
+            </h2>
+            <p style="color: var(--color-texto-secundario); font-size: 1rem;">
+              Crea tu postre soñado paso a paso: selecciona el número de porciones (de 6 a 150), tu bizcocho favorito, rellenos artesanales, temática decorativa y dedicatoria personalizada.
+            </p>
+            <ul class="custom-cake-features">
+              <li><span>✔</span> <strong>Cotización instantánea en pantalla</strong> sin sorpresas ni demoras.</li>
+              <li><span>✔</span> <strong>Planificación garantizada:</strong> Reserva con un mínimo de 72 horas para máxima calidad artesanal.</li>
+              <li><span>✔</span> <strong>Opciones para todos:</strong> Bizcochos tradicionales, Red Velvet, Zanahoria & Nuez o Sin Azúcar (Keto).</li>
+            </ul>
+            <a href="postre-personalizado.html" class="btn btn-primary btn-lg" id="btn-cta-personalizado">
+              🎨 Ir al Creador de Postres Personalizados
+            </a>
+          </div>
+          <div style="text-align: center;">
+            <img src="https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=700&q=80" alt="Torta decorada a medida" style="border-radius: 20px; border: 5px solid #fff; box-shadow: var(--sombra-card); max-height: 340px; margin: 0 auto;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Por Qué Elegirnos -->
+    <section class="section-padding container">
+      <div class="section-header">
+        <span class="section-tag">El Compromiso Dulce Encanto</span>
+        <h2>¿Por qué nuestros postres son inolvidables?</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+        <div style="background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-suave);">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🍯</div>
+          <h3>Manjar de Campo Auténtico</h3>
+          <p>Cocinado a fuego lento con leche entera fresca, logrando la textura untuosa y sabor caramelizado que solo una receta tradicional puede ofrecer.</p>
+        </div>
+        <div style="background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-suave);">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">🌾</div>
+          <h3>Masa Madre &amp; Sin Químicos</h3>
+          <p>Nuestros panes y bases de masa quebrada respetan los tiempos biológicos naturales de fermentación, sin aceleradores ni preservantes artificiales.</p>
+        </div>
+        <div style="background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-suave);">
+          <div style="font-size: 2rem; margin-bottom: 0.75rem;">⏰</div>
+          <h3>Puntualidad en tu Entrega</h3>
+          <p>Compromiso riguroso con tu fecha de retiro o despacho para que tu torta llegue intacta y a la temperatura adecuada a tu evento.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Principal -->
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>
+          Endulzando la vida de las familias con repostería artesanal, ingredientes nobles y pasión por el detalle en cada creación.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Enlaces Rápidos</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo de Productos</a></li>
+          <li><a href="postre-personalizado.html">Cotizar Postre Personalizado</a></li>
+          <li><a href="carrito.html">Mi Carrito</a></li>
+          <li><a href="blogs.html">Consejos &amp; Recetas</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Institucional</h4>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Historia de Dulce Encanto</a></li>
+          <li><a href="contacto.html">Ubicación y Horarios</a></li>
+          <li><a href="registro.html">Registro de Clientes</a></li>
+          <li><a href="login.html">Iniciar Sesión</a></li>
+          <li><a href="admin/dashboard.html">Panel de Administración</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Visítanos</h4>
+        <p>📍 Av. Providencia 1420, Providencia, Santiago, Chile</p>
+        <p>📞 +56 2 2345 6789</p>
+        <p>✉️ contacto@dulceencanto.cl</p>
+        <p>🕒 Lun a Sáb: 08:30 - 20:00 hrs</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería y Repostería Dulce Encanto. Todos los derechos reservados.</span>
+      <span>Proyecto ERS v2.0 - DSY1104 Desarrollo Fullstack</span>
+    </div>
+  </footer>
+
+  <!-- Scripts JavaScript Vanilla (ES6+) -->
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Renderizar barra de sesión demo
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      // Menú móvil toggle
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => {
+          navMenu.classList.toggle("open");
+        });
+      }
+
+      // Cargar productos destacados
+      const container = document.getElementById("featured-products-container");
+      if (container && window.ProductosService) {
+        const productos = ProductosService.obtenerProductos();
+        const destacados = productos.filter(p => p.destacado).slice(0, 4);
+
+        container.innerHTML = destacados.map(prod => {
+          const precioFormatted = CarritoService.formatearPrecio(prod.precio);
+          const esCritico = prod.stock <= prod.stockCritico;
+
+          return `
+            <article class="product-card" id="card-${prod.id}">
+              <div class="product-card-img-wrap">
+                <img src="${prod.imagen}" alt="${prod.nombre}" loading="lazy">
+                <span class="card-badge-category">${prod.categoria}</span>
+                ${esCritico ? `<span class="card-badge-stock-alert">¡Stock Crítico! (${prod.stock} disp.)</span>` : ''}
+              </div>
+              <div class="product-card-body">
+                <span class="product-code-meta">Cód: ${prod.codigo}</span>
+                <h3 class="product-card-title">${prod.nombre}</h3>
+                <div class="product-card-portions">
+                  <span>👥 ${prod.porciones}</span>
+                </div>
+                <p class="product-card-desc">${prod.descripcion}</p>
+                <div class="product-card-footer">
+                  <div>
+                    <span class="product-price ${prod.precio === 0 ? 'is-free' : ''}">${precioFormatted}</span>
+                  </div>
+                  <div style="display: flex; gap: 0.4rem;">
+                    <a href="producto-detalle.html?id=${prod.id}" class="btn btn-secondary btn-sm" title="Ver ingredientes y porciones">
+                      Detalles
+                    </a>
+                    <button class="btn btn-primary btn-sm" onclick="agregarAlCarritoHome('${prod.id}')" title="Añadir al carrito">
+                      🛒 Añadir
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+    });
+
+    function agregarAlCarritoHome(id) {
+      const prod = ProductosService.obtenerProductoPorId(id);
+      if (prod) {
+        CarritoService.agregarItem(prod, 1);
+      }
+    }
+  </script>
+</body>
+</html>

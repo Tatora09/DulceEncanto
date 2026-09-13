@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Clientes | Dulce Encanto</title>
+  <meta name="description" content="Crea tu cuenta de cliente en Panadería y Repostería Dulce Encanto con validación de RUT chileno y regiones.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 Registra tu cuenta y obtén 10% de descuento en tu primera compra con el cupón <strong>DULCE10</strong>.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding" style="max-width: 760px;">
+    <div class="form-card">
+      <div class="form-header-box" style="text-align: center;">
+        <span class="section-tag">Comunidad Dulce Encanto</span>
+        <h1 style="font-size: 2rem; margin: 0.35rem 0;">Crear Cuenta de Cliente</h1>
+        <p style="color: var(--color-texto-secundario); font-size: 0.95rem; margin: 0;">
+          Únete para gestionar tus pedidos de repostería, cotizaciones de postres personalizados y despachos.
+        </p>
+      </div>
+
+      <form id="registroForm" novalidate>
+        
+        <!-- RUN / RUT Chileno (Sec 4.2: Formato continuo sin puntos ni guión, longitud 7 a 9, Módulo 11) -->
+        <div class="form-group">
+          <label for="rut">
+            RUN / RUT Chileno <span class="required-star">*</span>
+          </label>
+          <input type="text" id="rut" placeholder="Ej: 19011022K (sin puntos ni guión)" maxlength="9" required autocomplete="off">
+          <span class="form-hint">
+            Formato continuo sin puntos ni guión (ej: <strong>19011022K</strong>). Longitud de 7 a 9 caracteres. Validado por Módulo 11.
+          </span>
+        </div>
+
+        <!-- Nombre Completo -->
+        <div class="form-group">
+          <label for="nombre">Nombre Completo <span class="required-star">*</span></label>
+          <input type="text" id="nombre" placeholder="Ej: Valentina Paz Araya" required>
+        </div>
+
+        <!-- Correo Electrónico (Sec 4.2: Máximo 100 caracteres, solo dominios autorizados @duoc.cl, @profesor.duoc.cl, @gmail.com) -->
+        <div class="form-group">
+          <label for="email">
+            Correo Electrónico <span class="required-star">*</span>
+          </label>
+          <input type="email" id="email" placeholder="nombre@gmail.com o @duoc.cl" maxlength="100" required>
+          <span class="form-hint">
+            Solo dominios autorizados: <strong>@duoc.cl</strong>, <strong>@profesor.duoc.cl</strong> o <strong>@gmail.com</strong>.
+          </span>
+        </div>
+
+        <!-- Teléfono de contacto -->
+        <div class="form-group">
+          <label for="telefono">Teléfono Móvil (WhatsApp)</label>
+          <input type="tel" id="telefono" placeholder="+56 9 1234 5678">
+        </div>
+
+        <!-- Cascada Región -> Comuna (Sec 4.2) -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="selectRegion">Región <span class="required-star">*</span></label>
+            <select id="selectRegion" required>
+              <option value="">Cargando regiones...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="selectComuna">Comuna <span class="required-star">*</span></label>
+            <select id="selectComuna" required disabled>
+              <option value="">-- Primero seleccione Región --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dirección de Envío -->
+        <div class="form-group">
+          <label for="direccion">Dirección de Entrega Habitual</label>
+          <input type="text" id="direccion" placeholder="Calle, número, departamento o villa">
+        </div>
+
+        <!-- Contraseña y Confirmación -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="password">Contraseña <span class="required-star">*</span></label>
+            <input type="password" id="password" placeholder="Mínimo 6 caracteres" required>
+          </div>
+
+          <div class="form-group">
+            <label for="passwordConfirm">Confirmar Contraseña <span class="required-star">*</span></label>
+            <input type="password" id="passwordConfirm" placeholder="Repite tu contraseña" required>
+          </div>
+        </div>
+
+        <!-- Términos y condiciones -->
+        <div class="form-group" style="margin-top: 0.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" id="aceptaTerminos" required style="width: auto;">
+            <span>Acepto las políticas de privacidad y los términos del servicio de Dulce Encanto.</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-full" id="btn-submit-registro">
+          Registrar Mi Cuenta
+        </button>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--color-texto-secundario);">
+          ¿Ya tienes una cuenta creada? <a href="login.html" style="font-weight: 600;">Inicia sesión aquí</a>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Momentos dulces garantizados en cada pedido.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Ayuda</h4>
+        <ul class="footer-links">
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0 - RF-06</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      // Inicializar selector en cascada Región -> Comuna (Sec 4.2)
+      inicializarCascadaRegionComuna("selectRegion", "selectComuna");
+
+      // Validaciones en tiempo real
+      const rutInput = document.getElementById("rut");
+      const emailInput = document.getElementById("email");
+      const nombreInput = document.getElementById("nombre");
+      const passInput = document.getElementById("password");
+      const passConfInput = document.getElementById("passwordConfirm");
+      const form = document.getElementById("registroForm");
+
+      rutInput.addEventListener("blur", () => {
+        const res = validarRUTChileno(rutInput.value);
+        if (!res.valido) mostrarError(rutInput, res.mensaje);
+        else {
+          limpiarError(rutInput);
+          rutInput.value = res.rutFormateado;
+        }
+      });
+
+      emailInput.addEventListener("blur", () => {
+        const res = validarEmailRestringido(emailInput.value);
+        if (!res.valido) mostrarError(emailInput, res.mensaje);
+        else limpiarError(emailInput);
+      });
+
+      nombreInput.addEventListener("blur", () => {
+        if (!nombreInput.value.trim()) mostrarError(nombreInput, "El nombre completo es obligatorio.");
+        else limpiarError(nombreInput);
+      });
+
+      passConfInput.addEventListener("input", () => {
+        if (passInput.value && passConfInput.value !== passInput.value) {
+          mostrarError(passConfInput, "Las contraseñas ingresadas no coinciden.");
+        } else {
+          limpiarError(passConfInput);
+        }
+      });
+
+      // Submit del Formulario
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let esValido = true;
+
+        // Validar RUT
+        const resRUT = validarRUTChileno(rutInput.value);
+        if (!resRUT.valido) {
+          mostrarError(rutInput, resRUT.mensaje);
+          esValido = false;
+        } else {
+          limpiarError(rutInput);
+        }
+
+        // Validar Email
+        const resEmail = validarEmailRestringido(emailInput.value);
+        if (!resEmail.valido) {
+          mostrarError(emailInput, resEmail.mensaje);
+          esValido = false;
+        } else {
+          limpiarError(emailInput);
+        }
+
+        // Validar Nombre
+        if (!nombreInput.value.trim()) {
+          mostrarError(nombreInput, "El nombre es obligatorio.");
+          esValido = false;
+        } else {
+          limpiarError(nombreInput);
+        }
+
+        // Validar Región y Comuna
+        const regionSelect = document.getElementById("selectRegion");
+        const comunaSelect = document.getElementById("selectComuna");
+        if (!regionSelect.value) {
+          mostrarError(regionSelect, "Debe seleccionar su región de residencia.");
+          esValido = false;
+        } else {
+          limpiarError(regionSelect);
+        }
+
+        if (!comunaSelect.value) {
+          mostrarError(comunaSelect, "Debe seleccionar su comuna.");
+          esValido = false;
+        } else {
+          limpiarError(comunaSelect);
+        }
+
+        // Validar Contraseña
+        if (passInput.value.length < 6) {
+          mostrarError(passInput, "La contraseña debe contener al menos 6 caracteres.");
+          esValido = false;
+        } else {
+          limpiarError(passInput);
+        }
+
+        if (passConfInput.value !== passInput.value) {
+          mostrarError(passConfInput, "Las contraseñas no coinciden.");
+          esValido = false;
+        } else {
+          limpiarError(passConfInput);
+        }
+
+        // Validar Términos
+        const terminos = document.getElementById("aceptaTerminos");
+        if (!terminos.checked) {
+          alert("Debe aceptar los términos del servicio y políticas de privacidad para continuar.");
+          esValido = false;
+        }
+
+        if (esValido) {
+          const nuevoUsuario = {
+            id: "usr-" + Date.now(),
+            rut: resRUT.rutFormateado,
+            nombre: nombreInput.value.trim(),
+            email: resEmail.email,
+            telefono: document.getElementById("telefono").value.trim(),
+            region: regionSelect.value,
+            comuna: comunaSelect.value,
+            direccion: document.getElementById("direccion").value.trim(),
+            rol: "Cliente",
+            estado: "Activo",
+            fechaRegistro: new Date().toISOString().split("T")[0]
+          };
+
+          AuthService.guardarUsuario(nuevoUsuario);
+          AuthService.cambiarUsuario(nuevoUsuario);
+          alert(`🎉 ¡Bienvenido a Dulce Encanto, ${nuevoUsuario.nombre}!\n\nTu cuenta ha sido creada exitosamente con RUT ${nuevoUsuario.rut}. Ya puedes realizar pedidos y solicitar postres a medida.`);
+          window.location.href = "index.html";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

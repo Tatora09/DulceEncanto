@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitudes de Postres Personalizados | Admin Dulce Encanto</title>
+  <meta name="description" content="Gestión y aprobación de tortas y postres personalizados con 72 hrs de anticipación en Dulce Encanto.">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body style="background-color: #F8F9FA;">
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="brand-logo" style="margin-bottom: 2rem;">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h2 style="font-size: 1.15rem; color: #fff; margin:0;">Dulce Encanto</h2>
+          <span style="font-size: 0.75rem; color: var(--color-rosado-pastel);">Panel de Control</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="admin-nav-list">
+          <li>
+            <a href="dashboard.html">
+              📊 <span>Dashboard &amp; Métricas</span>
+            </a>
+          </li>
+          <li>
+            <a href="productos.html">
+              🍰 <span>Gestión de Productos</span>
+            </a>
+          </li>
+          <li>
+            <a href="solicitudes.html" class="active">
+              🎂 <span>Solicitudes a Medida</span>
+              <span id="badge-solicitudes-count" style="background: var(--color-rosado-fuerte); color: #fff; padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; margin-left: auto;">0</span>
+            </a>
+          </li>
+          <li>
+            <a href="usuarios.html">
+              👥 <span>Gestión de Usuarios</span>
+            </a>
+          </li>
+          <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+            <a href="../index.html">
+              🏪 <span>Volver a la Tienda</span>
+            </a>
+          </li>
+          <li>
+            <a href="../login.html" onclick="AuthService.logout()">
+              🚪 <span>Cerrar Sesión</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 style="font-size: 1.85rem; margin: 0; color: var(--color-texto-principal);">
+            Gestión de Solicitudes a Medida
+          </h1>
+          <p style="margin: 0.25rem 0 0 0; color: var(--color-texto-secundario); font-size: 0.9rem;">
+            Supervisa cotizaciones, tiempos de anticipación (mínimo 72 hrs) y estados de horneado para cada cliente.
+          </p>
+        </div>
+
+        <a href="../postre-personalizado.html" class="btn btn-secondary" target="_blank">
+          ✨ Ver Cotizador Público ↗
+        </a>
+      </div>
+
+      <!-- Filtros -->
+      <div class="admin-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
+          <input type="text" id="searchSolicitud" placeholder="🔍 Buscar por código, cliente o email..." style="padding: 0.6rem 1rem;">
+          
+          <select id="filtroEstadoSolicitud" style="padding: 0.6rem 1rem;">
+            <option value="Todos">Todos los Estados</option>
+            <option value="Pendiente">⏳ Pendiente</option>
+            <option value="Aprobada">✓ Aprobada</option>
+            <option value="En Preparación">🥣 En Preparación</option>
+            <option value="Entregada">📦 Entregada</option>
+            <option value="Rechazada">✗ Rechazada</option>
+          </select>
+
+          <select id="filtroTipoPostre" style="padding: 0.6rem 1rem;">
+            <option value="Todos">Todos los Tipos</option>
+            <option value="Torta Tradicional">Torta Tradicional</option>
+            <option value="Torta en Fondant">Torta en Fondant</option>
+            <option value="Cupcakes Temáticos">Cupcakes Temáticos</option>
+            <option value="Pie / Tartaleta">Pie / Tartaleta</option>
+            <option value="Mesa de Dulces">Mesa de Dulces</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabla de Solicitudes (RF-09) -->
+      <div class="admin-card" style="padding: 0; overflow: hidden;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Cliente &amp; Contacto</th>
+              <th>Tipo &amp; Porciones</th>
+              <th>Bizcocho &amp; Relleno</th>
+              <th>Fecha Entrega (72h)</th>
+              <th>Cotización</th>
+              <th>Estado Actual</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="solicitudes-table-body">
+            <!-- Inyectado por JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal de Detalle Completo de la Solicitud -->
+  <div id="solicitudDetailModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #fff; max-width: 600px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative; max-height: 90vh; overflow-y: auto;">
+      <button onclick="cerrarModalSolicitud()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      
+      <div id="modalSolicitudContent">
+        <!-- Renderizado dinámicamente -->
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data-regiones.js"></script>
+  <script src="../js/validaciones.js"></script>
+  <script src="../js/data-productos.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+
+      document.getElementById("searchSolicitud").addEventListener("input", renderizarTablaSolicitudes);
+      document.getElementById("filtroEstadoSolicitud").addEventListener("change", renderizarTablaSolicitudes);
+      document.getElementById("filtroTipoPostre").addEventListener("change", renderizarTablaSolicitudes);
+
+      renderizarTablaSolicitudes();
+    });
+
+    function renderizarTablaSolicitudes() {
+      const search = document.getElementById("searchSolicitud").value.toLowerCase();
+      const estadoFiltro = document.getElementById("filtroEstadoSolicitud").value;
+      const tipoFiltro = document.getElementById("filtroTipoPostre").value;
+
+      let solicitudes = ProductosService.obtenerSolicitudes();
+
+      const pendientesCount = solicitudes.filter(s => s.estado === "Pendiente").length;
+      document.getElementById("badge-solicitudes-count").textContent = pendientesCount;
+
+      if (search) {
+        solicitudes = solicitudes.filter(s => 
+          s.codigo.toLowerCase().includes(search) || 
+          s.clienteNombre.toLowerCase().includes(search) ||
+          s.clienteEmail.toLowerCase().includes(search)
+        );
+      }
+
+      if (estadoFiltro !== "Todos") {
+        solicitudes = solicitudes.filter(s => s.estado === estadoFiltro);
+      }
+
+      if (tipoFiltro !== "Todos") {
+        solicitudes = solicitudes.filter(s => s.tipoPostre === tipoFiltro);
+      }
+
+      const tbody = document.getElementById("solicitudes-table-body");
+      if (solicitudes.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--color-texto-mutado);">
+              No se encontraron solicitudes con los criterios de búsqueda.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = solicitudes.map(s => {
+        let badgeClass = "badge-pending";
+        if (s.estado === "Aprobada") badgeClass = "badge-approved";
+        if (s.estado === "En Preparación") badgeClass = "badge-prep";
+        if (s.estado === "Entregada") badgeClass = "badge-completed";
+        if (s.estado === "Rechazada") badgeClass = "badge-rejected";
+
+        return `
+          <tr>
+            <td><strong style="color: var(--color-rosado-fuerte); font-family: monospace; font-size: 0.95rem;">${s.codigo}</strong></td>
+            <td>
+              <div style="font-weight: 600;">${s.clienteNombre}</div>
+              <small style="color: var(--color-texto-mutado);">${s.clienteEmail}<br>${s.clienteTelefono || 'Sin teléfono'}</small>
+            </td>
+            <td>
+              <strong>${s.tipoPostre}</strong><br>
+              <span style="font-size: 0.8rem; color: var(--color-texto-secundario);">👥 ${s.porciones} porciones</span>
+            </td>
+            <td>
+              <span style="font-size: 0.82rem;">
+                🍰 ${s.saborBizcocho}<br>
+                🍯 ${s.rellenoPrincipal}
+              </span>
+            </td>
+            <td>
+              <strong style="color: var(--color-texto-principal);">${s.fechaEntrega}</strong><br>
+              <small style="color: #2D6A4F;">✓ Cumple 72 hrs</small>
+            </td>
+            <td>
+              <strong style="color: var(--color-rosado-fuerte);">${CarritoService.formatearPrecio(s.precioEstimado)}</strong>
+            </td>
+            <td>
+              <select onchange="actualizarEstadoSolicitudRapido('${s.id}', this.value)" style="padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; font-weight: 600;">
+                <option value="Pendiente" ${s.estado === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+                <option value="Aprobada" ${s.estado === 'Aprobada' ? 'selected' : ''}>✓ Aprobada</option>
+                <option value="En Preparación" ${s.estado === 'En Preparación' ? 'selected' : ''}>🥣 En Preparación</option>
+                <option value="Entregada" ${s.estado === 'Entregada' ? 'selected' : ''}>📦 Entregada</option>
+                <option value="Rechazada" ${s.estado === 'Rechazada' ? 'selected' : ''}>✗ Rechazada</option>
+              </select>
+            </td>
+            <td>
+              <button class="btn btn-secondary btn-sm" onclick="verDetalleSolicitud('${s.id}')">
+                👁️ Ver Ficha
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function actualizarEstadoSolicitudRapido(id, nuevoEstado) {
+      ProductosService.actualizarEstadoSolicitud(id, nuevoEstado);
+      renderizarTablaSolicitudes();
+    }
+
+    function verDetalleSolicitud(id) {
+      const solicitudes = ProductosService.obtenerSolicitudes();
+      const s = solicitudes.find(x => x.id === id);
+      if (!s) return;
+
+      const content = document.getElementById("modalSolicitudContent");
+      content.innerHTML = `
+        <div style="border-bottom: 1px solid var(--color-borde-suave); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+          <span class="section-tag">${s.codigo}</span>
+          <h2 style="font-size: 1.45rem; color: var(--color-texto-principal); margin: 0.35rem 0;">
+            ${s.tipoPostre} (${s.porciones} Porciones)
+          </h2>
+          <span style="font-size: 0.85rem; color: var(--color-texto-mutado);">Ingresada el ${s.fechaSolicitud}</span>
+        </div>
+
+        <div style="background: var(--color-crema-suave); padding: 1.25rem; border-radius: var(--radio-md); margin-bottom: 1.25rem; font-size: 0.9rem;">
+          <h4 style="margin: 0 0 0.5rem 0; color: var(--color-rosado-fuerte);">👤 Datos del Cliente</h4>
+          <p style="margin-bottom: 0.25rem;"><strong>Nombre:</strong> ${s.clienteNombre}</p>
+          <p style="margin-bottom: 0.25rem;"><strong>Correo:</strong> ${s.clienteEmail}</p>
+          <p style="margin-bottom: 0;"><strong>Teléfono:</strong> ${s.clienteTelefono || 'No especificado'}</p>
+        </div>
+
+        <div style="margin-bottom: 1.25rem; font-size: 0.92rem;">
+          <h4 style="margin: 0 0 0.5rem 0;">🍰 Especificaciones Técnicas</h4>
+          <p style="margin-bottom: 0.25rem;"><strong>Bizcocho:</strong> ${s.saborBizcocho}</p>
+          <p style="margin-bottom: 0.25rem;"><strong>Relleno:</strong> ${s.rellenoPrincipal}</p>
+          <p style="margin-bottom: 0.25rem;"><strong>Fecha de Entrega Requerida:</strong> <span style="color: var(--color-rosado-fuerte); font-weight: 700;">${s.fechaEntrega}</span></p>
+          <p style="margin-bottom: 0.25rem;"><strong>Presupuesto Estimado:</strong> <span style="color: var(--color-rosado-fuerte); font-weight: 700;">${CarritoService.formatearPrecio(s.precioEstimado)}</span></p>
+        </div>
+
+        <div style="background: #fff; border: 1px solid var(--color-borde-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.25rem;">
+          <strong>Dedicatoria en Glaseado:</strong>
+          <p style="font-style: italic; color: var(--color-rosado-fuerte); margin: 0.25rem 0 0 0;">
+            ${s.dedicatoria ? `"${s.dedicatoria}"` : 'Sin dedicatoria'}
+          </p>
+        </div>
+
+        <div style="background: #fff; border: 1px solid var(--color-borde-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.5rem;">
+          <strong>Descripción de la Temática / Decoración:</strong>
+          <p style="margin: 0.25rem 0 0 0; color: var(--color-texto-secundario); line-height: 1.6;">
+            ${s.tematica}
+          </p>
+          ${s.urlImagen ? `
+            <div style="margin-top: 0.75rem;">
+              <a href="${s.urlImagen}" target="_blank" class="btn btn-secondary btn-sm">Ver Imagen de Referencia ↗</a>
+            </div>
+          ` : ''}
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div>
+            <label style="font-size: 0.85rem; font-weight: 600;">Modificar Estado:</label>
+            <select id="modalSelectEstado" style="padding: 6px 10px; font-size: 0.9rem; border-radius: 6px;">
+              <option value="Pendiente" ${s.estado === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
+              <option value="Aprobada" ${s.estado === 'Aprobada' ? 'selected' : ''}>✓ Aprobada</option>
+              <option value="En Preparación" ${s.estado === 'En Preparación' ? 'selected' : ''}>🥣 En Preparación</option>
+              <option value="Entregada" ${s.estado === 'Entregada' ? 'selected' : ''}>📦 Entregada</option>
+              <option value="Rechazada" ${s.estado === 'Rechazada' ? 'selected' : ''}>✗ Rechazada</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" onclick="guardarEstadoDesdeModal('${s.id}')">
+            Actualizar y Notificar Cliente
+          </button>
+        </div>
+      `;
+
+      document.getElementById("solicitudDetailModal").style.display = "flex";
+    }
+
+    function cerrarModalSolicitud() {
+      document.getElementById("solicitudDetailModal").style.display = "none";
+    }
+
+    function guardarEstadoDesdeModal(id) {
+      const nuevo = document.getElementById("modalSelectEstado").value;
+      ProductosService.actualizarEstadoSolicitud(id, nuevo);
+      alert(`✓ Estado de la solicitud actualizado a "${nuevo}".`);
+      cerrarModalSolicitud();
+      renderizarTablaSolicitudes();
+    }
+  </script>
+</body>
+</html>

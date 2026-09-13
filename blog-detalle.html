@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lectura de Artículo | Dulce Encanto</title>
+  <meta name="description" content="Consejos expertos sobre conservación de tortas y técnicas de repostería artesanal en Dulce Encanto.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 Panadería &amp; Repostería Dulce Encanto - Consejos y Secretos de Cocina
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link active">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <nav style="margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--color-texto-mutado);">
+      <a href="index.html">Inicio</a> &gt; 
+      <a href="blogs.html">Blog</a> &gt; 
+      <span id="breadcrumb-blog-title" style="color: var(--color-texto-principal); font-weight: 600;">Cargando...</span>
+    </nav>
+
+    <article class="blog-article-content" id="article-container">
+      <div style="text-align: center; padding: 3rem;">
+        <p>Cargando artículo...</p>
+      </div>
+    </article>
+
+    <!-- Artículos Relacionados -->
+    <section style="margin-top: 4rem; max-width: 860px; margin-left: auto; margin-right: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.3rem;">Otros Artículos de Interés</h3>
+        <a href="blogs.html" style="font-size: 0.9rem; font-weight: 600;">Ver todos los artículos →</a>
+      </div>
+      <div class="blog-grid" id="related-blogs-container"></div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Tradición y frescura en cada momento dulce.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Comunidad</h4>
+        <ul class="footer-links">
+          <li><a href="blogs.html">Blog</a></li>
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visítanos</h4>
+        <p>📍 Av. Providencia 1420, Santiago</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("slug") || "conservar-tortas-frescas";
+      cargarArticulo(slug);
+    });
+
+    function cargarArticulo(slug) {
+      const blog = ProductosService.obtenerBlogPorSlug(slug) || ProductosService.obtenerBlogs()[0];
+      document.title = `${blog.titulo} | Dulce Encanto`;
+      document.getElementById("breadcrumb-blog-title").textContent = blog.titulo;
+
+      const container = document.getElementById("article-container");
+      container.innerHTML = `
+        <div style="margin-bottom: 1.5rem;">
+          <span class="card-badge-category" style="position: static; display: inline-block; margin-bottom: 0.75rem;">
+            ${blog.categoria}
+          </span>
+          <h1 style="font-size: 2.2rem; color: var(--color-texto-principal); margin-bottom: 1rem; line-height: 1.3;">
+            ${blog.titulo}
+          </h1>
+          <div class="blog-meta" style="font-size: 0.88rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <span>🗓️ Publicado: ${blog.fecha}</span>
+            <span>✍️ Autor: ${blog.autor}</span>
+            <span>⏱️ Lectura: ${blog.tiempoLectura}</span>
+          </div>
+        </div>
+
+        <img src="${blog.imagen}" alt="${blog.titulo}" style="width: 100%; height: 380px; object-fit: cover; border-radius: var(--radio-lg); margin-bottom: 2rem; border: 4px solid var(--color-crema);">
+
+        <div style="font-size: 1.05rem; line-height: 1.8; color: var(--color-texto-principal);">
+          ${blog.contenido}
+        </div>
+
+        <div style="margin-top: 3rem; padding: 1.5rem; background: var(--color-crema-suave); border-radius: var(--radio-md); border: 1px solid var(--color-borde-suave); display: flex; align-items: center; gap: 1rem;">
+          <span style="font-size: 2.5rem;">🧁</span>
+          <div>
+            <h4 style="margin: 0 0 0.25rem 0;">¿Te antojaste de algo dulce?</h4>
+            <p style="margin: 0; font-size: 0.9rem;">
+              Revisa nuestras tortas artesanales o encarga tu diseño soñado en nuestro cotizador.
+            </p>
+          </div>
+          <a href="productos.html" class="btn btn-primary btn-sm" style="margin-left: auto; white-space: nowrap;">
+            Ver Catálogo
+          </a>
+        </div>
+      `;
+
+      // Cargar relacionados
+      const relContainer = document.getElementById("related-blogs-container");
+      const otros = ProductosService.obtenerBlogs().filter(b => b.id !== blog.id);
+      relContainer.innerHTML = otros.map(o => `
+        <article class="blog-card">
+          <img src="${o.imagen}" alt="${o.titulo}" class="blog-thumb">
+          <div class="blog-card-body">
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">${o.titulo}</h4>
+            <p style="font-size: 0.85rem; color: var(--color-texto-secundario); flex-grow: 1;">${o.resumen.substring(0, 80)}...</p>
+            <a href="blog-detalle.html?slug=${o.slug}" class="btn btn-secondary btn-sm" style="margin-top: 0.75rem;">Leer</a>
+          </div>
+        </article>
+      `).join("");
+    }
+  </script>
+</body>
+</html>

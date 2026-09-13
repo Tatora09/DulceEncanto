@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Usuarios y Roles | Admin Dulce Encanto</title>
+  <meta name="description" content="Administración de cuentas, roles RBAC y estados de colaboradores y clientes en Dulce Encanto.">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body style="background-color: #F8F9FA;">
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="brand-logo" style="margin-bottom: 2rem;">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h2 style="font-size: 1.15rem; color: #fff; margin:0;">Dulce Encanto</h2>
+          <span style="font-size: 0.75rem; color: var(--color-rosado-pastel);">Panel de Control</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="admin-nav-list">
+          <li>
+            <a href="dashboard.html">
+              📊 <span>Dashboard &amp; Métricas</span>
+            </a>
+          </li>
+          <li>
+            <a href="productos.html">
+              🍰 <span>Gestión de Productos</span>
+            </a>
+          </li>
+          <li>
+            <a href="solicitudes.html">
+              🎂 <span>Solicitudes a Medida</span>
+            </a>
+          </li>
+          <li>
+            <a href="usuarios.html" class="active">
+              👥 <span>Gestión de Usuarios</span>
+            </a>
+          </li>
+          <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+            <a href="../index.html">
+              🏪 <span>Volver a la Tienda</span>
+            </a>
+          </li>
+          <li>
+            <a href="../login.html" onclick="AuthService.logout()">
+              🚪 <span>Cerrar Sesión</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 style="font-size: 1.85rem; margin: 0; color: var(--color-texto-principal);">
+            Cuentas y Roles de Usuario
+          </h1>
+          <p style="margin: 0.25rem 0 0 0; color: var(--color-texto-secundario); font-size: 0.9rem;">
+            Control de accesos según roles: Administrador, Vendedor / Pastelero y Cliente (ERS v2.0).
+          </p>
+        </div>
+
+        <button class="btn btn-primary" onclick="abrirModalUsuario()">
+          ➕ Registrar Nuevo Colaborador / Usuario
+        </button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="admin-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
+          <input type="text" id="searchUsuario" placeholder="🔍 Buscar por RUT, nombre o correo..." style="padding: 0.6rem 1rem;">
+          
+          <select id="filtroRolUsuario" style="padding: 0.6rem 1rem;">
+            <option value="Todos">Todos los Roles</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Vendedor / Pastelero">Vendedor / Pastelero</option>
+            <option value="Cliente">Cliente</option>
+          </select>
+
+          <select id="filtroEstadoUsuario" style="padding: 0.6rem 1rem;">
+            <option value="Todos">Todos los Estados</option>
+            <option value="Activo">✓ Activo</option>
+            <option value="Inactivo">✗ Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabla de Usuarios -->
+      <div class="admin-card" style="padding: 0; overflow: hidden;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>RUT</th>
+              <th>Nombre Completo</th>
+              <th>Correo Electrónico</th>
+              <th>Teléfono</th>
+              <th>Comuna / Región</th>
+              <th>Rol Asignado</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usuarios-table-body">
+            <!-- Inyectado por JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Crear/Editar Usuario -->
+  <div id="usuarioModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
+    <div style="background: #fff; max-width: 620px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative; max-height: 90vh; overflow-y: auto;">
+      <button onclick="cerrarModalUsuario()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      
+      <h2 id="modalUsuarioTitle" style="font-size: 1.45rem; margin: 0 0 1.25rem 0;">
+        Registrar Usuario
+      </h2>
+
+      <form id="usuarioForm" novalidate>
+        <input type="hidden" id="usrId">
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="usrRut">RUT Chileno <span class="required-star">*</span></label>
+            <input type="text" id="usrRut" placeholder="19011022K" maxlength="9" required>
+            <span class="form-hint">Sin puntos ni guión (Módulo 11).</span>
+          </div>
+
+          <div class="form-group">
+            <label for="usrRol">Rol del Sistema <span class="required-star">*</span></label>
+            <select id="usrRol" required>
+              <option value="Cliente">Cliente</option>
+              <option value="Vendedor / Pastelero">Vendedor / Pastelero</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="usrNombre">Nombre Completo <span class="required-star">*</span></label>
+          <input type="text" id="usrNombre" placeholder="Ej: Patricia Morales" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="usrEmail">Correo Electrónico <span class="required-star">*</span></label>
+            <input type="email" id="usrEmail" placeholder="usuario@duoc.cl o @gmail.com" required>
+            <span class="form-hint">@duoc.cl, @profesor.duoc.cl o @gmail.com</span>
+          </div>
+
+          <div class="form-group">
+            <label for="usrTelefono">Teléfono</label>
+            <input type="tel" id="usrTelefono" placeholder="+56 9 8765 4321">
+          </div>
+        </div>
+
+        <!-- Cascada Región / Comuna -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="usrRegion">Región <span class="required-star">*</span></label>
+            <select id="usrRegion" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="usrComuna">Comuna <span class="required-star">*</span></label>
+            <select id="usrComuna" required disabled></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="usrEstado">Estado de la Cuenta</label>
+          <select id="usrEstado">
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModalUsuario()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-guardar-usuario">Guardar Usuario</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/data-regiones.js"></script>
+  <script src="../js/validaciones.js"></script>
+  <script src="../js/data-productos.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      inicializarCascadaRegionComuna("usrRegion", "usrComuna");
+
+      document.getElementById("searchUsuario").addEventListener("input", renderizarTablaUsuarios);
+      document.getElementById("filtroRolUsuario").addEventListener("change", renderizarTablaUsuarios);
+      document.getElementById("filtroEstadoUsuario").addEventListener("change", renderizarTablaUsuarios);
+
+      document.getElementById("usuarioForm").addEventListener("submit", guardarUsuarioSubmit);
+
+      renderizarTablaUsuarios();
+    });
+
+    function renderizarTablaUsuarios() {
+      const search = document.getElementById("searchUsuario").value.toLowerCase();
+      const rolFiltro = document.getElementById("filtroRolUsuario").value;
+      const estadoFiltro = document.getElementById("filtroEstadoUsuario").value;
+
+      let usuarios = AuthService.obtenerUsuarios();
+
+      if (search) {
+        usuarios = usuarios.filter(u => 
+          u.rut.toLowerCase().includes(search) || 
+          u.nombre.toLowerCase().includes(search) ||
+          u.email.toLowerCase().includes(search)
+        );
+      }
+
+      if (rolFiltro !== "Todos") {
+        usuarios = usuarios.filter(u => u.rol === rolFiltro);
+      }
+
+      if (estadoFiltro !== "Todos") {
+        usuarios = usuarios.filter(u => u.estado === estadoFiltro);
+      }
+
+      const tbody = document.getElementById("usuarios-table-body");
+      if (usuarios.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--color-texto-mutado);">
+              No se encontraron usuarios con los filtros seleccionados.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = usuarios.map(u => `
+        <tr>
+          <td><code style="background: var(--color-crema); padding: 3px 6px; border-radius: 4px; font-weight: 700;">${u.rut}</code></td>
+          <td><strong>${u.nombre}</strong></td>
+          <td><a href="mailto:${u.email}">${u.email}</a></td>
+          <td>${u.telefono || '—'}</td>
+          <td>${u.comuna}, ${u.region}</td>
+          <td>
+            <span class="tag-badge" style="font-weight: 600;">${u.rol}</span>
+          </td>
+          <td>
+            <span class="stock-badge ${u.estado === 'Activo' ? 'stock-ok' : 'stock-critical'}">
+              ${u.estado}
+            </span>
+          </td>
+          <td>
+            <div style="display: flex; gap: 0.4rem;">
+              <button class="btn btn-secondary btn-sm" onclick="editarUsuario('${u.id}')" title="Editar">✏️</button>
+              <button class="btn btn-sm ${u.estado === 'Activo' ? 'btn-danger' : 'btn-primary'}" onclick="conmutarEstadoUsuario('${u.id}')" title="Cambiar estado">
+                ${u.estado === 'Activo' ? 'Desactivar' : 'Activar'}
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function abrirModalUsuario() {
+      document.getElementById("usuarioForm").reset();
+      document.getElementById("usrId").value = "";
+      document.getElementById("modalUsuarioTitle").textContent = "Registrar Nuevo Usuario / Colaborador";
+      document.getElementById("usuarioModal").style.display = "flex";
+    }
+
+    function cerrarModalUsuario() {
+      document.getElementById("usuarioModal").style.display = "none";
+    }
+
+    function editarUsuario(id) {
+      const u = AuthService.obtenerUsuarios().find(x => x.id === id);
+      if (!u) return;
+
+      document.getElementById("usrId").value = u.id;
+      document.getElementById("usrRut").value = u.rut;
+      document.getElementById("usrNombre").value = u.nombre;
+      document.getElementById("usrEmail").value = u.email;
+      document.getElementById("usrTelefono").value = u.telefono || "";
+      document.getElementById("usrRol").value = u.rol;
+      document.getElementById("usrEstado").value = u.estado || "Activo";
+
+      const selectRegion = document.getElementById("usrRegion");
+      selectRegion.value = u.region;
+      actualizarSelectComunas(u.region, "usrComuna", u.comuna);
+
+      document.getElementById("modalUsuarioTitle").textContent = `Editar Usuario: ${u.nombre}`;
+      document.getElementById("usuarioModal").style.display = "flex";
+    }
+
+    function guardarUsuarioSubmit(e) {
+      e.preventDefault();
+
+      const id = document.getElementById("usrId").value;
+      const rutInput = document.getElementById("usrRut");
+      const emailInput = document.getElementById("usrEmail");
+      const nombreInput = document.getElementById("usrNombre");
+      const rol = document.getElementById("usrRol").value;
+      const estado = document.getElementById("usrEstado").value;
+      const telefono = document.getElementById("usrTelefono").value.trim();
+      const region = document.getElementById("usrRegion").value;
+      const comuna = document.getElementById("usrComuna").value;
+
+      const resRUT = validarRUTChileno(rutInput.value);
+      if (!resRUT.valido) {
+        alert(resRUT.mensaje);
+        return;
+      }
+
+      const resEmail = validarEmailRestringido(emailInput.value);
+      if (!resEmail.valido) {
+        alert(resEmail.mensaje);
+        return;
+      }
+
+      if (!nombreInput.value.trim() || !region || !comuna) {
+        alert("Por favor completa los campos requeridos.");
+        return;
+      }
+
+      const datosUsuario = {
+        rut: resRUT.rutFormateado,
+        nombre: nombreInput.value.trim(),
+        email: resEmail.email,
+        telefono,
+        region,
+        comuna,
+        rol,
+        estado
+      };
+
+      if (id) {
+        AuthService.actualizarUsuario(id, datosUsuario);
+        alert(`✓ Usuario ${datosUsuario.nombre} actualizado.`);
+      } else {
+        datosUsuario.id = "usr-" + Date.now();
+        datosUsuario.fechaRegistro = new Date().toISOString().split("T")[0];
+        AuthService.guardarUsuario(datosUsuario);
+        alert(`✓ Usuario ${datosUsuario.nombre} creado.`);
+      }
+
+      cerrarModalUsuario();
+      renderizarTablaUsuarios();
+    }
+
+    function conmutarEstadoUsuario(id) {
+      const u = AuthService.obtenerUsuarios().find(x => x.id === id);
+      if (!u) return;
+
+      const nuevo = u.estado === "Activo" ? "Inactivo" : "Activo";
+      AuthService.actualizarUsuario(id, { estado: nuevo });
+      renderizarTablaUsuarios();
+    }
+  </script>
+</body>
+</html>

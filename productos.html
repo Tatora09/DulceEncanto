@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Repostería Artesanal | Dulce Encanto</title>
+  <meta name="description" content="Catálogo completo de tortas, kuchenes, cupcakes, galletas y panes artesanales de Panadería y Repostería Dulce Encanto.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra de Anuncios -->
+  <div class="top-announcement-bar">
+    🌸 ¡Envío gratis en Santiago por compras sobre $35.000! Cupón: <strong>DULCE10</strong>
+  </div>
+
+  <!-- Barra de Sesión RBAC Demo -->
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header Principal -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link active">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div class="section-header">
+      <span class="section-tag">Nuestras Delicias</span>
+      <h1>Catálogo de Repostería</h1>
+      <p>Seleccionamos materias primas de la más alta pureza para elaborar tortas, kuchenes y delicias horneadas día a día.</p>
+    </div>
+
+    <!-- Barra de Filtros y Búsqueda -->
+    <div style="background: #fff; padding: 1.5rem; border-radius: var(--radio-lg); border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-suave); margin-bottom: 2.5rem;">
+      <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center;">
+        
+        <!-- Categorías Pills -->
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;" id="category-filter-group">
+          <button class="portion-pill active" data-cat="Todos">Todos</button>
+          <button class="portion-pill" data-cat="Tortas">🎂 Tortas</button>
+          <button class="portion-pill" data-cat="Kuchenes">🥧 Kuchenes &amp; Pies</button>
+          <button class="portion-pill" data-cat="Cupcakes">🧁 Cupcakes</button>
+          <button class="portion-pill" data-cat="Galletas">🍪 Galletas</button>
+          <button class="portion-pill" data-cat="Panes">🥖 Panes Artesanales</button>
+        </div>
+
+        <!-- Búsqueda y Ordenamiento -->
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+          <input type="text" id="searchInput" placeholder="Buscar por nombre o ingrediente..." style="width: 250px; padding: 0.6rem 0.85rem; font-size: 0.88rem;">
+          
+          <select id="sortSelect" style="width: 190px; padding: 0.6rem 0.85rem; font-size: 0.88rem;">
+            <option value="default">Ordenar por: Defecto</option>
+            <option value="price-asc">Precio: Menor a Mayor</option>
+            <option value="price-desc">Precio: Mayor a Menor</option>
+            <option value="name-asc">Nombre: A - Z</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mensaje si no hay resultados -->
+    <div id="no-results-msg" style="display: none; text-align: center; padding: 4rem 1rem; background: #fff; border-radius: 16px; border: 1px dashed var(--color-rosado-pastel);">
+      <span style="font-size: 3rem;">🍰</span>
+      <h3 style="margin: 1rem 0 0.5rem 0;">No encontramos postres que coincidan con tu búsqueda</h3>
+      <p style="color: var(--color-texto-secundario);">Prueba ajustando los filtros o revisa nuestra sección de postres personalizados.</p>
+      <button class="btn btn-secondary" onclick="resetFiltros()" style="margin-top: 1rem;">Limpiar Filtros</button>
+    </div>
+
+    <!-- Grid de Productos -->
+    <div class="product-grid" id="catalog-grid">
+      <!-- Inyectado por JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Tradición y frescura en cada bocado. Despachos y retiros coordinados en Santiago de Chile.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Información</h4>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="blogs.html">Blog</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Atención</h4>
+        <p>📞 +56 2 2345 6789</p>
+        <p>✉️ ventas@dulceencanto.cl</p>
+        <p>🕒 Lun a Sáb: 08:30 - 20:00 hrs</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Dulce Encanto. ERS v2.0 - DSY1104</span>
+      <span>Providencia, Región Metropolitana</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    let categoriaActiva = "Todos";
+    let textoBusqueda = "";
+    let ordenActual = "default";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      // Revisar si viene categoría por URL query param ?cat=Tortas
+      const urlParams = new URLSearchParams(window.location.search);
+      const catParam = urlParams.get("cat");
+      if (catParam) {
+        categoriaActiva = catParam;
+      }
+
+      // Inicializar botones de filtro
+      const catBtns = document.querySelectorAll("#category-filter-group button");
+      catBtns.forEach(btn => {
+        if (btn.getAttribute("data-cat") === categoriaActiva) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+
+        btn.addEventListener("click", () => {
+          catBtns.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          categoriaActiva = btn.getAttribute("data-cat");
+          renderizarCatalogo();
+        });
+      });
+
+      // Búsqueda
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener("input", (e) => {
+        textoBusqueda = e.target.value.toLowerCase().trim();
+        renderizarCatalogo();
+      });
+
+      // Orden
+      const sortSelect = document.getElementById("sortSelect");
+      sortSelect.addEventListener("change", (e) => {
+        ordenActual = e.target.value;
+        renderizarCatalogo();
+      });
+
+      renderizarCatalogo();
+    });
+
+    function renderizarCatalogo() {
+      const grid = document.getElementById("catalog-grid");
+      const noResults = document.getElementById("no-results-msg");
+      let productos = ProductosService.obtenerProductos();
+
+      // Filtrar por categoría
+      if (categoriaActiva !== "Todos") {
+        productos = productos.filter(p => p.categoria.toLowerCase() === categoriaActiva.toLowerCase());
+      }
+
+      // Filtrar por búsqueda
+      if (textoBusqueda) {
+        productos = productos.filter(p => 
+          p.nombre.toLowerCase().includes(textoBusqueda) ||
+          p.descripcion.toLowerCase().includes(textoBusqueda) ||
+          (p.ingredientes && p.ingredientes.some(ing => ing.toLowerCase().includes(textoBusqueda))) ||
+          p.codigo.toLowerCase().includes(textoBusqueda)
+        );
+      }
+
+      // Ordenar
+      if (ordenActual === "price-asc") {
+        productos.sort((a, b) => a.precio - b.precio);
+      } else if (ordenActual === "price-desc") {
+        productos.sort((a, b) => b.precio - a.precio);
+      } else if (ordenActual === "name-asc") {
+        productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      }
+
+      if (productos.length === 0) {
+        grid.innerHTML = "";
+        noResults.style.display = "block";
+        return;
+      }
+
+      noResults.style.display = "none";
+      grid.innerHTML = productos.map(prod => {
+        const precioFormatted = CarritoService.formatearPrecio(prod.precio);
+        const esCritico = prod.stock <= prod.stockCritico;
+
+        return `
+          <article class="product-card" id="card-${prod.id}">
+            <div class="product-card-img-wrap">
+              <img src="${prod.imagen}" alt="${prod.nombre}" loading="lazy">
+              <span class="card-badge-category">${prod.categoria}</span>
+              ${esCritico ? `<span class="card-badge-stock-alert">¡Stock Crítico! (${prod.stock} disp.)</span>` : ''}
+            </div>
+            <div class="product-card-body">
+              <span class="product-code-meta">Cód: ${prod.codigo}</span>
+              <h3 class="product-card-title">${prod.nombre}</h3>
+              <div class="product-card-portions">
+                <span>👥 ${prod.porciones}</span>
+              </div>
+              <p class="product-card-desc">${prod.descripcion}</p>
+              <div class="product-card-footer">
+                <div>
+                  <span class="product-price ${prod.precio === 0 ? 'is-free' : ''}">${precioFormatted}</span>
+                </div>
+                <div style="display: flex; gap: 0.4rem;">
+                  <a href="producto-detalle.html?id=${prod.id}" class="btn btn-secondary btn-sm">
+                    Ficha
+                  </a>
+                  <button class="btn btn-primary btn-sm" onclick="agregarAlCarritoCatalogo('${prod.id}')">
+                    🛒 Añadir
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function agregarAlCarritoCatalogo(id) {
+      const prod = ProductosService.obtenerProductoPorId(id);
+      if (prod) {
+        CarritoService.agregarItem(prod, 1);
+      }
+    }
+
+    function resetFiltros() {
+      categoriaActiva = "Todos";
+      textoBusqueda = "";
+      document.getElementById("searchInput").value = "";
+      document.querySelectorAll("#category-filter-group button").forEach(b => {
+        b.classList.toggle("active", b.getAttribute("data-cat") === "Todos");
+      });
+      renderizarCatalogo();
+    }
+  </script>
+</body>
+</html>

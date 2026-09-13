@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle del Postre | Dulce Encanto</title>
+  <meta name="description" content="Detalle de producto, ingredientes, tabla de alérgenos y selección de porciones en Dulce Encanto.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Barra de Anuncios -->
+  <div class="top-announcement-bar">
+    🌸 Todos nuestros postres son horneados artesanalmente sin conservantes artificiales.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link active">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <!-- Migas de pan -->
+    <nav style="margin-bottom: 1.5rem; font-size: 0.88rem; color: var(--color-texto-mutado);">
+      <a href="index.html">Inicio</a> &gt; 
+      <a href="productos.html">Productos</a> &gt; 
+      <span id="breadcrumb-product-name" style="color: var(--color-texto-principal); font-weight: 600;">Cargando...</span>
+    </nav>
+
+    <!-- Contenedor Ficha de Producto -->
+    <div class="product-detail-grid" id="product-detail-container">
+      <!-- Inyectado por JS -->
+      <div style="text-align: center; padding: 3rem;">
+        <p>Cargando información del postre...</p>
+      </div>
+    </div>
+
+    <!-- Productos Relacionados -->
+    <section style="margin-top: 4rem;">
+      <div class="section-header" style="text-align: left; margin-bottom: 1.75rem;">
+        <span class="section-tag">Te Podría Gustar</span>
+        <h2>Otros Postres Recomendados</h2>
+      </div>
+      <div class="product-grid" id="related-products-grid"></div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Tradición y frescura en cada bocado. Despachos y retiros en Santiago de Chile.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Enlaces Útiles</h4>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="blogs.html">Blog Repostero</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Horarios</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>🕒 Lun - Sáb: 08:30 a 20:00</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    let productoActual = null;
+    let opcionPorcionSeleccionada = null;
+    let cantidadSeleccionada = 1;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const prodId = params.get("id") || "prod-001";
+      cargarDetalle(prodId);
+    });
+
+    function cargarDetalle(id) {
+      productoActual = ProductosService.obtenerProductoPorId(id);
+      if (!productoActual) {
+        // Fallback al primero
+        productoActual = ProductosService.obtenerProductos()[0];
+      }
+
+      document.title = `${productoActual.nombre} | Dulce Encanto`;
+      document.getElementById("breadcrumb-product-name").textContent = productoActual.nombre;
+
+      // Opcion porcion por defecto
+      if (productoActual.opcionesPorciones && productoActual.opcionesPorciones.length > 0) {
+        opcionPorcionSeleccionada = productoActual.opcionesPorciones[0];
+      } else {
+        opcionPorcionSeleccionada = { etiqueta: productoActual.porciones, precio: productoActual.precio };
+      }
+
+      renderizarFicha();
+      renderizarRelacionados();
+    }
+
+    function renderizarFicha() {
+      const container = document.getElementById("product-detail-container");
+      const precioUnitario = opcionPorcionSeleccionada ? opcionPorcionSeleccionada.precio : productoActual.precio;
+      const precioFormateado = CarritoService.formatearPrecio(precioUnitario);
+      const esCritico = productoActual.stock <= productoActual.stockCritico;
+
+      const opcionesHTML = (productoActual.opcionesPorciones || []).map((op, idx) => {
+        const activa = opcionPorcionSeleccionada && opcionPorcionSeleccionada.etiqueta === op.etiqueta ? 'active' : '';
+        return `
+          <button type="button" class="portion-pill ${activa}" onclick="cambiarOpcionPorcion(${idx})">
+            ${op.etiqueta} - ${CarritoService.formatearPrecio(op.precio)}
+          </button>
+        `;
+      }).join("");
+
+      const ingredientesHTML = (productoActual.ingredientes || []).map(ing => `
+        <span class="tag-badge">✓ ${ing}</span>
+      `).join("");
+
+      const alergenosHTML = (productoActual.alergenos || []).map(ale => `
+        <span class="tag-badge allergen">⚠️ Contiene ${ale}</span>
+      `).join("");
+
+      container.innerHTML = `
+        <div class="detail-gallery">
+          <img src="${productoActual.imagen}" alt="${productoActual.nombre}" class="detail-main-img">
+          <span class="card-badge-category" style="top: 20px; left: 20px; font-size: 0.85rem; padding: 0.35rem 0.8rem;">
+            ${productoActual.categoria}
+          </span>
+          ${esCritico ? `
+            <div style="margin-top: 1rem; background-color: var(--color-alerta-critico-fondo); border: 1px solid var(--color-alerta-critico-borde); padding: 0.75rem 1rem; border-radius: var(--radio-md); display: flex; align-items: center; gap: 0.5rem; color: var(--color-alerta-critico-texto); font-weight: 600; font-size: 0.88rem;">
+              <span>⚠️</span>
+              <span>¡Atención! Stock Crítico (${productoActual.stock} unidades en vitrina). Requiere horneado adicional si necesitas mayor cantidad.</span>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="detail-info">
+          <span style="font-size: 0.82rem; color: var(--color-texto-mutado); text-transform: uppercase; letter-spacing: 1px;">
+            Código: ${productoActual.codigo}
+          </span>
+          <h1 style="margin: 0.4rem 0 0.85rem 0; font-size: 2.2rem; color: var(--color-texto-principal);">
+            ${productoActual.nombre}
+          </h1>
+
+          <div style="margin-bottom: 1.25rem;">
+            <span style="font-size: 2rem; font-weight: 700; color: var(--color-rosado-fuerte);" id="detail-price-tag">
+              ${precioFormateado}
+            </span>
+          </div>
+
+          <p style="font-size: 1rem; color: var(--color-texto-secundario); margin-bottom: 1.5rem; line-height: 1.7;">
+            ${productoActual.descripcion}
+          </p>
+
+          <!-- Selección de Porciones / Tamaño (RF-03) -->
+          ${productoActual.opcionesPorciones && productoActual.opcionesPorciones.length > 0 ? `
+            <div style="margin-bottom: 1.5rem;">
+              <label style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; display: block;">
+                Selecciona Tamaño / Cantidad de Porciones:
+              </label>
+              <div class="portion-options-grid">
+                ${opcionesHTML}
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Controles de Cantidad y Añadir -->
+          <div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2rem; flex-wrap: wrap;">
+            <div>
+              <label style="font-size: 0.82rem; font-weight: 600; color: var(--color-texto-mutado); margin-bottom: 0.25rem; display: block;">
+                Cantidad:
+              </label>
+              <div class="quantity-control" style="padding: 2px;">
+                <button type="button" class="btn-qty" onclick="modificarCantidadDetalle(-1)">-</button>
+                <span class="qty-display" id="detail-qty-display">${cantidadSeleccionada}</span>
+                <button type="button" class="btn-qty" onclick="modificarCantidadDetalle(1)">+</button>
+              </div>
+            </div>
+
+            <div style="flex-grow: 1; padding-top: 1.25rem;">
+              <button class="btn btn-primary btn-lg btn-full" onclick="agregarProductoActualAlCarrito()" id="btn-add-cart-detail">
+                🛒 Añadir al Carrito
+              </button>
+            </div>
+          </div>
+
+          <!-- Ingredientes y Alérgenos (RF-03) -->
+          <div style="background-color: var(--color-crema-suave); border: 1px solid var(--color-borde-suave); border-radius: var(--radio-lg); padding: 1.25rem;">
+            <div style="margin-bottom: 1rem;">
+              <strong style="font-size: 0.88rem; color: var(--color-texto-principal); display: block; margin-bottom: 0.4rem;">
+                🌾 Ingredientes Naturales:
+              </strong>
+              <div class="tags-list">
+                ${ingredientesHTML}
+              </div>
+            </div>
+
+            <div>
+              <strong style="font-size: 0.88rem; color: var(--color-texto-principal); display: block; margin-bottom: 0.4rem;">
+                ℹ️ Información de Alérgenos:
+              </strong>
+              <div class="tags-list">
+                ${alergenosHTML}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+    }
+
+    function cambiarOpcionPorcion(index) {
+      if (productoActual.opcionesPorciones && productoActual.opcionesPorciones[index]) {
+        opcionPorcionSeleccionada = productoActual.opcionesPorciones[index];
+        renderizarFicha();
+      }
+    }
+
+    function modificarCantidadDetalle(delta) {
+      const nueva = cantidadSeleccionada + delta;
+      if (nueva >= 1 && nueva <= (productoActual.stock > 0 ? productoActual.stock : 20)) {
+        cantidadSeleccionada = nueva;
+        document.getElementById("detail-qty-display").textContent = cantidadSeleccionada;
+      }
+    }
+
+    function agregarProductoActualAlCarrito() {
+      if (!productoActual) return;
+      const itemParaCarrito = {
+        id: productoActual.id,
+        nombre: productoActual.nombre,
+        precio: opcionPorcionSeleccionada ? opcionPorcionSeleccionada.precio : productoActual.precio,
+        imagen: productoActual.imagen,
+        categoria: productoActual.categoria,
+        porciones: opcionPorcionSeleccionada ? opcionPorcionSeleccionada.etiqueta : productoActual.porciones,
+        opcionPorcion: opcionPorcionSeleccionada ? opcionPorcionSeleccionada.etiqueta : null
+      };
+
+      CarritoService.agregarItem(itemParaCarrito, cantidadSeleccionada);
+    }
+
+    function renderizarRelacionados() {
+      const relatedGrid = document.getElementById("related-products-grid");
+      const todos = ProductosService.obtenerProductos();
+      const relacionados = todos
+        .filter(p => p.id !== productoActual.id && (p.categoria === productoActual.categoria || p.destacado))
+        .slice(0, 3);
+
+      relatedGrid.innerHTML = relacionados.map(prod => `
+        <article class="product-card" id="card-${prod.id}">
+          <div class="product-card-img-wrap">
+            <img src="${prod.imagen}" alt="${prod.nombre}" loading="lazy">
+            <span class="card-badge-category">${prod.categoria}</span>
+          </div>
+          <div class="product-card-body">
+            <h3 class="product-card-title">${prod.nombre}</h3>
+            <div class="product-card-portions">
+              <span>👥 ${prod.porciones}</span>
+            </div>
+            <div class="product-card-footer">
+              <span class="product-price">${CarritoService.formatearPrecio(prod.precio)}</span>
+              <a href="producto-detalle.html?id=${prod.id}" class="btn btn-secondary btn-sm">Ver Ficha</a>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+  </script>
+</body>
+</html>

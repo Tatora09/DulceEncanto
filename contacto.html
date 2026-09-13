@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto y Ubicación | Dulce Encanto</title>
+  <meta name="description" content="Contáctanos o visítanos en nuestro salón de té y pastelería en Providencia, Santiago. Consultas sobre eventos y pedidos.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 Visítanos en Providencia o haz tu consulta directa por WhatsApp al +56 9 9876 5432.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link active">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div class="section-header">
+      <span class="section-tag">Estamos Cerca de Ti</span>
+      <h1>Contáctanos y Visítanos</h1>
+      <p>¿Tienes dudas sobre un postre especial, banquetería o despacho? Déjanos un mensaje y te responderemos en breve.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 2.5rem; align-items: start; margin-bottom: 4rem;">
+      
+      <!-- Formulario de Consulta -->
+      <div class="form-card">
+        <h2 style="font-size: 1.35rem; margin-bottom: 1.25rem; color: var(--color-texto-principal);">
+          ✉️ Envíanos un Mensaje
+        </h2>
+
+        <form id="contactoForm" novalidate>
+          <div class="form-group">
+            <label for="contactNombre">Nombre Completo <span class="required-star">*</span></label>
+            <input type="text" id="contactNombre" placeholder="Tu nombre" required>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="contactEmail">Correo Electrónico <span class="required-star">*</span></label>
+              <input type="email" id="contactEmail" placeholder="ejemplo@gmail.com o @duoc.cl" required>
+            </div>
+            <div class="form-group">
+              <label for="contactTelefono">Teléfono</label>
+              <input type="tel" id="contactTelefono" placeholder="+56 9 1234 5678">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMotivo">Motivo del Mensaje</label>
+            <select id="contactMotivo">
+              <option value="Consulta General">Consulta General</option>
+              <option value="Cotización de Evento / Bodas">Cotización de Evento / Bodas</option>
+              <option value="Consulta sobre Despachos">Consulta sobre Despachos</option>
+              <option value="Alérgenos e Ingredientes">Información sobre Alérgenos</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMensaje">Mensaje <span class="required-star">*</span></label>
+            <textarea id="contactMensaje" rows="4" placeholder="Escribe aquí tu consulta en detalle..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-full" id="btn-enviar-contacto">
+            Enviar Mensaje
+          </button>
+        </form>
+      </div>
+
+      <!-- Datos de la Pastelería y Mapa -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <div style="background: #fff; padding: 2rem; border-radius: var(--radio-lg); border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-card);">
+          <h3 style="font-size: 1.25rem; color: var(--color-rosado-fuerte); margin-bottom: 1rem;">
+            🍰 Salón de Té &amp; Tienda Matriz
+          </h3>
+          <p style="margin-bottom: 0.75rem;">
+            📍 <strong>Dirección:</strong> Av. Providencia 1420, Providencia (a pasos de Metro Manuel Montt), Santiago.
+          </p>
+          <p style="margin-bottom: 0.75rem;">
+            🕒 <strong>Horario de Atención:</strong><br>
+            • Lunes a Viernes: 08:30 a 20:00 hrs.<br>
+            • Sábados: 09:00 a 19:00 hrs.<br>
+            • Domingos y Festivos: 09:30 a 15:00 hrs (solo retiro de pedidos).
+          </p>
+          <p style="margin-bottom: 0.75rem;">
+            📞 <strong>Central Telefónica:</strong> +56 2 2345 6789
+          </p>
+          <p style="margin-bottom: 0;">
+            ✉️ <strong>Correo:</strong> contacto@dulceencanto.cl
+          </p>
+        </div>
+
+        <!-- Simulación Visual de Mapa Pastel -->
+        <div style="background: #FFF9F5; border: 2px dashed var(--color-rosado-pastel); border-radius: var(--radio-lg); padding: 1.5rem; text-align: center; box-shadow: var(--sombra-card);">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🗺️</div>
+          <h4 style="color: var(--color-texto-principal); margin-bottom: 0.25rem;">Ubicación Privilegiada en Providencia</h4>
+          <p style="font-size: 0.85rem; color: var(--color-texto-mutado); margin-bottom: 1rem;">
+            Estacionamiento exclusivo para clientes por Calle Guardia Vieja.
+          </p>
+          <div style="height: 140px; background: linear-gradient(135deg, #FFE5D9, #F8C8DC); border-radius: var(--radio-md); display: flex; align-items: center; justify-content: center; color: var(--color-texto-principal); font-weight: 600; font-size: 0.9rem;">
+            📍 Pastelería Dulce Encanto Providencia #1420
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Preguntas Frecuentes (FAQ) -->
+    <section style="margin-top: 2rem;">
+      <div class="section-header">
+        <span class="section-tag">Dudas Habituales</span>
+        <h2>Preguntas Frecuentes</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div style="background: #fff; padding: 1.5rem; border-radius: var(--radio-md); border: 1px solid var(--color-borde-suave);">
+          <h4 style="color: var(--color-rosado-fuerte); margin-bottom: 0.5rem;">¿Con cuánta anticipación debo pedir una torta personalizada?</h4>
+          <p style="font-size: 0.9rem; margin: 0;">Por regla de calidad artesanal, nuestro sistema exige al menos 72 horas (3 días) de anticipación. Para matrimonios o eventos sobre 50 personas recomendamos 1 a 2 semanas.</p>
+        </div>
+
+        <div style="background: #fff; padding: 1.5rem; border-radius: var(--radio-md); border: 1px solid var(--color-borde-suave);">
+          <h4 style="color: var(--color-rosado-fuerte); margin-bottom: 0.5rem;">¿Tienen opciones sin azúcar o keto?</h4>
+          <p style="font-size: 0.9rem; margin: 0;">¡Sí! En nuestro formulario interactivo de postre personalizado puedes seleccionar bizcocho sin azúcar (Keto), endulzado con alulosa y harina de almendras.</p>
+        </div>
+
+        <div style="background: #fff; padding: 1.5rem; border-radius: var(--radio-md); border: 1px solid var(--color-borde-suave);">
+          <h4 style="color: var(--color-rosado-fuerte); margin-bottom: 0.5rem;">¿Cómo funciona el despacho en Santiago?</h4>
+          <p style="font-size: 0.9rem; margin: 0;">Contamos con furgones refrigerados especializados. El valor es de $3.500 dentro de la provincia de Santiago, y totalmente <strong>GRATIS</strong> por compras superiores a $35.000.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Momentos dulces garantizados en cada pedido.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Enlaces</h4>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="blogs.html">Blog</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Horarios</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>🕒 Lun - Sáb: 08:30 a 20:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      const form = document.getElementById("contactoForm");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById("contactNombre").value.trim();
+        const email = document.getElementById("contactEmail").value.trim();
+        const mensaje = document.getElementById("contactMensaje").value.trim();
+
+        if (!nombre || !email || !mensaje) {
+          alert("Por favor completa los campos requeridos.");
+          return;
+        }
+
+        alert(`📬 ¡Muchas gracias, ${nombre}! Tu mensaje ha sido recibido por el equipo de Dulce Encanto. Nos pondremos en contacto contigo a la brevedad.`);
+        form.reset();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión | Dulce Encanto</title>
+  <meta name="description" content="Acceso a la plataforma de Panadería y Repostería Dulce Encanto para clientes y personal administrativo.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 Panadería &amp; Repostería Dulce Encanto - Portal Seguro de Clientes y Colaboradores
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link active">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding" style="max-width: 540px;">
+    <div class="form-card">
+      <div class="form-header-box" style="text-align: center;">
+        <span class="section-tag">Acceso al Sistema</span>
+        <h1 style="font-size: 2rem; margin: 0.35rem 0;">Iniciar Sesión</h1>
+        <p style="color: var(--color-texto-secundario); font-size: 0.9rem; margin: 0;">
+          Ingresa con tu correo institucional o personal autorizado.
+        </p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="loginEmail">Correo Electrónico <span class="required-star">*</span></label>
+          <input type="email" id="loginEmail" placeholder="ejemplo@duoc.cl o @gmail.com" required autocomplete="email">
+          <span class="form-hint">Dominios permitidos: @duoc.cl, @profesor.duoc.cl o @gmail.com</span>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPass">Contraseña <span class="required-star">*</span></label>
+          <input type="password" id="loginPass" placeholder="Tu contraseña" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-full" id="btn-login-submit">
+          Ingresar a la Plataforma
+        </button>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+          ¿No tienes cuenta aún? <a href="registro.html" style="font-weight: 600;">Regístrate como cliente</a>
+        </div>
+      </form>
+
+      <!-- Botones de Acceso Rápido para Evaluación / Demo (RBAC) -->
+      <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1.5px dashed var(--color-borde-suave);">
+        <h3 style="font-size: 0.95rem; text-align: center; color: var(--color-texto-principal); margin-bottom: 0.85rem;">
+          ⚡ Accesos Rápidos para Evaluación (Roles ERS v2.0):
+        </h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm btn-full" onclick="iniciarComo('admin@duoc.cl', 'Administrador')">
+            👑 <strong>Administrador:</strong> admin@duoc.cl (Acceso Total)
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm btn-full" onclick="iniciarComo('carlos@profesor.duoc.cl', 'Vendedor / Pastelero')">
+            👩‍🍳 <strong>Pastelero/Vendedor:</strong> carlos@profesor.duoc.cl (Catálogo &amp; Solicitudes)
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm btn-full" onclick="iniciarComo('fernanda.cliente@gmail.com', 'Cliente')">
+            🛍️ <strong>Cliente:</strong> fernanda.cliente@gmail.com (Tienda &amp; Pedidos)
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Tradición y frescura garantizadas en cada preparación.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Panel</h4>
+        <ul class="footer-links">
+          <li><a href="admin/dashboard.html">Dashboard</a></li>
+          <li><a href="admin/productos.html">Productos</a></li>
+          <li><a href="admin/solicitudes.html">Solicitudes</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0 - RF-06</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      const form = document.getElementById("loginForm");
+      const emailInput = document.getElementById("loginEmail");
+
+      emailInput.addEventListener("blur", () => {
+        const res = validarEmailRestringido(emailInput.value);
+        if (!res.valido) mostrarError(emailInput, res.mensaje);
+        else limpiarError(emailInput);
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = emailInput.value.trim();
+        const resEmail = validarEmailRestringido(email);
+
+        if (!resEmail.valido) {
+          mostrarError(emailInput, resEmail.mensaje);
+          return;
+        }
+
+        const res = AuthService.login(email);
+        if (res.exito) {
+          alert(`¡Bienvenido de vuelta, ${res.usuario.nombre} (${res.usuario.rol})!`);
+          if (res.usuario.rol === "Cliente") {
+            window.location.href = "index.html";
+          } else {
+            window.location.href = "admin/dashboard.html";
+          }
+        } else {
+          mostrarError(emailInput, res.mensaje);
+        }
+      });
+    });
+
+    function iniciarComo(email, rol) {
+      document.getElementById("loginEmail").value = email;
+      document.getElementById("loginPass").value = "123456";
+      const res = AuthService.login(email);
+      if (res.exito) {
+        if (res.usuario.rol === "Cliente") {
+          window.location.href = "index.html";
+        } else {
+          window.location.href = "admin/dashboard.html";
+        }
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuestra Historia | Dulce Encanto</title>
+  <meta name="description" content="Conoce la historia, valores y el equipo artesanal detrás de la Panadería y Repostería Dulce Encanto.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 Más de 20 años endulzando momentos familiares con recetas tradicionales del sur de Chile.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link active">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div class="section-header">
+      <span class="section-tag">Nuestras Raíces</span>
+      <h1>La Historia de Dulce Encanto</h1>
+      <p>Una pasión heredada de generación en generación, horneada cada mañana con cariño y materias primas chilenas.</p>
+    </div>
+
+    <!-- Bloque Historia con Fotografía -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-bottom: 4rem;">
+      <div>
+        <h2 style="font-size: 1.85rem; color: var(--color-texto-principal); margin-bottom: 1rem;">
+          De la cocina familiar a tu mesa
+        </h2>
+        <p style="font-size: 1.05rem; line-height: 1.8; color: var(--color-texto-secundario);">
+          <strong>Dulce Encanto</strong> nació a comienzos del año 2004 en una cálida cocina familiar de la Región de Los Lagos. Nuestra fundadora, Elena Rosales, aprendió los secretos del hojaldre crujiente y los kuchenes de frambuesa de su abuela de origen colono en Frutillar.
+        </p>
+        <p style="font-size: 1.05rem; line-height: 1.8; color: var(--color-texto-secundario);">
+          Lo que comenzó como una pequeña producción para amigos y festividades locales, se convirtió en una reconocida panadería y repostería artesanal en Santiago, manteniendo intacta la regla dorada: <em>cero premezclas industriales y 100% sabor a hogar</em>.
+        </p>
+        <div style="margin-top: 1.75rem;">
+          <a href="productos.html" class="btn btn-primary">Descubrir Nuestras Tortas</a>
+        </div>
+      </div>
+
+      <div style="position: relative;">
+        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80" alt="Horneado artesanal en Dulce Encanto" style="border-radius: var(--radio-xl); border: 5px solid #fff; box-shadow: var(--sombra-card);">
+        <div style="position: absolute; bottom: -15px; right: -15px; background: var(--color-crema); border: 2px solid var(--color-rosado-pastel); padding: 1rem 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-card);">
+          <strong style="font-size: 1.4rem; color: var(--color-rosado-fuerte); display: block;">+20 Años</strong>
+          <span style="font-size: 0.82rem; color: var(--color-texto-secundario);">De tradición repostera</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Valores Artesanales -->
+    <div style="background: #fff; border-radius: var(--radio-xl); padding: 3rem 2rem; border: 1px solid var(--color-borde-suave); box-shadow: var(--sombra-card); margin-bottom: 4rem;">
+      <div class="section-header" style="margin-bottom: 2rem;">
+        <span class="section-tag">Nuestra Filosofía</span>
+        <h2>Los 4 Pilares de Nuestra Repostería</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem;">
+        <div style="text-align: center;">
+          <span style="font-size: 2.8rem; display: block; margin-bottom: 0.5rem;">🍓</span>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Materia Prima Noble</h3>
+          <p style="font-size: 0.9rem;">Frambuesas naturales de huertos sureños, lúcuma pura y manjar cocido lentamente en pailas de cobre.</p>
+        </div>
+
+        <div style="text-align: center;">
+          <span style="font-size: 2.8rem; display: block; margin-bottom: 0.5rem;">👩‍🍳</span>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Mano Experta</h3>
+          <p style="font-size: 0.9rem;">Cada flor de azúcar, hojarasca y bañado en merengue es elaborado manualmente por pasteleros titulados.</p>
+        </div>
+
+        <div style="text-align: center;">
+          <span style="font-size: 2.8rem; display: block; margin-bottom: 0.5rem;">⏳</span>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Tiempos Sagrados</h3>
+          <p style="font-size: 0.9rem;">Exigimos 72 horas para postres personalizados porque el bizcocho y los rellenos requieren reposo óptimo.</p>
+        </div>
+
+        <div style="text-align: center;">
+          <span style="font-size: 2.8rem; display: block; margin-bottom: 0.5rem;">🌱</span>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Sustentabilidad</h3>
+          <p style="font-size: 0.9rem;">Cajas biodegradables y convenios directos con pequeños apicultores y agricultores nacionales.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nuestro Equipo -->
+    <section>
+      <div class="section-header">
+        <span class="section-tag">Manos Maestras</span>
+        <h2>El Equipo que da Vida a tus Postres</h2>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;">
+        <div style="background: #fff; border-radius: var(--radio-lg); overflow: hidden; border: 1px solid var(--color-borde-suave); text-align: center; box-shadow: var(--sombra-card);">
+          <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Chef Elena Rosales" style="height: 240px; width: 100%; object-fit: cover;">
+          <div style="padding: 1.5rem;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.25rem;">Elena Rosales</h3>
+            <span style="color: var(--color-rosado-fuerte); font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Fundadora &amp; Maestra Repostera</span>
+            <p style="font-size: 0.88rem; color: var(--color-texto-secundario);">Guardiana de las recetas tradicionales de hojarasca y kuchenes alemanes.</p>
+          </div>
+        </div>
+
+        <div style="background: #fff; border-radius: var(--radio-lg); overflow: hidden; border: 1px solid var(--color-borde-suave); text-align: center; box-shadow: var(--sombra-card);">
+          <img src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?auto=format&fit=crop&w=600&q=80" alt="Carlos Vera" style="height: 240px; width: 100%; object-fit: cover;">
+          <div style="padding: 1.5rem;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.25rem;">Carlos Vera</h3>
+            <span style="color: var(--color-rosado-fuerte); font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Especialista en Fondant &amp; Escultura</span>
+            <p style="font-size: 0.88rem; color: var(--color-texto-secundario);">Transforma cualquier temática y dedicatoria en una obra de arte comestible.</p>
+          </div>
+        </div>
+
+        <div style="background: #fff; border-radius: var(--radio-lg); overflow: hidden; border: 1px solid var(--color-borde-suave); text-align: center; box-shadow: var(--sombra-card);">
+          <img src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?auto=format&fit=crop&w=600&q=80" alt="Lucía Morales" style="height: 240px; width: 100%; object-fit: cover;">
+          <div style="padding: 1.5rem;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.25rem;">Lucía Morales</h3>
+            <span style="color: var(--color-rosado-fuerte); font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem;">Chef de Masa Madre &amp; Panadería</span>
+            <p style="font-size: 0.88rem; color: var(--color-texto-secundario);">Responsable de nuestras hogazas rústicas de fermentación lenta de 36 horas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Momentos dulces garantizados en cada pedido.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Comunidad</h4>
+        <ul class="footer-links">
+          <li><a href="blogs.html">Recetas &amp; Consejos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visítanos</h4>
+        <p>📍 Av. Providencia 1420, Santiago</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+    });
+  </script>
+</body>
+</html>

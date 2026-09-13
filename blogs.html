@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog y Recetas Reposteras | Dulce Encanto</title>
+  <meta name="description" content="Artículos, secretos de pastelería, recetas y técnicas para conservar tus tortas frescas por el equipo de Dulce Encanto.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="top-announcement-bar">
+    🌸 Tips reposteros y secretos de nuestros maestros pasteleros cada semana.
+  </div>
+
+  <div class="session-toolbar" id="session-toolbar"></div>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="navbar">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h1>Dulce Encanto</h1>
+          <span>Panadería &amp; Repostería</span>
+        </div>
+      </a>
+
+      <button class="mobile-nav-toggle" id="mobileToggle" aria-label="Abrir menú">☰</button>
+
+      <nav>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="productos.html" class="nav-link">Productos</a></li>
+          <li><a href="postre-personalizado.html" class="nav-link btn-highlight">✨ Postre Personalizado</a></li>
+          <li><a href="nosotros.html" class="nav-link">Nosotros</a></li>
+          <li><a href="blogs.html" class="nav-link active">Blog &amp; Recetas</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+          <li>
+            <a href="carrito.html" class="nav-cart-link" id="cartNavBtn">
+              🛒 Carrito <span class="cart-count-badge" id="cartCount">0</span>
+            </a>
+          </li>
+          <li><a href="login.html" class="nav-link">Ingresar</a></li>
+          <li><a href="admin/dashboard.html" class="nav-admin-badge">⚙️ Admin</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding">
+    <div class="section-header">
+      <span class="section-tag">Secretos del Horno</span>
+      <h1>Blog &amp; Consejos Reposteros</h1>
+      <p>Aprende técnicas profesionales, guías de conservación y el arte de la repostería artesanal junto a nuestros pasteleros.</p>
+    </div>
+
+    <!-- Grid de Artículos del Blog (RF-07) -->
+    <div class="blog-grid" id="blogs-container">
+      <!-- Inyectado dinámicamente por JS desde data-productos.js -->
+    </div>
+  </main>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="brand-logo-icon">🧁</div>
+          <div class="brand-text">
+            <h3 style="color: #fff; margin:0;">Dulce Encanto</h3>
+            <span style="color: var(--color-rosado-pastel);">Panadería &amp; Repostería</span>
+          </div>
+        </div>
+        <p>Momentos dulces garantizados en cada pedido.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Catálogo</a></li>
+          <li><a href="postre-personalizado.html">Postres a Medida</a></li>
+          <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Comunidad</h4>
+        <ul class="footer-links">
+          <li><a href="nosotros.html">Nosotros</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="admin/dashboard.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Visítanos</h4>
+        <p>📍 Providencia, Santiago</p>
+        <p>📞 +56 2 2345 6789</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Panadería &amp; Repostería Dulce Encanto. ERS v2.0 - RF-07</span>
+    </div>
+  </footer>
+
+  <script src="js/data-regiones.js"></script>
+  <script src="js/validaciones.js"></script>
+  <script src="js/data-productos.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      AuthService.renderizarBarraSesion("session-toolbar");
+      CarritoService.actualizarContadorNavbar();
+
+      const toggle = document.getElementById("mobileToggle");
+      const navMenu = document.getElementById("navMenu");
+      if (toggle && navMenu) {
+        toggle.addEventListener("click", () => navMenu.classList.toggle("open"));
+      }
+
+      const container = document.getElementById("blogs-container");
+      if (container && window.ProductosService) {
+        const blogs = ProductosService.obtenerBlogs();
+        container.innerHTML = blogs.map(blog => `
+          <article class="blog-card" id="blog-${blog.id}">
+            <img src="${blog.imagen}" alt="${blog.titulo}" class="blog-thumb" loading="lazy">
+            <div class="blog-card-body">
+              <div class="blog-meta">
+                <span>🗓️ ${blog.fecha}</span> • 
+                <span>✍️ ${blog.autor}</span> • 
+                <span>⏱️ ${blog.tiempoLectura}</span>
+              </div>
+              <h2 style="font-size: 1.25rem; font-family: var(--fuente-decorativa); margin-bottom: 0.75rem; color: var(--color-texto-principal);">
+                ${blog.titulo}
+              </h2>
+              <p style="font-size: 0.9rem; color: var(--color-texto-secundario); flex-grow: 1; margin-bottom: 1.25rem;">
+                ${blog.resumen}
+              </p>
+              <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--color-borde-suave);">
+                <a href="blog-detalle.html?slug=${blog.slug}" class="btn btn-secondary btn-sm" style="width: 100%;">
+                  Leer Artículo Completo →
+                </a>
+              </div>
+            </div>
+          </article>
+        `).join("");
+      }
+    });
+  </script>
+</body>
+</html>

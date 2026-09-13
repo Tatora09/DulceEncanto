@@ -1,0 +1,6 @@
+{
+  "name": "Dulce Encanto - Panadería & Repostería",
+  "description": "Plataforma e-commerce para Dulce Encanto con catálogo repostero, cotización interactiva de postres personalizados con reglas de negocio y panel administrativo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
