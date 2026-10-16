@@ -6,9 +6,6 @@
   <title>Solicitudes de Postres Personalizados | Admin Dulce Encanto</title>
   <meta name="description" content="Gestión y aprobación de tortas y postres personalizados con 72 hrs de anticipación en Dulce Encanto.">
   <link rel="stylesheet" href="../css/styles.css">
-
-<body style="background-color: #F8F9FA;">
-
   <style>
     :root {
       --color-rosado-fuerte: #D81B60;
@@ -32,34 +29,25 @@
     .admin-nav-list a { text-decoration: none; color: var(--color-texto-secundario); display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; font-weight: 500; gap: 10px; }
     .admin-nav-list a:hover, .admin-nav-list a.active { background-color: var(--color-crema-suave); color: var(--color-rosado-fuerte); }
     .admin-main { flex: 1; padding: 2.5rem 3rem; background-color: #F8F9FA; overflow-y: auto; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
-    .stat-card { background: #FFFFFF; padding: 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-suave); border: 1px solid var(--borde-suave); display: flex; flex-direction: column; gap: 0.5rem; transition: transform 0.2s; }
-    .stat-card:hover { transform: translateY(-2px); }
-    .stat-label { font-size: 0.9rem; color: var(--color-texto-secundario); font-weight: 600; }
-    .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--color-texto-principal); }
-    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
     .btn-primary { background-color: var(--color-rosado-fuerte); color: white; }
     .btn-secondary { background-color: white; color: var(--color-texto-principal); border: 1px solid var(--borde-suave); }
+    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
     .btn:hover { opacity: 0.85; }
     .admin-card { background: #FFFFFF; padding: 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-suave); border: 1px solid var(--borde-suave); }
     .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     .admin-table th { text-align: left; padding: 0.75rem 1rem; color: var(--color-texto-secundario); border-bottom: 2px solid var(--borde-suave); font-size: 0.9rem; font-weight: 600; }
-    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--borde-suave); font-size: 0.95rem; color: var(--color-texto-principal); }
-    .status-badge { padding: 0.35rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 600; }
-    .badge-pending { background: #FFF3CD; color: #856404; }
-    .badge-prep { background: #CCE5FF; color: #004085; }
-    .badge-completed { background: #D4EDDA; color: #155724; }
-    .badge-approved { background: #E8F5E9; color: #2E7D32; }
-    .badge-rejected { background: #F8D7DA; color: #721C24; }
-    .stock-alert-item { background: #FFFFFF; padding: 1rem; border-radius: 8px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 4px rgba(229, 62, 62, 0.05); }
+    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--borde-suave); font-size: 0.95rem; color: var(--color-texto-principal); vertical-align: middle; }
+    .section-tag { display: inline-block; background: var(--color-crema-suave); color: var(--color-rosado-fuerte); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;}
   </style>
 </head>
+<body style="background-color: #F8F9FA;">
 
   <div class="session-toolbar" id="session-toolbar"></div>
 
-<!-- Sidebar Admin Rediseñado -->
+  <div class="admin-layout">
     <aside class="admin-sidebar">
-      <div class="brand-logo">
+      <div class="brand-logo" style="margin-bottom: 2rem;">
         <div class="brand-logo-icon">🧁</div>
         <div class="brand-text">
           <h2 style="font-size: 1.2rem; color: var(--color-rosado-fuerte); margin:0;">Dulce Encanto</h2>
@@ -90,7 +78,7 @@
               👥 <span>Gestión de Usuarios</span>
             </a>
           </li>
-          <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+          <li style="margin-top: 2rem; border-top: 1px solid var(--borde-suave); padding-top: 1rem;">
             <a href="../index.html">
               🏪 <span>Volver a la Tienda</span>
             </a>
@@ -123,9 +111,9 @@
       <!-- Filtros -->
       <div class="admin-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
         <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
-          <input type="text" id="searchSolicitud" placeholder="🔍 Buscar por código, cliente o email..." style="padding: 0.6rem 1rem;">
+          <input type="text" id="searchSolicitud" placeholder="🔍 Buscar por código, cliente o email..." style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
           
-          <select id="filtroEstadoSolicitud" style="padding: 0.6rem 1rem;">
+          <select id="filtroEstadoSolicitud" style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
             <option value="Todos">Todos los Estados</option>
             <option value="Pendiente">⏳ Pendiente</option>
             <option value="Aprobada">✓ Aprobada</option>
@@ -134,7 +122,7 @@
             <option value="Rechazada">✗ Rechazada</option>
           </select>
 
-          <select id="filtroTipoPostre" style="padding: 0.6rem 1rem;">
+          <select id="filtroTipoPostre" style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
             <option value="Todos">Todos los Tipos</option>
             <option value="Torta Tradicional">Torta Tradicional</option>
             <option value="Torta en Fondant">Torta en Fondant</option>
@@ -170,7 +158,7 @@
 
   <!-- Modal de Detalle Completo de la Solicitud -->
   <div id="solicitudDetailModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
-    <div style="background: #fff; max-width: 600px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative; max-height: 90vh; overflow-y: auto;">
+    <div style="background: #fff; max-width: 600px; width: 100%; border-radius: var(--radio-md); padding: 2rem; box-shadow: var(--sombra-suave); position: relative; max-height: 90vh; overflow-y: auto;">
       <button onclick="cerrarModalSolicitud()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
       
       <div id="modalSolicitudContent">
@@ -266,7 +254,7 @@
               <strong style="color: var(--color-rosado-fuerte);">${CarritoService.formatearPrecio(s.precioEstimado)}</strong>
             </td>
             <td>
-              <select onchange="actualizarEstadoSolicitudRapido('${s.id}', this.value)" style="padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; font-weight: 600;">
+              <select onchange="actualizarEstadoSolicitudRapido('${s.id}', this.value)" style="padding: 4px 8px; font-size: 0.82rem; border-radius: 6px; font-weight: 600; border: 1px solid var(--borde-suave);">
                 <option value="Pendiente" ${s.estado === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
                 <option value="Aprobada" ${s.estado === 'Aprobada' ? 'selected' : ''}>✓ Aprobada</option>
                 <option value="En Preparación" ${s.estado === 'En Preparación' ? 'selected' : ''}>🥣 En Preparación</option>
@@ -296,7 +284,7 @@
 
       const content = document.getElementById("modalSolicitudContent");
       content.innerHTML = `
-        <div style="border-bottom: 1px solid var(--color-borde-suave); padding-bottom: 1rem; margin-bottom: 1.25rem;">
+        <div style="border-bottom: 1px solid var(--borde-suave); padding-bottom: 1rem; margin-bottom: 1.25rem;">
           <span class="section-tag">${s.codigo}</span>
           <h2 style="font-size: 1.45rem; color: var(--color-texto-principal); margin: 0.35rem 0;">
             ${s.tipoPostre} (${s.porciones} Porciones)
@@ -319,14 +307,14 @@
           <p style="margin-bottom: 0.25rem;"><strong>Presupuesto Estimado:</strong> <span style="color: var(--color-rosado-fuerte); font-weight: 700;">${CarritoService.formatearPrecio(s.precioEstimado)}</span></p>
         </div>
 
-        <div style="background: #fff; border: 1px solid var(--color-borde-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.25rem;">
+        <div style="background: #fff; border: 1px solid var(--borde-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.25rem;">
           <strong>Dedicatoria en Glaseado:</strong>
           <p style="font-style: italic; color: var(--color-rosado-fuerte); margin: 0.25rem 0 0 0;">
             ${s.dedicatoria ? `"${s.dedicatoria}"` : 'Sin dedicatoria'}
           </p>
         </div>
 
-        <div style="background: #fff; border: 1px solid var(--color-borde-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.5rem;">
+        <div style="background: #fff; border: 1px solid var(--borde-suave); padding: 1rem; border-radius: var(--radio-md); margin-bottom: 1.5rem;">
           <strong>Descripción de la Temática / Decoración:</strong>
           <p style="margin: 0.25rem 0 0 0; color: var(--color-texto-secundario); line-height: 1.6;">
             ${s.tematica}
@@ -341,7 +329,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
           <div>
             <label style="font-size: 0.85rem; font-weight: 600;">Modificar Estado:</label>
-            <select id="modalSelectEstado" style="padding: 6px 10px; font-size: 0.9rem; border-radius: 6px;">
+            <select id="modalSelectEstado" style="padding: 6px 10px; font-size: 0.9rem; border-radius: 6px; border: 1px solid var(--borde-suave);">
               <option value="Pendiente" ${s.estado === 'Pendiente' ? 'selected' : ''}>⏳ Pendiente</option>
               <option value="Aprobada" ${s.estado === 'Aprobada' ? 'selected' : ''}>✓ Aprobada</option>
               <option value="En Preparación" ${s.estado === 'En Preparación' ? 'selected' : ''}>🥣 En Preparación</option>
@@ -351,7 +339,7 @@
           </div>
 
           <button class="btn btn-primary" onclick="guardarEstadoDesdeModal('${s.id}')">
-            Actualizar y Notificar Cliente
+            Actualizar
           </button>
         </div>
       `;

@@ -6,6 +6,50 @@
   <title>Gestión de Usuarios y Roles | Admin Dulce Encanto</title>
   <meta name="description" content="Administración de cuentas, roles RBAC y estados de colaboradores y clientes en Dulce Encanto.">
   <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    :root {
+      --color-rosado-fuerte: #D81B60;
+      --color-rosado-pastel: #F8BBD0;
+      --color-crema-suave: #FFF0F3;
+      --color-texto-principal: #2D3748;
+      --color-texto-secundario: #4A5568;
+      --color-texto-mutado: #718096;
+      --color-alerta-critico-texto: #E53E3E;
+      --borde-suave: #E2E8F0;
+      --radio-md: 12px;
+      --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    body { background-color: #F8F9FA; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+    .admin-layout { display: flex; min-height: 100vh; }
+    .admin-sidebar { background-color: #FFFFFF; width: 260px; padding: 2rem 1.5rem; display: flex; flex-direction: column; border-right: 1px solid var(--borde-suave); box-shadow: 2px 0 10px rgba(0,0,0,0.02); }
+    .brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 2.5rem; }
+    .brand-logo-icon { font-size: 1.8rem; }
+    .admin-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .admin-nav-list a { text-decoration: none; color: var(--color-texto-secundario); display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; font-weight: 500; gap: 10px; }
+    .admin-nav-list a:hover, .admin-nav-list a.active { background-color: var(--color-crema-suave); color: var(--color-rosado-fuerte); }
+    .admin-main { flex: 1; padding: 2.5rem 3rem; background-color: #F8F9FA; overflow-y: auto; }
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
+    .btn-primary { background-color: var(--color-rosado-fuerte); color: white; }
+    .btn-secondary { background-color: white; color: var(--color-texto-principal); border: 1px solid var(--borde-suave); }
+    .btn-danger { background-color: #E53E3E; color: white; }
+    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+    .btn:hover { opacity: 0.85; }
+    .admin-card { background: #FFFFFF; padding: 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-suave); border: 1px solid var(--borde-suave); }
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .admin-table th { text-align: left; padding: 0.75rem 1rem; color: var(--color-texto-secundario); border-bottom: 2px solid var(--borde-suave); font-size: 0.9rem; font-weight: 600; }
+    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--borde-suave); font-size: 0.95rem; color: var(--color-texto-principal); vertical-align: middle; }
+    .stock-badge { padding: 0.35rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 600; }
+    .stock-ok { background: #D4EDDA; color: #155724; }
+    .stock-critical { background: #F8D7DA; color: #721C24; }
+    .tag-badge { background: var(--color-crema-suave); color: var(--color-rosado-fuerte); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--color-rosado-pastel); }
+    .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-weight: 600; font-size: 0.9rem; color: var(--color-texto-principal); }
+    .form-group input, .form-group select { padding: 0.6rem; border: 1px solid var(--borde-suave); border-radius: 6px; font-family: inherit; font-size: 0.95rem; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .required-star { color: #E53E3E; }
+    .form-hint { font-size: 0.8rem; color: var(--color-texto-mutado); }
+  </style>
 </head>
 <body style="background-color: #F8F9FA;">
 
@@ -16,8 +60,8 @@
       <div class="brand-logo" style="margin-bottom: 2rem;">
         <div class="brand-logo-icon">🧁</div>
         <div class="brand-text">
-          <h2 style="font-size: 1.15rem; color: #fff; margin:0;">Dulce Encanto</h2>
-          <span style="font-size: 0.75rem; color: var(--color-rosado-pastel);">Panel de Control</span>
+          <h2 style="font-size: 1.2rem; color: var(--color-rosado-fuerte); margin:0;">Dulce Encanto</h2>
+          <span style="font-size: 0.8rem; color: var(--color-texto-mutado);">Panel de Control</span>
         </div>
       </div>
 
@@ -43,7 +87,7 @@
               👥 <span>Gestión de Usuarios</span>
             </a>
           </li>
-          <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+          <li style="margin-top: 2rem; border-top: 1px solid var(--borde-suave); padding-top: 1rem;">
             <a href="../index.html">
               🏪 <span>Volver a la Tienda</span>
             </a>
@@ -76,16 +120,16 @@
       <!-- Filtros -->
       <div class="admin-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
         <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
-          <input type="text" id="searchUsuario" placeholder="🔍 Buscar por RUT, nombre o correo..." style="padding: 0.6rem 1rem;">
+          <input type="text" id="searchUsuario" placeholder="🔍 Buscar por RUT, nombre o correo..." style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
           
-          <select id="filtroRolUsuario" style="padding: 0.6rem 1rem;">
+          <select id="filtroRolUsuario" style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
             <option value="Todos">Todos los Roles</option>
             <option value="Administrador">Administrador</option>
             <option value="Vendedor / Pastelero">Vendedor / Pastelero</option>
             <option value="Cliente">Cliente</option>
           </select>
 
-          <select id="filtroEstadoUsuario" style="padding: 0.6rem 1rem;">
+          <select id="filtroEstadoUsuario" style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
             <option value="Todos">Todos los Estados</option>
             <option value="Activo">✓ Activo</option>
             <option value="Inactivo">✗ Inactivo</option>
@@ -118,7 +162,7 @@
 
   <!-- Modal Crear/Editar Usuario -->
   <div id="usuarioModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem;">
-    <div style="background: #fff; max-width: 620px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative; max-height: 90vh; overflow-y: auto;">
+    <div style="background: #fff; max-width: 620px; width: 100%; border-radius: var(--radio-md); padding: 2rem; box-shadow: var(--sombra-suave); position: relative; max-height: 90vh; overflow-y: auto;">
       <button onclick="cerrarModalUsuario()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
       
       <h2 id="modalUsuarioTitle" style="font-size: 1.45rem; margin: 0 0 1.25rem 0;">
@@ -153,8 +197,8 @@
         <div class="form-row-2">
           <div class="form-group">
             <label for="usrEmail">Correo Electrónico <span class="required-star">*</span></label>
-            <input type="email" id="usrEmail" placeholder="usuario@duoc.cl o @gmail.com" required>
-            <span class="form-hint">@duoc.cl, @profesor.duoc.cl o @gmail.com</span>
+            <input type="email" id="usrEmail" placeholder="usuario@duoc.cl" required>
+            <span class="form-hint">@duoc.cl o @gmail.com</span>
           </div>
 
           <div class="form-group">
@@ -163,7 +207,6 @@
           </div>
         </div>
 
-        <!-- Cascada Región / Comuna -->
         <div class="form-row-2">
           <div class="form-group">
             <label for="usrRegion">Región <span class="required-star">*</span></label>
@@ -249,9 +292,9 @@
 
       tbody.innerHTML = usuarios.map(u => `
         <tr>
-          <td><code style="background: var(--color-crema); padding: 3px 6px; border-radius: 4px; font-weight: 700;">${u.rut}</code></td>
+          <td><code style="background: var(--color-crema-suave); padding: 3px 6px; border-radius: 4px; font-weight: 700;">${u.rut}</code></td>
           <td><strong>${u.nombre}</strong></td>
-          <td><a href="mailto:${u.email}">${u.email}</a></td>
+          <td><a href="mailto:${u.email}" style="color: var(--color-rosado-fuerte); text-decoration: none;">${u.email}</a></td>
           <td>${u.telefono || '—'}</td>
           <td>${u.comuna}, ${u.region}</td>
           <td>

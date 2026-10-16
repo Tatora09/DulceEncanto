@@ -6,9 +6,6 @@
   <title>Gestión de Productos | Admin Dulce Encanto</title>
   <meta name="description" content="CRUD completo de productos, inventario, precios y stock crítico en Dulce Encanto.">
   <link rel="stylesheet" href="../css/styles.css">
-
-<body style="background-color: #F8F9FA;">
-
   <style>
     :root {
       --color-rosado-fuerte: #D81B60;
@@ -37,29 +34,37 @@
     .stat-card:hover { transform: translateY(-2px); }
     .stat-label { font-size: 0.9rem; color: var(--color-texto-secundario); font-weight: 600; }
     .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--color-texto-principal); }
-    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer;}
     .btn-primary { background-color: var(--color-rosado-fuerte); color: white; }
     .btn-secondary { background-color: white; color: var(--color-texto-principal); border: 1px solid var(--borde-suave); }
+    .btn-danger { background-color: #E53E3E; color: white; }
     .btn:hover { opacity: 0.85; }
+    .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
     .admin-card { background: #FFFFFF; padding: 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-suave); border: 1px solid var(--borde-suave); }
     .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     .admin-table th { text-align: left; padding: 0.75rem 1rem; color: var(--color-texto-secundario); border-bottom: 2px solid var(--borde-suave); font-size: 0.9rem; font-weight: 600; }
-    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--borde-suave); font-size: 0.95rem; color: var(--color-texto-principal); }
+    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--borde-suave); font-size: 0.95rem; color: var(--color-texto-principal); vertical-align: middle; }
     .status-badge { padding: 0.35rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 600; }
-    .badge-pending { background: #FFF3CD; color: #856404; }
-    .badge-prep { background: #CCE5FF; color: #004085; }
-    .badge-completed { background: #D4EDDA; color: #155724; }
-    .badge-approved { background: #E8F5E9; color: #2E7D32; }
-    .badge-rejected { background: #F8D7DA; color: #721C24; }
-    .stock-alert-item { background: #FFFFFF; padding: 1rem; border-radius: 8px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 4px rgba(229, 62, 62, 0.05); }
+    .stock-badge { padding: 0.35rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 600; }
+    .stock-ok { background: #D4EDDA; color: #155724; }
+    .stock-critical { background: #F8D7DA; color: #721C24; }
+    .tag-badge { background: var(--color-crema-suave); color: var(--color-rosado-fuerte); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem; font-weight: 600; border: 1px solid var(--color-rosado-pastel); }
+    .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-weight: 600; font-size: 0.9rem; color: var(--color-texto-principal); }
+    .form-group input, .form-group select, .form-group textarea { padding: 0.6rem; border: 1px solid var(--borde-suave); border-radius: 6px; font-family: inherit; font-size: 0.95rem; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .required-star { color: #E53E3E; }
+    .form-hint { font-size: 0.8rem; color: var(--color-texto-mutado); }
   </style>
 </head>
+<body style="background-color: #F8F9FA;">
 
   <div class="session-toolbar" id="session-toolbar"></div>
 
-<!-- Sidebar Admin Rediseñado -->
+  <div class="admin-layout">
+    <!-- Sidebar -->
     <aside class="admin-sidebar">
-      <div class="brand-logo">
+      <div class="brand-logo" style="margin-bottom: 2rem;">
         <div class="brand-logo-icon">🧁</div>
         <div class="brand-text">
           <h2 style="font-size: 1.2rem; color: var(--color-rosado-fuerte); margin:0;">Dulce Encanto</h2>
@@ -89,7 +94,7 @@
               👥 <span>Gestión de Usuarios</span>
             </a>
           </li>
-          <li style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+          <li style="margin-top: 2rem; border-top: 1px solid var(--borde-suave); padding-top: 1rem;">
             <a href="../index.html">
               🏪 <span>Volver a la Tienda</span>
             </a>
@@ -123,9 +128,9 @@
       <!-- Barra de Filtros y Búsqueda -->
       <div class="admin-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
         <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center;">
-          <input type="text" id="adminSearchInput" placeholder="🔍 Buscar por nombre o código..." style="padding: 0.6rem 1rem;">
+          <input type="text" id="adminSearchInput" placeholder="🔍 Buscar por nombre o código..." style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
           
-          <select id="adminCategoryFilter" style="padding: 0.6rem 1rem;">
+          <select id="adminCategoryFilter" style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
             <option value="Todos">Todas las Categorías</option>
             <option value="Tortas Tradicionales">Tortas Tradicionales</option>
             <option value="Tortas en Fondant">Tortas en Fondant</option>
@@ -134,7 +139,7 @@
             <option value="Bollería & Panadería">Bollería &amp; Panadería</option>
           </select>
 
-          <select id="adminStockFilter" style="padding: 0.6rem 1rem;">
+          <select id="adminStockFilter" style="padding: 0.6rem 1rem; border: 1px solid var(--borde-suave); border-radius: 6px;">
             <option value="Todos">Todo el Stock</option>
             <option value="Critico">⚠️ Solo Stock Crítico</option>
             <option value="Normal">✓ Stock Normal</option>
@@ -168,7 +173,7 @@
 
   <!-- Modal para Crear / Editar Producto (CRUD) -->
   <div id="productModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto;">
-    <div style="background: #fff; max-width: 680px; width: 100%; border-radius: var(--radio-lg); padding: 2rem; box-shadow: var(--sombra-hover); position: relative; max-height: 90vh; overflow-y: auto;">
+    <div style="background: #fff; max-width: 680px; width: 100%; border-radius: var(--radio-md); padding: 2rem; box-shadow: var(--sombra-suave); position: relative; max-height: 90vh; overflow-y: auto;">
       <button onclick="cerrarModalProducto()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
       
       <h2 id="modalTitle" style="font-size: 1.45rem; color: var(--color-texto-principal); margin: 0 0 1.25rem 0;">
