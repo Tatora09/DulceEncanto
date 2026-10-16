@@ -88,6 +88,45 @@
         Versión ERS v2.0
       </div>
     </aside>
+
+    <!-- Contenido Principal -->
+    <main class="admin-main">
+      
+      <!-- Top bar del dashboard -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h1 style="font-size: 1.85rem; margin: 0; color: var(--color-texto-principal);">Panel de Operaciones Reposteras</h1>
+          <p style="margin: 0.25rem 0 0 0; color: var(--color-texto-secundario); font-size: 0.95rem;">Resumen diario de pedidos, niveles de stock en vitrina y solicitudes.</p>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="productos.html?action=nuevo" class="btn btn-primary">➕ Nuevo Producto</a>
+          <a href="solicitudes.html" class="btn btn-secondary">📋 Revisar Solicitudes</a>
+        </div>
+      </div>
+
+      <!-- Tarjetas de Métricas KPI -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Productos en Catálogo</div>
+          <div class="stat-value" id="kpi-total-productos">0</div>
+          <span style="font-size: 0.8rem; color: #2D6A4F; font-weight: 500;">✓ Activos en vitrina</span>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid var(--color-alerta-critico-texto);">
+          <div class="stat-label">Alertas de Stock Crítico</div>
+          <div class="stat-value" id="kpi-stock-critico" style="color: var(--color-alerta-critico-texto);">0</div>
+          <span style="font-size: 0.8rem; color: var(--color-alerta-critico-texto); font-weight: 500;" id="kpi-stock-critico-sub">⚠️ Requieren horneado urgente</span>
+        </div>
+        <div class="stat-card" style="border-left: 4px solid var(--color-rosado-fuerte);">
+          <div class="stat-label">Solicitudes de Postres</div>
+          <div class="stat-value" id="kpi-solicitudes-pendientes" style="color: var(--color-rosado-fuerte);">0</div>
+          <span style="font-size: 0.8rem; color: var(--color-texto-mutado); font-weight: 500;">Con 72 hrs de anticipación</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Usuarios Registrados</div>
+          <div class="stat-value" id="kpi-total-usuarios">0</div>
+          <span style="font-size: 0.8rem; color: #2D6A4F; font-weight: 500;">Clientes y colaboradores</span>
+        </div>
+      </div>
     
 </body>
 </html>
