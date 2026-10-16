@@ -56,7 +56,38 @@
   <div class="session-toolbar" id="session-toolbar"></div>
   <div class="admin-layout">
 
+<!-- Sidebar Admin Rediseñado -->
+    <aside class="admin-sidebar">
+      <div class="brand-logo">
+        <div class="brand-logo-icon">🧁</div>
+        <div class="brand-text">
+          <h2 style="font-size: 1.2rem; color: var(--color-rosado-fuerte); margin:0;">Dulce Encanto</h2>
+          <span style="font-size: 0.8rem; color: var(--color-texto-mutado);">Panel de Control</span>
+        </div>
+      </div>
 
+      <nav>
+        <ul class="admin-nav-list">
+          <li><a href="dashboard.html" class="active">📊 <span>Dashboard &amp; Métricas</span></a></li>
+          <li><a href="productos.html">🍰 <span>Gestión de Productos</span></a></li>
+          <li>
+            <a href="solicitudes.html">🎂 <span>Solicitudes a Medida</span>
+              <span id="sidebar-solicitudes-badge" style="background: var(--color-rosado-fuerte); color: #fff; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; margin-left: auto;">0</span>
+            </a>
+          </li>
+          <li><a href="usuarios.html">👥 <span>Gestión de Usuarios</span></a></li>
+          <li style="margin-top: 1.5rem; border-top: 1px solid var(--borde-suave); padding-top: 1.5rem;">
+            <a href="../index.html">🏪 <span>Volver a la Tienda</span></a>
+          </li>
+          <li><a href="../login.html" onclick="AuthService.logout()">🚪 <span>Cerrar Sesión</span></a></li>
+        </ul>
+      </nav>
+
+      <div style="margin-top: auto; padding-top: 2rem; font-size: 0.8rem; color: var(--color-texto-mutado);">
+        Rol activo: <strong id="admin-user-role-label" style="color: var(--color-texto-principal);">Admin</strong><br>
+        Versión ERS v2.0
+      </div>
+    </aside>
     
 </body>
 </html>
