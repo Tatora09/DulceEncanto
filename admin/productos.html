@@ -6,13 +6,59 @@
   <title>Gestión de Productos | Admin Dulce Encanto</title>
   <meta name="description" content="CRUD completo de productos, inventario, precios y stock crítico en Dulce Encanto.">
   <link rel="stylesheet" href="../css/styles.css">
-</head>
+
 <body style="background-color: #F8F9FA;">
+
+  <style>
+    :root {
+      --color-rosado-fuerte: #D81B60;
+      --color-rosado-pastel: #F8BBD0;
+      --color-crema-suave: #FFF0F3;
+      --color-texto-principal: #2D3748;
+      --color-texto-secundario: #4A5568;
+      --color-texto-mutado: #718096;
+      --color-alerta-critico-texto: #E53E3E;
+      --borde-suave: #E2E8F0;
+      --radio-md: 12px;
+      --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    body { background-color: #F8F9FA; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+    .admin-layout { display: flex; min-height: 100vh; }
+    .admin-sidebar { background-color: #FFFFFF; width: 260px; padding: 2rem 1.5rem; display: flex; flex-direction: column; border-right: 1px solid var(--borde-suave); box-shadow: 2px 0 10px rgba(0,0,0,0.02); }
+    .brand-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 2.5rem; }
+    .brand-logo-icon { font-size: 1.8rem; }
+    .admin-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .admin-nav-list a { text-decoration: none; color: var(--color-texto-secundario); display: flex; align-items: center; padding: 0.75rem 1rem; border-radius: 8px; transition: all 0.2s ease; font-weight: 500; gap: 10px; }
+    .admin-nav-list a:hover, .admin-nav-list a.active { background-color: var(--color-crema-suave); color: var(--color-rosado-fuerte); }
+    .admin-main { flex: 1; padding: 2.5rem 3rem; background-color: #F8F9FA; overflow-y: auto; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+    .stat-card { background: #FFFFFF; padding: 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-suave); border: 1px solid var(--borde-suave); display: flex; flex-direction: column; gap: 0.5rem; transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-label { font-size: 0.9rem; color: var(--color-texto-secundario); font-weight: 600; }
+    .stat-value { font-size: 2.2rem; font-weight: 700; color: var(--color-texto-principal); }
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background-color: var(--color-rosado-fuerte); color: white; }
+    .btn-secondary { background-color: white; color: var(--color-texto-principal); border: 1px solid var(--borde-suave); }
+    .btn:hover { opacity: 0.85; }
+    .admin-card { background: #FFFFFF; padding: 1.5rem; border-radius: var(--radio-md); box-shadow: var(--sombra-suave); border: 1px solid var(--borde-suave); }
+    .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .admin-table th { text-align: left; padding: 0.75rem 1rem; color: var(--color-texto-secundario); border-bottom: 2px solid var(--borde-suave); font-size: 0.9rem; font-weight: 600; }
+    .admin-table td { padding: 1rem; border-bottom: 1px solid var(--borde-suave); font-size: 0.95rem; color: var(--color-texto-principal); }
+    .status-badge { padding: 0.35rem 0.75rem; border-radius: 99px; font-size: 0.8rem; font-weight: 600; }
+    .badge-pending { background: #FFF3CD; color: #856404; }
+    .badge-prep { background: #CCE5FF; color: #004085; }
+    .badge-completed { background: #D4EDDA; color: #155724; }
+    .badge-approved { background: #E8F5E9; color: #2E7D32; }
+    .badge-rejected { background: #F8D7DA; color: #721C24; }
+    .stock-alert-item { background: #FFFFFF; padding: 1rem; border-radius: 8px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 4px rgba(229, 62, 62, 0.05); }
+  </style>
+</head>
 
   <div class="session-toolbar" id="session-toolbar"></div>
 
+<!-- Sidebar Admin Rediseñado -->
   <div class="admin-layout">
-    <!-- Sidebar -->
     <aside class="admin-sidebar">
       <div class="brand-logo" style="margin-bottom: 2rem;">
         <div class="brand-logo-icon">🧁</div>
