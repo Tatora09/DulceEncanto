@@ -127,6 +127,44 @@
           <span style="font-size: 0.8rem; color: #2D6A4F; font-weight: 500;">Clientes y colaboradores</span>
         </div>
       </div>
+
+      <!-- Alertas de Stock Crítico -->
+      <section style="margin-bottom: 2.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.25rem; margin:0; display: flex; align-items: center; gap: 0.5rem; color: var(--color-texto-principal);">
+            <span>⚠️</span> Alertas de Inventario: Stock Crítico
+          </h2>
+          <span style="font-size: 0.85rem; color: var(--color-texto-mutado);">Condición: Stock actual &le; Stock mínimo configurado</span>
+        </div>
+        <div id="stock-critico-container"></div>
+      </section>
+
+      <!-- Grid de Solicitudes Recientes y Productos Destacados -->
+      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem;">
+        <div class="admin-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; margin: 0; color: var(--color-texto-principal);">🎂 Solicitudes Recientes</h3>
+            <a href="solicitudes.html" style="font-size: 0.85rem; font-weight: 600; color: var(--color-rosado-fuerte); text-decoration: none;">Ver todas →</a>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr><th>Código</th><th>Cliente</th><th>Tipo / Porciones</th><th>Fecha Entrega</th><th>Estado</th></tr>
+            </thead>
+            <tbody id="solicitudes-recientes-body"></tbody>
+          </table>
+        </div>
+
+        <div class="admin-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; margin: 0; color: var(--color-texto-principal);">🍰 Vitrina Rápida</h3>
+            <a href="productos.html" style="font-size: 0.85rem; font-weight: 600; color: var(--color-rosado-fuerte); text-decoration: none;">Gestionar →</a>
+          </div>
+          <div id="vitrina-rapida-list" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
     
 </body>
 </html>
