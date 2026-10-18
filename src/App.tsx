@@ -1,50 +1,72 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 
-import PublicLayout from './components/PublicLayout';
-import AdminLayout from './components/AdminLayout';
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import AdminSidebar from "./components/AdminSidebar";
 
 // Públicas
-import Home from './pages/public/Home';
-import Productos from './pages/public/Productos';
-import DetalleProducto from './pages/public/DetalleProducto';
-import Categorias from './pages/public/Categorias';
-import CategoriaDetalle from './pages/public/CategoriaDetalle';
-import Ofertas from './pages/public/Ofertas';
-import Carrito from './pages/public/Carrito';
-import Checkout from './pages/public/Checkout';
-import PagoExitoso from './pages/public/PagoExitoso';
-import PagoError from './pages/public/PagoError';
-import Blogs from './pages/public/Blogs';
-import DetalleBlog from './pages/public/DetalleBlog';
-import Contacto from './pages/public/Contacto';
-import Nosotros from './pages/public/Nosotros';
-import Login from './pages/public/Login';
-import Registro from './pages/public/Registro';
-import NotFound from './pages/public/NotFound';
+import Home from "./pages/public/Home";
+import Productos from "./pages/public/Productos";
+import DetalleProducto from "./pages/public/DetalleProducto";
+import Categorias from "./pages/public/Categorias";
+import CategoriaDetalle from "./pages/public/CategoriaDetalle";
+import Ofertas from "./pages/public/Ofertas";
+import Carrito from "./pages/public/Carrito";
+import Checkout from "./pages/public/Checkout";
+import PagoExitoso from "./pages/public/PagoExitoso";
+import PagoError from "./pages/public/PagoError";
+import Blogs from "./pages/public/Blogs";
+import DetalleBlog from "./pages/public/DetalleBlog";
+import Contacto from "./pages/public/Contacto";
+import Nosotros from "./pages/public/Nosotros";
+import Login from "./pages/public/Login";
+import Registro from "./pages/public/Registro";
+import NotFound from "./pages/public/NotFound";
 
-// Admin
-import Dashboard from './pages/admin/Dashboard';
-import OrdenesAdmin from './pages/admin/OrdenesAdmin';
-import BoletaAdmin from './pages/admin/BoletaAdmin';
-import ProductosAdmin from './pages/admin/ProductosAdmin';
-import ProductoForm from './pages/admin/ProductoForm';
-import ProductosCriticos from './pages/admin/ProductosCriticos';
-import ReportesProductos from './pages/admin/ReportesProductos';
-import CategoriasAdmin from './pages/admin/CategoriasAdmin';
-import CategoriaForm from './pages/admin/CategoriaForm';
-import UsuariosAdmin from './pages/admin/UsuariosAdmin';
-import UsuarioForm from './pages/admin/UsuarioForm';
-import HistorialCompras from './pages/admin/HistorialCompras';
-import Reportes from './pages/admin/Reportes';
-import Perfil from './pages/admin/Perfil';
+// Administración
+import Dashboard from "./pages/admin/Dashboard";
+import OrdenesAdmin from "./pages/admin/OrdenesAdmin";
+import BoletaAdmin from "./pages/admin/BoletaAdmin";
+import ProductosAdmin from "./pages/admin/ProductosAdmin";
+import ProductoForm from "./pages/admin/ProductoForm";
+import ProductosCriticos from "./pages/admin/ProductosCriticos";
+import ReportesProductos from "./pages/admin/ReportesProductos";
+import CategoriasAdmin from "./pages/admin/CategoriasAdmin";
+import CategoriaForm from "./pages/admin/CategoriaForm";
+import UsuariosAdmin from "./pages/admin/UsuariosAdmin";
+import UsuarioForm from "./pages/admin/UsuarioForm";
+import HistorialCompras from "./pages/admin/HistorialCompras";
+import Reportes from "./pages/admin/Reportes";
+import Perfil from "./pages/admin/Perfil";
+
+// Marco de la tienda: Navbar arriba y Footer abajo; <Outlet /> muestra la página activa
+const MarcoTienda: React.FC = () => (
+  <>
+    <Navbar />
+    <main className="container py-4">
+      <Outlet />
+    </main>
+    <Footer />
+  </>
+);
+
+// Marco del panel de administración: barra lateral + página activa
+const MarcoAdmin: React.FC = () => (
+  <div className="d-flex min-vh-100">
+    <AdminSidebar />
+    <main className="flex-grow-1 p-4 bg-light">
+      <Outlet />
+    </main>
+  </div>
+);
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Tienda (pública) */}
-        <Route element={<PublicLayout />}>
+        <Route element={<MarcoTienda />}>
           <Route path="/" element={<Home />} />
           <Route path="/productos" element={<Productos />} />
           <Route path="/producto/:id" element={<DetalleProducto />} />
@@ -65,7 +87,7 @@ function App() {
         </Route>
 
         {/* Administración */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<MarcoAdmin />}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
 
