@@ -59,35 +59,7 @@ const Productos: React.FC = () => {
   });
 
   return (
-    <div className="admin-layout">
-      <aside className="admin-sidebar">
-        <div className="brand-logo" style={{ marginBottom: '2rem' }}>
-          <div className="brand-logo-icon">🧁</div>
-          <div className="brand-text">
-            <h2 style={{ fontSize: '1.2rem', color: 'var(--color-rosado-fuerte)', margin: 0 }}>Dulce Encanto</h2>
-            <span style={{ fontSize: '0.8rem', color: 'var(--color-texto-mutado)' }}>Panel de Control</span>
-          </div>
-        </div>
-
-        <nav>
-          <ul className="admin-nav-list">
-            <li><Link to="/admin/dashboard">📊 <span>Dashboard & Métricas</span></Link></li>
-            <li><Link to="/admin/productos" className="active">🍰 <span>Gestión de Productos</span></Link></li>
-            <li>
-              <Link to="/admin/solicitudes">🎂 <span>Solicitudes a Medida</span>
-                <span id="sidebar-solicitudes-badge" style={{ background: 'var(--color-rosado-fuerte)', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.72rem', marginLeft: 'auto' }}>1</span>
-              </Link>
-            </li>
-            <li><Link to="/admin/usuarios">👥 <span>Gestión de Usuarios</span></Link></li>
-            <li style={{ marginTop: '1.5rem', borderTop: '1px solid var(--borde-suave)', paddingTop: '1.5rem' }}>
-              <Link to="/">🏪 <span>Volver a la Tienda</span></Link>
-            </li>
-            <li><Link to="/login">🚪 <span>Cerrar Sesión</span></Link></li>
-          </ul>
-        </nav>
-      </aside>
-
-      <main className="admin-main">
+      <div className="admin-main">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <h1 style={{ fontSize: '1.85rem', margin: 0, color: 'var(--color-texto-principal)' }}>Catálogo e Inventario</h1>
@@ -152,7 +124,7 @@ const Productos: React.FC = () => {
             </tbody>
           </table>
         </div>
-      </main>
+      </div>
 
       {/* Modal CRUD en React */}
       {modalAbierto && (
