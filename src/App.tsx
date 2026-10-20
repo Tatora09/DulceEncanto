@@ -1,9 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AdminSidebar from "./components/AdminSidebar";
+import RutaProtegida from "./components/RutaProtegida";
 
 // Públicas
 import Home from "./pages/public/Home";
@@ -40,16 +41,23 @@ import HistorialCompras from "./pages/admin/HistorialCompras";
 import Reportes from "./pages/admin/Reportes";
 import Perfil from "./pages/admin/Perfil";
 
-// Marco de la tienda: Navbar arriba y Footer abajo; <Outlet /> muestra la página activa
-const MarcoTienda: React.FC = () => (
-  <>
-    <Navbar />
-    <main className="container py-4">
-      <Outlet />
-    </main>
-    <Footer />
-  </>
-);
+// Marco de la tienda: barra de anuncio + Navbar arriba y Footer abajo; <Outlet /> muestra la página activa
+// El Home usa el ancho completo (su hero llega a los bordes); las demás páginas van en un contenedor.
+const MarcoTienda: React.FC = () => {
+  const { pathname } = useLocation();
+  return (
+    <>
+      <div className="de-announcement">
+        🌸 ¡Envío gratis en Santiago por compras sobre $35.000! Usa el cupón <strong>DULCE10</strong> para 10% de descuento.
+      </div>
+      <Navbar />
+      <main className={pathname === "/" ? "" : "container py-4"}>
+        <Outlet />
+      </main>
+      <Footer />
+    </>
+  );
+};
 
 // Marco del panel de administración: barra lateral + página activa
 const MarcoAdmin: React.FC = () => (
@@ -87,7 +95,7 @@ function App() {
         </Route>
 
         {/* Administración */}
-        <Route path="/admin" element={<MarcoAdmin />}>
+        <Route path="/admin" element={<RutaProtegida><MarcoAdmin /></RutaProtegida>}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
 
