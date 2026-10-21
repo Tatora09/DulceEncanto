@@ -45,7 +45,6 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-      {/* Contenido Principal */}
       <div className="admin-main">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
@@ -137,7 +136,6 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

@@ -59,6 +59,7 @@ const Productos: React.FC = () => {
   });
 
   return (
+    <>
       <div className="admin-main">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
@@ -150,8 +151,8 @@ const Productos: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
-export default ProductosAdmin;
+export default Productos;

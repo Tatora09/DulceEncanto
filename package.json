@@ -7,6 +7,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "karma start karma.conf.cjs",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
   },
@@ -26,15 +27,23 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jasmine": "^7.0.0",
     "@types/node": "^22.14.0",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
+    "jasmine-core": "^7.0.2",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-jasmine": "^5.1.0",
+    "karma-webpack": "^5.0.1",
     "tailwindcss": "^4.1.14",
+    "ts-loader": "^9.6.2",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
-    "vite": "^6.2.3"
+    "vite": "^6.2.3",
+    "webpack": "^5.112.0"
   }
 }
