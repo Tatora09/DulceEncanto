@@ -44,13 +44,13 @@ export function validarCupon(codigo: string): { valido: boolean; cupon?: Cupon; 
 
 export function calcularTotales(items: ItemCarrito[], cupon: Cupon | null): TotalesCarrito {
   const subtotal = items.reduce((acc, i) => acc + i.precio * i.cantidad, 0);
-  const montoDescuento = Math.round((subtotal * (cupon?.descuentoPct ?? 0)) / 100);
-  const costoEnvio = subtotal === 0 ? 0 : subtotal >= ENVIO_GRATIS_DESDE ? 0 : COSTO_ENVIO;
+  const montoDescuento = 0;
+  const costoEnvio = 0;
   return {
     cantidadTotal: items.reduce((acc, i) => acc + i.cantidad, 0),
     subtotal,
     montoDescuento,
     costoEnvio,
-    total: Math.max(0, subtotal - montoDescuento + costoEnvio),
+    total: subtotal,
   };
 }

@@ -1,27 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { obtenerCategorias, obtenerProductosPorCategoria } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const EMOJI_CATEGORIA: Record<string, string> = {
   Tortas: "🎂", Kuchenes: "🥧", Cupcakes: "🧁", Galletas: "🍪", Panes: "🥖",
 };
 const TONOS = ["", "tono-mantequilla", "", "tono-menta"];
 
-interface Fila { nombre: string; cantidad: number }
-
 const Categorias: React.FC = () => {
-  const [filas, setFilas] = useState<Fila[]>([]);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      const nombres = await obtenerCategorias();
-      const datos: Fila[] = [];
-      for (const nombre of nombres) datos.push({ nombre, cantidad: (await obtenerProductosPorCategoria(nombre)).length });
-      setFilas(datos);
-      setCargando(false);
-    })();
-  }, []);
+  const { productos, cargando, error } = useCatalogo();
+  const conteo = new Map<string, number>();
+  for (const producto of productos) conteo.set(producto.categoria, (conteo.get(producto.categoria) ?? 0) + 1);
+  const filas = [...conteo.entries()].map(([nombre, cantidad]) => ({ nombre, cantidad }));
 
   if (cargando) return <p>Cargando categorías…</p>;
 
@@ -33,7 +23,7 @@ const Categorias: React.FC = () => {
         <p>Elige tu antojo favorito.</p>
       </div>
       {filas.length === 0 ? (
-        <p className="text-muted text-center">Aún no hay categorías disponibles.</p>
+        !cargando && <p className="text-muted text-center">Aún no hay categorías disponibles.</p>
       ) : (
         <div className="de-cat-grid container">
           {filas.map((f, i) => (
@@ -45,6 +35,7 @@ const Categorias: React.FC = () => {
           ))}
         </div>
       )}
+      {error && <div className="alert alert-danger mt-3" role="alert">{error}</div>}
     </section>
   );
 };

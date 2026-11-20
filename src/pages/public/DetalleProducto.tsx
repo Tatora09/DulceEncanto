@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import type { Producto } from "../../types";
 import CantidadControl from "../../components/CantidadControl";
 import { useCart } from "../../context/CartContext";
 import { formatearPrecio, obtenerProductoPorId, precioOpcion, precioVigente } from "../../services/productsService";
@@ -8,11 +9,22 @@ const DetalleProducto: React.FC = () => {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const { agregar } = useCart();
-  const producto = obtenerProductoPorId(id);
-
+  const [producto, setProducto] = useState<Producto>();
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
   const [indiceOpcion, setIndiceOpcion] = useState(0);
   const [cantidad, setCantidad] = useState(1);
 
+  useEffect(() => {
+    setCargando(true);
+    obtenerProductoPorId(id)
+      .then(setProducto)
+      .catch((e: unknown) => setError(e instanceof Error ? e.message : "No se pudo cargar el producto."))
+      .finally(() => setCargando(false));
+  }, [id]);
+
+  if (cargando) return <p>Cargando producto…</p>;
+  if (error) return <div className="alert alert-danger" role="alert">{error}</div>;
   if (!producto) {
     return (
       <section className="text-center py-5">
@@ -53,7 +65,7 @@ const DetalleProducto: React.FC = () => {
 
       <div className="row g-4">
         <div className="col-12 col-md-6">
-          <img src={producto.imagen} alt={producto.nombre} className="img-fluid rounded-4 shadow-sm w-100" style={{ maxHeight: 480, objectFit: "cover" }} />
+          {producto.imagen && <img src={producto.imagen} alt={producto.nombre} className="img-fluid rounded-4 shadow-sm w-100" style={{ maxHeight: 480, objectFit: "cover" }} />}
         </div>
 
         <div className="col-12 col-md-6">
@@ -87,13 +99,6 @@ const DetalleProducto: React.FC = () => {
           </div>
 
           <h2 className="h6">Ingredientes</h2>
-          <p className="text-muted">{producto.ingredientes.join(", ")}</p>
-          <h2 className="h6">Alérgenos</h2>
-          <p>
-            {producto.alergenos.map((a) => (
-              <span key={a} className="badge text-bg-warning me-1">{a}</span>
-            ))}
-          </p>
         </div>
       </div>
     </section>

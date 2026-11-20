@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Rol, Usuario } from "../../types";
-import { eliminarUsuario, obtenerUsuarios } from "../../services/authService";
-import { useAuth } from "../../context/AuthContext";
+import { obtenerUsuarios } from "../../services/authService";
 
 const ROLES: Rol[] = ["Administrador", "Vendedor / Pastelero", "Cliente"];
 
@@ -10,7 +9,6 @@ const claseRol = (rol: Rol) =>
   rol === "Administrador" ? "bg-dark" : rol === "Cliente" ? "bg-secondary" : "bg-info text-dark";
 
 const UsuariosAdmin: React.FC = () => {
-  const { usuario: sesion } = useAuth();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
@@ -32,23 +30,11 @@ const UsuariosAdmin: React.FC = () => {
     cargar();
   }, [cargar]);
 
-  const eliminar = async (u: Usuario) => {
-    if (u.id === sesion?.id) return;
-    if (!window.confirm(`¿Eliminar a "${u.nombre}"? Esta acción no se puede deshacer.`)) return;
-    try {
-      await eliminarUsuario(u.id);
-      await cargar();
-    } catch {
-      setError("No se pudo eliminar el usuario.");
-    }
-  };
-
   const filtrados = usuarios.filter((u) => {
     const texto = busqueda.toLowerCase();
     const cumpleTexto =
       u.nombre.toLowerCase().includes(texto) ||
-      u.email.toLowerCase().includes(texto) ||
-      u.rut.toLowerCase().includes(texto);
+      u.email.toLowerCase().includes(texto);
     return cumpleTexto && (filtroRol === "Todos" || u.rol === filtroRol);
   });
 
@@ -67,7 +53,7 @@ const UsuariosAdmin: React.FC = () => {
         <div className="col-12 col-md-8">
           <input
             className="form-control"
-            placeholder="Buscar por nombre, correo o RUT"
+            placeholder="Buscar por nombre o correo"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
@@ -87,37 +73,20 @@ const UsuariosAdmin: React.FC = () => {
           <table className="table table-hover align-middle bg-white">
             <thead>
               <tr>
-                <th>RUT</th>
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Rol</th>
-                <th>Comuna</th>
-                <th>Estado</th>
                 <th />
               </tr>
             </thead>
             <tbody>
               {filtrados.map((u) => (
                 <tr key={u.id}>
-                  <td>{u.rut}</td>
                   <td>{u.nombre}</td>
                   <td>{u.email}</td>
                   <td><span className={`badge ${claseRol(u.rol)}`}>{u.rol}</span></td>
-                  <td>{u.comuna}</td>
-                  <td>
-                    <span className={`badge ${u.estado === "Activo" ? "bg-success" : "bg-secondary"}`}>{u.estado}</span>
-                  </td>
                   <td className="text-end text-nowrap">
                     <Link to={`/admin/usuarios/${u.id}/historial`} className="btn btn-sm btn-outline-secondary me-2">Compras</Link>
-                    <Link to={`/admin/usuarios/${u.id}/editar`} className="btn btn-sm btn-outline-primary me-2">Editar</Link>
-                    <button
-                      className="btn btn-sm btn-outline-danger"
-                      disabled={u.id === sesion?.id}
-                      title={u.id === sesion?.id ? "No puedes eliminar tu propia cuenta" : undefined}
-                      onClick={() => eliminar(u)}
-                    >
-                      Eliminar
-                    </button>
                   </td>
                 </tr>
               ))}

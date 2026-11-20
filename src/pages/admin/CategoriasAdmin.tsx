@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { contarProductos, eliminarCategoria, listarCategorias } from "../../services/categoriesService";
+import { contarProductos, eliminarCategoria, listarCategorias, type Categoria } from "../../services/categoriesService";
 
-interface FilaCategoria {
-  nombre: string;
+interface FilaCategoria extends Categoria {
   productos: number;
 }
 
@@ -14,9 +13,13 @@ const CategoriasAdmin: React.FC = () => {
 
   const cargar = useCallback(async () => {
     try {
-      const nombres = await listarCategorias();
-      const datos: FilaCategoria[] = [];
-      for (const nombre of nombres) datos.push({ nombre, productos: await contarProductos(nombre) });
+      const categorias = await listarCategorias();
+      const datos = await Promise.all(
+        categorias.map(async (categoria) => ({
+          ...categoria,
+          productos: await contarProductos(categoria.nombre),
+        })),
+      );
       setFilas(datos);
       setError("");
     } catch {
@@ -33,7 +36,7 @@ const CategoriasAdmin: React.FC = () => {
   const eliminar = async (f: FilaCategoria) => {
     if (!window.confirm(`¿Eliminar la categoría "${f.nombre}"?`)) return;
     try {
-      await eliminarCategoria(f.nombre);
+      await eliminarCategoria(f.id);
       await cargar();
     } catch (e) {
       setError(e instanceof Error ? e.message : "No se pudo eliminar la categoría.");
@@ -61,11 +64,11 @@ const CategoriasAdmin: React.FC = () => {
             </thead>
             <tbody>
               {filas.map((f) => (
-                <tr key={f.nombre}>
+                <tr key={f.id}>
                   <td>{f.nombre}</td>
                   <td><span className="badge bg-secondary">{f.productos}</span></td>
                   <td className="text-end text-nowrap">
-                    <Link to={`/admin/categorias/${encodeURIComponent(f.nombre)}/editar`} className="btn btn-sm btn-outline-primary me-2">Editar</Link>
+                    <Link to={`/admin/categorias/${f.id}/editar`} className="btn btn-sm btn-outline-primary me-2">Editar</Link>
                     <button
                       className="btn btn-sm btn-outline-danger"
                       disabled={f.productos > 0}

@@ -31,6 +31,11 @@ const Contacto: React.FC = () => {
     if (form.mensaje.trim().length < 10) e.mensaje = "El mensaje debe tener al menos 10 caracteres.";
     setErrores(e);
     if (Object.keys(e).length === 0) {
+      const asunto = encodeURIComponent(`Consulta: ${form.motivo}`);
+      const cuerpo = encodeURIComponent(
+        `Nombre: ${form.nombre.trim()}\nCorreo: ${form.email.trim()}\nTeléfono: ${form.telefono.trim() || "No indicado"}\n\n${form.mensaje.trim()}`,
+      );
+      window.location.href = `mailto:contacto@dulceencanto.cl?subject=${asunto}&body=${cuerpo}`;
       setEnviado(true);
       setForm({ nombre: "", email: "", telefono: "", motivo: MOTIVOS[0], mensaje: "" });
     }
@@ -44,7 +49,7 @@ const Contacto: React.FC = () => {
       <div className="row g-4">
         <div className="col-lg-7">
           <form onSubmit={enviar} noValidate className="bg-white p-4 rounded border">
-            {enviado && <div className="alert alert-success">¡Gracias! Recibimos tu mensaje y te responderemos pronto.</div>}
+            {enviado && <div className="alert alert-info">Se abrió tu aplicación de correo. Envía el mensaje desde allí para que podamos recibirlo.</div>}
             <CampoFormulario id="nombre" etiqueta="Nombre completo" valor={form.nombre} onCambio={cambiar("nombre")} error={errores.nombre} requerido />
             <CampoFormulario id="email" etiqueta="Correo electrónico" tipo="email" valor={form.email} onCambio={cambiar("email")} error={errores.email} requerido />
             <CampoFormulario id="telefono" etiqueta="Teléfono" tipo="tel" valor={form.telefono} onCambio={cambiar("telefono")} />

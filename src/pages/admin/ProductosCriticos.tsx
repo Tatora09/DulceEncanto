@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import type { Producto } from "../../types";
-import { obtenerProductosCriticos } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const ProductosCriticos: React.FC = () => {
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      setProductos(await obtenerProductosCriticos());
-      setCargando(false);
-    })();
-  }, []);
+  const { productos: catalogo, cargando, error } = useCatalogo();
+  const productos = catalogo.filter((producto) => producto.stock <= producto.stockCritico);
 
   if (cargando) return <p>Cargando…</p>;
 
@@ -20,6 +12,7 @@ const ProductosCriticos: React.FC = () => {
     <section>
       <Link to="/admin/productos" className="btn btn-link px-0">← Volver a productos</Link>
       <h1 className="h3 mb-3">Productos con stock crítico</h1>
+      {error && <div className="alert alert-danger" role="alert">{error}</div>}
 
       {productos.length === 0 ? (
         <div className="alert alert-success">Todo en orden: ningún producto está bajo su stock crítico.</div>
@@ -27,7 +20,7 @@ const ProductosCriticos: React.FC = () => {
         <div className="table-responsive">
           <table className="table table-hover align-middle bg-white">
             <thead>
-              <tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Stock</th><th>Crítico</th><th /></tr>
+              <tr><th>ID</th><th>Producto</th><th>Categoría</th><th>Stock</th><th>Crítico (≤ 5)</th><th /></tr>
             </thead>
             <tbody>
               {productos.map((p) => (

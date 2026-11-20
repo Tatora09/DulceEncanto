@@ -1,120 +1,163 @@
 import type { Rol, Usuario } from "../types";
-import { USUARIOS_INICIALES } from "../data/usuarios";
-import { validarEmailRestringido, validarRUTChileno } from "../utils/validaciones";
-import { borrar, escribir, leer } from "./storage";
+import { ApiError, apiRequest, guardarTokens, limpiarTokens, obtenerAccessToken } from "./api";
+import { leer, escribir, borrar } from "./storage";
 
-export const KEY_USUARIOS = "dulce_encanto_usuarios_lista";
 export const KEY_SESION = "dulce_encanto_usuario_actual";
 
 export type ResultadoLogin = { exito: true; usuario: Usuario } | { exito: false; mensaje: string };
 
-// ---------- Usuarios (CRUD) ----------
-export function obtenerUsuarios(): Usuario[] {
-  return leer<Usuario[]>(KEY_USUARIOS, USUARIOS_INICIALES);
+interface UsuarioApi {
+  id: number;
+  nombre: string;
+  correo: string;
+  rol: string;
 }
 
-export function obtenerUsuarioPorId(id: string): Usuario | undefined {
-  return obtenerUsuarios().find((u) => u.id === id);
+interface RespuestaLogin {
+  accessToken: string;
+  refreshToken: string;
+  usuario: { id: number; nombre: string; rol: string };
 }
 
-export function guardarUsuario(datos: Partial<Usuario> & Pick<Usuario, "email">): Usuario {
-  const usuarios = obtenerUsuarios();
-  const idx = usuarios.findIndex((u) => (datos.id && u.id === datos.id) || (datos.rut && u.rut === datos.rut));
-
-  if (idx > -1) {
-    usuarios[idx] = { ...usuarios[idx], ...datos };
-    escribir(KEY_USUARIOS, usuarios);
-    return usuarios[idx];
+function adaptarRol(rol: string): Rol {
+  switch (rol.replace(/^ROLE_/, "").toUpperCase()) {
+    case "ADMIN":
+    case "ADMINISTRADOR":
+      return "Administrador";
+    case "VENDEDOR":
+    case "PASTELERO":
+    case "VENDEDOR / PASTELERO":
+      return "Vendedor / Pastelero";
+    case "CLIENTE":
+      return "Cliente";
+    default:
+      throw new Error(`El backend devolvió un rol no reconocido: ${rol}`);
   }
-  const nuevo: Usuario = {
-    id: "usr-" + Date.now(),
+}
+
+function adaptarUsuario(usuario: UsuarioApi): Usuario {
+  return {
+    id: String(usuario.id),
     rut: "",
-    nombre: datos.email.split("@")[0],
-    rol: "Cliente",
+    nombre: usuario.nombre,
+    email: usuario.correo,
+    rol: adaptarRol(usuario.rol),
     region: "",
     comuna: "",
     estado: "Activo",
-    fechaRegistro: new Date().toISOString().split("T")[0],
-    ...datos,
+    fechaRegistro: "",
   };
-  escribir(KEY_USUARIOS, [...usuarios, nuevo]);
-  return nuevo;
 }
 
-export function eliminarUsuario(id: string): void {
-  escribir(KEY_USUARIOS, obtenerUsuarios().filter((u) => u.id !== id));
+function rolApi(rol: Rol): string {
+  if (rol === "Administrador") return "ADMIN";
+  if (rol === "Vendedor / Pastelero") return "VENDEDOR";
+  return "CLIENTE";
 }
 
-// ---------- Sesión ----------
-/** Devuelve la sesión guardada o null. A diferencia de la versión HTML, NO inicia sesión sola como admin. */
+export async function obtenerUsuarios(): Promise<Usuario[]> {
+  const usuarios = await apiRequest<UsuarioApi[]>("usuarios", "usuarios");
+  return usuarios.map(adaptarUsuario);
+}
+
+export async function obtenerUsuarioPorId(id: string): Promise<Usuario | undefined> {
+  return (await obtenerUsuarios()).find((usuario) => usuario.id === id);
+}
+
+export async function guardarUsuario(datos: Partial<Usuario> & Pick<Usuario, "email" | "nombre"> & { password: string }): Promise<Usuario> {
+  if (datos.id) throw new Error("El backend todavía no permite editar usuarios.");
+  const usuario = await apiRequest<UsuarioApi>("usuarios", "usuarios", {
+    method: "POST",
+    body: JSON.stringify({
+      nombre: datos.nombre,
+      correo: datos.email,
+      password: datos.password,
+      rol: rolApi(datos.rol ?? "Cliente"),
+    }),
+  });
+  return adaptarUsuario(usuario);
+}
+
 export function obtenerUsuarioActual(): Usuario | null {
+  if (!obtenerAccessToken()) return null;
   return leer<Usuario | null>(KEY_SESION, null);
 }
 
-export function login(email: string): ResultadoLogin {
-  const existente = obtenerUsuarios().find((u) => u.email.toLowerCase() === email.trim().toLowerCase());
-  if (existente) {
-    escribir(KEY_SESION, existente);
-    return { exito: true, usuario: existente };
+export async function login(email: string, password: string): Promise<ResultadoLogin> {
+  try {
+    const respuesta = await apiRequest<RespuestaLogin>("usuarios", "auth/login", {
+      method: "POST",
+      body: JSON.stringify({ correo: email.trim().toLowerCase(), password }),
+    });
+    guardarTokens(respuesta.accessToken, respuesta.refreshToken);
+    const usuario = adaptarUsuario({
+      id: respuesta.usuario.id,
+      nombre: respuesta.usuario.nombre,
+      correo: email.trim().toLowerCase(),
+      rol: respuesta.usuario.rol,
+    });
+    escribir(KEY_SESION, usuario);
+    return { exito: true, usuario };
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 401) {
+      return { exito: false, mensaje: "Correo o contraseña incorrectos." };
+    }
+    if (error instanceof ApiError && error.status === 403) {
+      return {
+        exito: false,
+        mensaje: "El backend bloqueó el inicio de sesión (403). Revisa que /api/v1/auth/login esté permitido sin token en su configuración de seguridad.",
+      };
+    }
+    throw error;
   }
-
-  // Correo con dominio autorizado que aún no existe: se crea como Cliente
-  const v = validarEmailRestringido(email);
-  if (!v.valido) {
-    return { exito: false, mensaje: "Correo no autorizado. Debe ser @duoc.cl, @profesor.duoc.cl o @gmail.com" };
-  }
-  const nuevo = guardarUsuario({ email: v.email!, rol: "Cliente" });
-  escribir(KEY_SESION, nuevo);
-  return { exito: true, usuario: nuevo };
 }
 
 export function logout(): void {
+  limpiarTokens();
   borrar(KEY_SESION);
 }
 
-// ---------- Permisos (RBAC) ----------
 export function esStaff(usuario: Usuario | null): boolean {
   return !!usuario && usuario.rol !== "Cliente";
+}
+
+export function esAdministrador(usuario: Usuario | null): boolean {
+  return usuario?.rol === "Administrador";
 }
 
 export function tieneRol(usuario: Usuario | null, ...roles: Rol[]): boolean {
   return !!usuario && roles.includes(usuario.rol);
 }
 
-// ---------- Registro ----------
 export interface DatosRegistro {
-  rut: string;
   nombre: string;
   email: string;
-  telefono: string;
-  region: string;
-  comuna: string;
+  password: string;
 }
 
 export type ResultadoRegistro =
   | { exito: true; usuario: Usuario }
-  | { exito: false; campo: "rut" | "email"; mensaje: string };
+  | { exito: false; campo: "email"; mensaje: string };
 
-/** Crea un Cliente nuevo. Rechaza RUT o correo ya registrados. */
-export function registrarUsuario(datos: DatosRegistro): ResultadoRegistro {
-  const rut = validarRUTChileno(datos.rut).rutFormateado ?? datos.rut;
-  const email = datos.email.trim().toLowerCase();
-  const usuarios = obtenerUsuarios();
-
-  if (usuarios.some((u) => u.rut === rut)) {
-    return { exito: false, campo: "rut", mensaje: "Ya existe una cuenta con este RUT." };
+export async function registrarUsuario(datos: DatosRegistro): Promise<ResultadoRegistro> {
+  try {
+    const usuario = await apiRequest<UsuarioApi>("usuarios", "auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        nombre: datos.nombre.trim(),
+        correo: datos.email.trim().toLowerCase(),
+        password: datos.password,
+        rol: "CLIENTE",
+      }),
+    });
+    return { exito: true, usuario: adaptarUsuario(usuario) };
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 409) {
+      return { exito: false, campo: "email", mensaje: "Ya existe una cuenta con este correo." };
+    }
+    if (error instanceof ApiError && error.status === 403) {
+      throw new Error("El backend bloqueó el registro (403). Revisa que /api/v1/auth/register esté permitido sin token.");
+    }
+    throw error;
   }
-  if (usuarios.some((u) => u.email.toLowerCase() === email)) {
-    return { exito: false, campo: "email", mensaje: "Ya existe una cuenta con este correo." };
-  }
-  const usuario = guardarUsuario({
-    rut,
-    email,
-    nombre: datos.nombre.trim(),
-    telefono: datos.telefono.trim(),
-    region: datos.region,
-    comuna: datos.comuna,
-    rol: "Cliente",
-  });
-  return { exito: true, usuario };
 }

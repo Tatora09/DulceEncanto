@@ -1,26 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CampoFormulario from "../../components/CampoFormulario";
-import { crearCategoria, existeCategoria, renombrarCategoria } from "../../services/categoriesService";
+import { crearCategoria, existeCategoria, obtenerCategoriaPorId, renombrarCategoria } from "../../services/categoriesService";
 
 const CategoriaForm: React.FC = () => {
-  const { id } = useParams(); // en esta versión el id es el propio nombre de la categoría
+  const { id } = useParams();
   const navigate = useNavigate();
   const editando = Boolean(id);
 
-  const [nombre, setNombre] = useState(id ?? "");
+  const [nombre, setNombre] = useState("");
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
+  const [cargando, setCargando] = useState(Boolean(id));
+
+  useEffect(() => {
+    if (!id) return;
+    obtenerCategoriaPorId(id)
+      .then((categoria) => {
+        if (categoria) setNombre(categoria.nombre);
+        else setError("La categoría no existe.");
+      })
+      .catch((e: unknown) => setError(e instanceof Error ? e.message : "No se pudo cargar la categoría."))
+      .finally(() => setCargando(false));
+  }, [id]);
 
   const enviar = async (ev: React.FormEvent) => {
     ev.preventDefault();
     const limpio = nombre.trim();
     if (!limpio) return setError("El nombre es obligatorio.");
     if (limpio.length > 40) return setError("El nombre no puede exceder 40 caracteres.");
-    if (await existeCategoria(limpio, id)) return setError("Ya existe una categoría con ese nombre.");
-
     setGuardando(true);
     try {
+      if (await existeCategoria(limpio, id)) {
+        setError("Ya existe una categoría con ese nombre.");
+        setGuardando(false);
+        return;
+      }
       if (id) await renombrarCategoria(id, limpio);
       else await crearCategoria(limpio);
       navigate("/admin/categorias");
@@ -29,6 +44,8 @@ const CategoriaForm: React.FC = () => {
       setGuardando(false);
     }
   };
+
+  if (cargando) return <p>Cargando categoría…</p>;
 
   return (
     <section>

@@ -47,9 +47,7 @@ const MarcoTienda: React.FC = () => {
   const { pathname } = useLocation();
   return (
     <>
-      <div className="de-announcement">
-        🌸 ¡Envío gratis en Santiago por compras sobre $35.000! Usa el cupón <strong>DULCE10</strong> para 10% de descuento.
-      </div>
+      <div className="de-announcement">🌸 Repostería artesanal hecha con ingredientes frescos.</div>
       <Navbar />
       <main className={pathname === "/" ? "" : "container py-4"}>
         <Outlet />
@@ -114,7 +112,6 @@ function App() {
 
           <Route path="usuarios" element={<UsuariosAdmin />} />
           <Route path="usuarios/nuevo" element={<UsuarioForm />} />
-          <Route path="usuarios/:id/editar" element={<UsuarioForm />} />
           <Route path="usuarios/:id/historial" element={<HistorialCompras />} />
 
           <Route path="reportes" element={<Reportes />} />

@@ -1,43 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import type { Producto } from "../../types";
 import {
   eliminarProducto,
   formatearPrecio,
-  obtenerProductos,
   precioVigente,
 } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const ProductosAdmin: React.FC = () => {
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState("");
+  const catalogo = useCatalogo();
+  const { productos, cargando, error } = catalogo;
+  const [errorAccion, setErrorAccion] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("Todas");
   const [filtroStock, setFiltroStock] = useState("Todos");
 
-  const cargar = useCallback(async () => {
-    try {
-      setProductos(await obtenerProductos());
-      setError("");
-    } catch {
-      setError("No se pudieron cargar los productos.");
-    } finally {
-      setCargando(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    cargar();
-  }, [cargar]);
-
   const eliminar = async (p: Producto) => {
     if (!window.confirm(`¿Eliminar "${p.nombre}"? Esta acción no se puede deshacer.`)) return;
     try {
+      setErrorAccion("");
       await eliminarProducto(p.id);
-      await cargar();
-    } catch {
-      setError("No se pudo eliminar el producto.");
+      await catalogo.recargar();
+    } catch (e) {
+      setErrorAccion(e instanceof Error ? e.message : "No se pudo eliminar el producto.");
     }
   };
 
@@ -66,6 +52,7 @@ const ProductosAdmin: React.FC = () => {
       </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
+      {errorAccion && <div className="alert alert-danger" role="alert">{errorAccion}</div>}
 
       <div className="row g-2 mb-3">
         <div className="col-12 col-md-6">
@@ -99,7 +86,7 @@ const ProductosAdmin: React.FC = () => {
             <thead>
               <tr>
                 <th />
-                <th>Código</th>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Categoría</th>
                 <th>Precio</th>
@@ -122,14 +109,7 @@ const ProductosAdmin: React.FC = () => {
                     <td>{p.nombre}</td>
                     <td>{p.categoria}</td>
                     <td>
-                      {enOferta ? (
-                        <>
-                          <span className="text-muted text-decoration-line-through me-2">{formatearPrecio(p.precio)}</span>
-                          <strong>{formatearPrecio(precioVigente(p))}</strong>
-                        </>
-                      ) : (
-                        formatearPrecio(p.precio)
-                      )}
+                      {enOferta ? <strong>{formatearPrecio(precioVigente(p))}</strong> : formatearPrecio(p.precio)}
                     </td>
                     <td>
                       <span className={`badge ${critico ? "bg-danger" : "bg-success"}`}>{p.stock}</span>

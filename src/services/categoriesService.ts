@@ -1,46 +1,73 @@
-import { KEY_PRODUCTOS, obtenerProductos } from "./productsService";
-import { escribir, leer } from "./storage";
+import { apiRequest } from "./api";
 
-/** Categorías creadas a mano que todavía no tienen productos. */
-export const KEY_CATEGORIAS_EXTRA = "dulce_encanto_categorias_extra";
-
-const extras = () => leer<string[]>(KEY_CATEGORIAS_EXTRA, []);
-const igual = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
-
-/** Categorías de los productos + las creadas a mano, sin repetir y ordenadas. */
-export function listarCategorias(): string[] {
-  const deProductos = obtenerProductos().map((p) => p.categoria);
-  return [...new Set([...deProductos, ...extras()])].sort((a, b) => a.localeCompare(b, "es"));
+export interface Categoria {
+  id: string;
+  nombre: string;
+  descripcion: string;
 }
 
-export function contarProductos(categoria: string): number {
-  return obtenerProductos().filter((p) => p.categoria === categoria).length;
+interface CategoriaApi {
+  id: number;
+  nombre: string;
+  descripcion?: string;
 }
 
-export function existeCategoria(nombre: string, ignorar?: string): boolean {
-  return listarCategorias().some((c) => igual(c, nombre) && !(ignorar && igual(c, ignorar)));
+const adaptarCategoria = (categoria: CategoriaApi): Categoria => ({
+  id: String(categoria.id),
+  nombre: categoria.nombre,
+  descripcion: categoria.descripcion ?? "",
+});
+
+export async function listarCategorias(): Promise<Categoria[]> {
+  const categorias = await apiRequest<CategoriaApi[]>("productos", "categorias");
+  return categorias.map(adaptarCategoria);
 }
 
-export function crearCategoria(nombre: string): void {
+export async function obtenerCategoriaPorId(id: string): Promise<Categoria | undefined> {
+  return (await listarCategorias()).find((categoria) => categoria.id === id);
+}
+
+export async function contarProductos(categoria: string): Promise<number> {
+  const productos = await apiRequest<Array<{ categoria: { nombre: string } }>>("productos", "productos");
+  return productos.filter((producto) => producto.categoria.nombre === categoria).length;
+}
+
+export async function existeCategoria(nombre: string, ignorar?: string): Promise<boolean> {
+  const categorias = await listarCategorias();
+  return categorias.some(
+    (categoria) =>
+      categoria.id !== ignorar &&
+      categoria.nombre.trim().toLocaleLowerCase() === nombre.trim().toLocaleLowerCase(),
+  );
+}
+
+export async function crearCategoria(nombre: string): Promise<void> {
   const limpio = nombre.trim();
   if (!limpio) throw new Error("El nombre es obligatorio.");
-  if (existeCategoria(limpio)) throw new Error("Ya existe una categoría con ese nombre.");
-  escribir(KEY_CATEGORIAS_EXTRA, [...extras(), limpio]);
+  if (await existeCategoria(limpio)) throw new Error("Ya existe una categoría con ese nombre.");
+  await apiRequest("productos", "categorias", {
+    method: "POST",
+    body: JSON.stringify({ nombre: limpio, descripcion: "" }),
+  });
 }
 
-/** Cambia el nombre en la lista y en todos los productos que la usan. */
-export function renombrarCategoria(anterior: string, nuevo: string): void {
+export async function renombrarCategoria(id: string, nuevo: string): Promise<void> {
   const limpio = nuevo.trim();
   if (!limpio) throw new Error("El nombre es obligatorio.");
-  if (existeCategoria(limpio, anterior)) throw new Error("Ya existe una categoría con ese nombre.");
-
-  const productos = obtenerProductos().map((p) => (p.categoria === anterior ? { ...p, categoria: limpio } : p));
-  escribir(KEY_PRODUCTOS, productos);
-  escribir(KEY_CATEGORIAS_EXTRA, extras().map((c) => (c === anterior ? limpio : c)));
+  if (await existeCategoria(limpio, id)) throw new Error("Ya existe una categoría con ese nombre.");
+  const categoria = await obtenerCategoriaPorId(id);
+  if (!categoria) throw new Error("La categoría ya no existe.");
+  await apiRequest("productos", `categorias/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({ nombre: limpio, descripcion: categoria.descripcion }),
+  });
 }
 
-/** Solo se puede eliminar una categoría sin productos. */
-export function eliminarCategoria(nombre: string): void {
-  if (contarProductos(nombre) > 0) throw new Error("No se puede eliminar una categoría que tiene productos.");
-  escribir(KEY_CATEGORIAS_EXTRA, extras().filter((c) => c !== nombre));
+export async function eliminarCategoria(id: string): Promise<void> {
+  const categoria = await obtenerCategoriaPorId(id);
+  if (!categoria) throw new Error("La categoría ya no existe.");
+  if (await contarProductos(categoria.nombre)) {
+    throw new Error("No se puede eliminar una categoría que tiene productos.");
+  }
+  await apiRequest<void>("productos", `categorias/${id}`, { method: "DELETE" });
 }

@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import type { Producto } from "../../types";
-import { formatearPrecio, obtenerProductos } from "../../services/productsService";
+import { formatearPrecio } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const ReportesProductos: React.FC = () => {
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      setProductos(await obtenerProductos());
-      setCargando(false);
-    })();
-  }, []);
+  const { productos, cargando, error } = useCatalogo();
 
   if (cargando) return <p>Cargando reporte…</p>;
 
@@ -42,6 +34,7 @@ const ReportesProductos: React.FC = () => {
     <section>
       <Link to="/admin/productos" className="btn btn-link px-0">← Volver a productos</Link>
       <h1 className="h3 mb-3">Reporte de inventario</h1>
+      {error && <div className="alert alert-danger" role="alert">{error}</div>}
 
       <div className="row g-3 mb-4">
         {tarjetas.map(([etiqueta, v]) => (

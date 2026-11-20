@@ -1,6 +1,5 @@
 import React from "react";
 import type { Cupon, TotalesCarrito } from "../types";
-import { ENVIO_GRATIS_DESDE } from "../services/cartService";
 import { formatearPrecio } from "../services/productsService";
 
 interface ResumenTotalesProps {
@@ -20,13 +19,6 @@ const ResumenTotales: React.FC<ResumenTotalesProps> = ({ totales, cupon }) => (
         </dt>
         <dd className="col-5 text-end text-success">−{formatearPrecio(totales.montoDescuento)}</dd>
       </>
-    )}
-
-    <dt className="col-7 fw-normal">Envío</dt>
-    <dd className="col-5 text-end">{totales.costoEnvio === 0 ? "Gratis" : formatearPrecio(totales.costoEnvio)}</dd>
-
-    {totales.costoEnvio > 0 && (
-      <dd className="col-12 small text-muted">Envío gratis desde {formatearPrecio(ENVIO_GRATIS_DESDE)}</dd>
     )}
 
     <dt className="col-7 fs-5 border-top pt-2">Total</dt>

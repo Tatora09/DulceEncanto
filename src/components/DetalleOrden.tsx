@@ -3,28 +3,11 @@ import type { Orden } from "../types";
 import { formatearPrecio } from "../services/productsService";
 import ResumenTotales from "./ResumenTotales";
 
-/** Datos del cliente, dirección, productos y totales de una orden (solo lectura). */
+/** Productos, montos y usuario devueltos por el servicio de ventas. */
 const DetalleOrden: React.FC<{ orden: Orden }> = ({ orden }) => {
-  const { cliente, direccion } = orden;
   return (
     <>
-      <div className="row g-3 mb-3">
-        <div className="col-md-6">
-          <h2 className="h6">Cliente</h2>
-          <p className="mb-0">{cliente.nombre} {cliente.apellidos}</p>
-          <p className="mb-0 text-muted">{cliente.correo}</p>
-          {cliente.telefono && <p className="mb-0 text-muted">{cliente.telefono}</p>}
-        </div>
-        <div className="col-md-6">
-          <h2 className="h6">Dirección de entrega</h2>
-          <p className="mb-0">
-            {direccion.calle}
-            {direccion.departamento && `, ${direccion.departamento}`}
-          </p>
-          <p className="mb-0 text-muted">{direccion.comuna}, {direccion.region}</p>
-          {direccion.indicaciones && <p className="mb-0 small fst-italic">“{direccion.indicaciones}”</p>}
-        </div>
-      </div>
+      <p className="small text-muted">Compra asociada al usuario #{orden.usuarioId}.</p>
 
       <div className="table-responsive">
         <table className="table table-sm align-middle">

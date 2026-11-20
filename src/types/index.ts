@@ -6,6 +6,7 @@ export interface OpcionPorcion {
 export interface Producto {
   id: string;
   codigo: string;
+  categoriaId?: string;
   nombre: string;
   categoria: string;
   precio: number;
@@ -126,7 +127,7 @@ export interface DireccionEntrega {
   indicaciones: string;
 }
 
-export type EstadoOrden = "Pagada" | "Pago rechazado";
+export type EstadoOrden = "Pagada" | "Pago rechazado" | "Anulada";
 
 export interface Orden {
   id: string;

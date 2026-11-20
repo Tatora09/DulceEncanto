@@ -110,34 +110,24 @@ function validarTelefonoOpcional(telefono: string): string | undefined {
   return undefined;
 }
 
-// ---------- Registro de cliente ----------
+// ---------- Registro de cliente (campos disponibles en la API) ----------
 
 export interface FormRegistro {
-  rut: string;
   nombre: string;
   email: string;
-  telefono: string;
-  region: string;
-  comuna: string;
+  password: string;
 }
 
 /** Devuelve solo los campos inválidos: mapa campo → mensaje. */
 export function validarDatosRegistro(form: FormRegistro): Partial<Record<keyof FormRegistro, string>> {
   const errores: Partial<Record<keyof FormRegistro, string>> = {};
 
-  const rut = validarRUTChileno(form.rut);
-  if (!rut.valido) errores.rut = rut.mensaje;
-
   if (form.nombre.trim().length < 2) errores.nombre = "Ingrese su nombre completo (mínimo 2 caracteres).";
 
   const email = validarEmailRestringido(form.email);
   if (!email.valido) errores.email = email.mensaje;
 
-  const tel = validarTelefonoOpcional(form.telefono);
-  if (tel) errores.telefono = tel;
-
-  if (!form.region) errores.region = "Seleccione su región.";
-  if (!form.comuna) errores.comuna = "Seleccione su comuna.";
+  if (form.password.length < 8) errores.password = "La contraseña debe tener al menos 8 caracteres.";
 
   return errores;
 }

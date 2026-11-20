@@ -17,7 +17,7 @@ const Reportes: React.FC = () => {
   if (cargando) return <p>Cargando reportes…</p>;
 
   const pagadas = ordenes.filter((o) => o.estado === "Pagada");
-  const rechazadas = ordenes.length - pagadas.length;
+  const anuladas = ordenes.filter((o) => o.estado === "Anulada").length;
   const ventas = pagadas.reduce((acc, o) => acc + o.totales.total, 0);
   const ticket = pagadas.length ? Math.round(ventas / pagadas.length) : 0;
 
@@ -35,7 +35,7 @@ const Reportes: React.FC = () => {
 
   const tarjetas: [string, string][] = [
     ["Órdenes pagadas", String(pagadas.length)],
-    ["Pagos rechazados", String(rechazadas)],
+    ["Boletas anuladas", String(anuladas)],
     ["Ventas totales", formatearPrecio(ventas)],
     ["Ticket promedio", formatearPrecio(ticket)],
   ];

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/ProductCard";
 import { useAgregarAlCarrito } from "../../hooks/useAgregarAlCarrito";
-import { obtenerCategorias, obtenerProductos } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const PORTADA_POR_DEFECTO =
   "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80";
@@ -19,9 +19,10 @@ const TONOS = ["", "tono-mantequilla", "", "tono-menta"];
 
 const Home: React.FC = () => {
   const alCarrito = useAgregarAlCarrito();
-  const productos = obtenerProductos();
-  const destacados = productos.filter((p) => p.destacado).slice(0, 3);
-  const categorias = obtenerCategorias();
+  const { productos, cargando, error } = useCatalogo();
+  const destacadosCatalogo = productos.filter((p) => p.destacado);
+  const destacados = (destacadosCatalogo.length ? destacadosCatalogo : productos).slice(0, 3);
+  const categorias = [...new Set(productos.map((producto) => producto.categoria))].sort((a, b) => a.localeCompare(b, "es"));
   const portada = destacados[0]?.imagen ?? PORTADA_POR_DEFECTO;
 
   return (
@@ -66,6 +67,8 @@ const Home: React.FC = () => {
           <p>Cada receta ha sido perfeccionada en nuestros hornos artesanales.</p>
         </div>
         <div className="de-cat-grid">
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
+          {cargando && <p className="text-muted">Cargando catálogo…</p>}
           {categorias.map((c, i) => (
             <Link
               key={c}
@@ -88,6 +91,8 @@ const Home: React.FC = () => {
             <p>Disfruta de nuestros clásicos recién horneados.</p>
           </div>
           <div className="row g-4">
+            {error && <div className="alert alert-danger" role="alert">{error}</div>}
+            {cargando && <p className="text-muted">Cargando productos…</p>}
             {destacados.map((p) => (
               <div className="col-12 col-md-6 col-lg-4" key={p.id}>
                 <ProductCard producto={p} onAgregar={alCarrito} />

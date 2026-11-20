@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useParams } from "react-router-dom";
-import type { Producto } from "../../types";
 import ProductCard from "../../components/ProductCard";
 import { useAgregarAlCarrito } from "../../hooks/useAgregarAlCarrito";
-import { obtenerProductosPorCategoria } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const CategoriaDetalle: React.FC = () => {
   const { id } = useParams(); // el id es el nombre de la categoría
   const alCarrito = useAgregarAlCarrito();
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      setProductos(id ? await obtenerProductosPorCategoria(id) : []);
-      setCargando(false);
-    })();
-  }, [id]);
+  const { productos: catalogo, cargando, error } = useCatalogo();
+  const productos = catalogo.filter((producto) => producto.categoria === id);
 
   if (cargando) return <p>Cargando productos…</p>;
 
@@ -24,8 +16,9 @@ const CategoriaDetalle: React.FC = () => {
     <section>
       <Link to="/categorias" className="btn btn-link px-0">← Todas las categorías</Link>
       <h1 className="h3 mb-3">{id}</h1>
+      {error && <div className="alert alert-danger" role="alert">{error}</div>}
       {productos.length === 0 ? (
-        <p className="text-muted">Por ahora no hay productos en esta categoría.</p>
+        !cargando && <p className="text-muted">Por ahora no hay productos en esta categoría.</p>
       ) : (
         <div className="row g-4">
           {productos.map((p) => (

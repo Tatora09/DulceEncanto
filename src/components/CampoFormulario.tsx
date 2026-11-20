@@ -6,7 +6,7 @@ interface CampoFormularioProps {
   valor: string;
   onCambio: (valor: string) => void;
   error?: string;
-  tipo?: "text" | "email" | "tel" | "date" | "password";
+  tipo?: "text" | "email" | "tel" | "date" | "password" | "number";
   requerido?: boolean;
   placeholder?: string;
   multilinea?: boolean;

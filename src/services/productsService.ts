@@ -1,10 +1,9 @@
-import type { Blog, EstadoSolicitud, ItemCarrito, OpcionPorcion, Producto, Solicitud } from "../types";
-import { PRODUCTOS_INICIALES } from "../data/productos";
+import type { Blog, EstadoSolicitud, OpcionPorcion, Producto, Solicitud } from "../types";
 import { SOLICITUDES_INICIALES } from "../data/solicitudes";
 import { BLOGS_INICIALES } from "../data/blogs";
+import { apiRequest, ApiError } from "./api";
 import { escribir, leer } from "./storage";
 
-export const KEY_PRODUCTOS = "dulce_encanto_productos";
 export const KEY_SOLICITUDES = "dulce_encanto_solicitudes";
 export const KEY_BLOGS = "dulce_encanto_blogs";
 
@@ -20,68 +19,109 @@ export function precioVigente(p: Producto): number {
 
 /** Precio de una opción de porción, aplicando la misma rebaja porcentual si el producto está en oferta */
 export function precioOpcion(p: Producto, opcion: OpcionPorcion): number {
+  if (p.precio === 0) return opcion.precio;
   return Math.round(opcion.precio * (precioVigente(p) / p.precio));
 }
 
-// ---------- Productos (CRUD) ----------
-export function obtenerProductos(): Producto[] {
-  return leer<Producto[]>(KEY_PRODUCTOS, PRODUCTOS_INICIALES);
+interface CategoriaApi {
+  id: number;
+  nombre: string;
+  descripcion?: string;
 }
 
-export function obtenerProductoPorId(id: string): Producto | undefined {
-  return obtenerProductos().find((p) => p.id === id || p.codigo === id);
+interface ProductoApi {
+  id: number;
+  nombre: string;
+  descripcion?: string;
+  precio: number;
+  stock: number;
+  categoria: CategoriaApi;
+  imagenUrl?: string;
 }
 
-export function guardarProducto(datos: Partial<Producto> & Pick<Producto, "nombre">): Producto {
-  const productos = obtenerProductos();
-  const idx = datos.id ? productos.findIndex((p) => p.id === datos.id) : -1;
+function adaptarProducto(producto: ProductoApi): Producto {
+  return {
+    id: String(producto.id),
+    codigo: `PRD-${producto.id}`,
+    nombre: producto.nombre,
+    categoria: producto.categoria.nombre,
+    categoriaId: String(producto.categoria.id),
+    precio: producto.precio,
+    stock: producto.stock,
+    stockCritico: 5,
+    porciones: "Unidad",
+    descripcion: producto.descripcion ?? "",
+    ingredientes: [],
+    alergenos: [],
+    imagen: producto.imagenUrl ?? "",
+    opcionesPorciones: [{ etiqueta: "Unidad", precio: producto.precio }],
+  };
+}
 
-  if (idx > -1) {
-    productos[idx] = { ...productos[idx], ...datos } as Producto;
-    escribir(KEY_PRODUCTOS, productos);
-    return productos[idx];
+export async function obtenerProductos(): Promise<Producto[]> {
+  const productos = await apiRequest<ProductoApi[]>("productos", "productos");
+  return productos.map(adaptarProducto);
+}
+
+export async function obtenerProductoPorId(id: string): Promise<Producto | undefined> {
+  if (!/^\d+$/.test(id)) return (await obtenerProductos()).find((p) => p.codigo === id);
+  try {
+    return adaptarProducto(await apiRequest<ProductoApi>("productos", `productos/${id}`));
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return undefined;
+    throw error;
   }
-  const nuevo = { ...datos, id: datos.id ?? "prod-" + Date.now() } as Producto;
-  escribir(KEY_PRODUCTOS, [nuevo, ...productos]);
-  return nuevo;
 }
 
-export function eliminarProducto(id: string): void {
-  escribir(KEY_PRODUCTOS, obtenerProductos().filter((p) => p.id !== id));
+export async function guardarProducto(datos: Partial<Producto> & Pick<Producto, "nombre">): Promise<Producto> {
+  const categorias = await apiRequest<CategoriaApi[]>("productos", "categorias");
+  const categoria = categorias.find((item) => item.nombre === datos.categoria);
+  if (!categoria) throw new Error("Selecciona una categoría existente.");
+
+  const cuerpo = {
+    nombre: datos.nombre,
+    descripcion: datos.descripcion ?? "",
+    precio: datos.precio ?? 0,
+    stock: datos.stock ?? 0,
+    imagenUrl: datos.imagen ?? "",
+    categoria: { id: categoria.id },
+  };
+  const guardado = datos.id
+    ? await apiRequest<ProductoApi>("productos", `productos/${datos.id}`, { method: "PUT", body: JSON.stringify(cuerpo) })
+    : await apiRequest<ProductoApi>("productos", "productos", { method: "POST", body: JSON.stringify(cuerpo) });
+  return adaptarProducto(guardado);
 }
 
-/** Resta del inventario lo vendido. Nunca deja stock negativo. */
-export function descontarStock(items: ItemCarrito[]): void {
-  const productos = obtenerProductos();
-  const actualizados = productos.map((p) => {
-    const vendido = items.filter((i) => i.id === p.id).reduce((acc, i) => acc + i.cantidad, 0);
-    return vendido > 0 ? { ...p, stock: Math.max(0, p.stock - vendido) } : p;
-  });
-  escribir(KEY_PRODUCTOS, actualizados);
+export async function eliminarProducto(id: string): Promise<void> {
+  await apiRequest<void>("productos", `productos/${id}`, { method: "DELETE" });
 }
 
-// ---------- Consultas derivadas ----------
-export function obtenerCategorias(): string[] {
-  return [...new Set(obtenerProductos().map((p) => p.categoria))].sort();
+export async function obtenerCategorias(): Promise<string[]> {
+  const categorias = await apiRequest<CategoriaApi[]>("productos", "categorias");
+  return categorias.map((categoria) => categoria.nombre).sort((a, b) => a.localeCompare(b, "es"));
 }
 
-export function obtenerProductosPorCategoria(categoria: string): Producto[] {
-  return obtenerProductos().filter((p) => p.categoria === categoria);
+export async function obtenerProductosPorCategoria(categoria: string): Promise<Producto[]> {
+  return (await obtenerProductos()).filter((producto) => producto.categoria === categoria);
 }
 
-export function obtenerOfertas(): Producto[] {
-  return obtenerProductos().filter((p) => p.precioOferta !== undefined && p.precioOferta < p.precio);
+export async function obtenerOfertas(): Promise<Producto[]> {
+  return (await obtenerProductos()).filter((producto) => producto.precioOferta !== undefined);
 }
 
-export function obtenerProductosCriticos(): Producto[] {
-  return obtenerProductos().filter((p) => p.stock <= p.stockCritico);
+export async function obtenerProductosCriticos(): Promise<Producto[]> {
+  return (await obtenerProductos()).filter((producto) => producto.stock <= producto.stockCritico);
 }
 
-export function buscarProductos(texto: string): Producto[] {
+export async function buscarProductos(texto: string): Promise<Producto[]> {
   const q = texto.trim().toLowerCase();
-  if (!q) return obtenerProductos();
-  return obtenerProductos().filter(
-    (p) => p.nombre.toLowerCase().includes(q) || p.categoria.toLowerCase().includes(q) || p.descripcion.toLowerCase().includes(q)
+  const productos = await obtenerProductos();
+  if (!q) return productos;
+  return productos.filter(
+    (producto) =>
+      producto.nombre.toLowerCase().includes(q) ||
+      producto.categoria.toLowerCase().includes(q) ||
+      producto.descripcion.toLowerCase().includes(q),
   );
 }
 

@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import CantidadControl from "../../components/CantidadControl";
 import ResumenTotales from "../../components/ResumenTotales";
 import { useCart } from "../../context/CartContext";
-import { formatearPrecio, obtenerProductoPorId } from "../../services/productsService";
+import { calcularTotales } from "../../services/cartService";
+import { formatearPrecio } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const Carrito: React.FC = () => {
-  const { items, cupon, cambiarCantidad, quitar, vaciar, aplicarCupon, quitarCupon, ...totales } = useCart();
-  const [codigo, setCodigo] = useState("");
-  const [mensajeCupon, setMensajeCupon] = useState<{ valido: boolean; texto: string } | null>(null);
+  const { items, cambiarCantidad, quitar, vaciar } = useCart();
+  const { productos, error: errorCatalogo } = useCatalogo();
+  const itemsActualizados = items.map((item) => {
+    const producto = productos.find((actual) => actual.id === item.id);
+    return producto
+      ? {
+          ...item,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          imagen: producto.imagen,
+          categoria: producto.categoria,
+          porciones: "Unidad",
+          opcionPorcion: null,
+        }
+      : item;
+  });
+  const totales = calcularTotales(itemsActualizados, null);
 
   if (items.length === 0) {
     return (
@@ -20,16 +36,10 @@ const Carrito: React.FC = () => {
     );
   }
 
-  const aplicar = (e: React.FormEvent) => {
-    e.preventDefault();
-    const r = aplicarCupon(codigo);
-    setMensajeCupon({ valido: r.valido, texto: r.mensaje });
-    if (r.valido) setCodigo("");
-  };
-
   return (
     <section>
       <h1 className="h3 mb-4">Carrito de compra</h1>
+      {errorCatalogo && <div className="alert alert-danger" role="alert">{errorCatalogo}</div>}
       <div className="row g-4">
         <div className="col-12 col-lg-8">
           <div className="table-responsive">
@@ -44,8 +54,8 @@ const Carrito: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {items.map((i) => {
-                  const stock = obtenerProductoPorId(i.id)?.stock;
+                {itemsActualizados.map((i) => {
+                  const stock = productos.find((producto) => producto.id === i.id)?.stock;
                   return (
                     <tr key={`${i.id}-${i.opcionPorcion}`} data-testid="fila-carrito">
                       <td>
@@ -81,25 +91,8 @@ const Carrito: React.FC = () => {
             <div className="card-body">
               <h2 className="h5 mb-3">Resumen</h2>
 
-              <form className="mb-3" onSubmit={aplicar}>
-                <label htmlFor="cupon" className="form-label">Cupón de descuento</label>
-                <div className="input-group">
-                  <input id="cupon" className="form-control" value={codigo} onChange={(e) => setCodigo(e.target.value)} placeholder="Ej: DULCE10" />
-                  <button className="btn btn-outline-success" type="submit">Aplicar</button>
-                </div>
-                {mensajeCupon && (
-                  <div className={"small mt-1 " + (mensajeCupon.valido ? "text-success" : "text-danger")} role="status">
-                    {mensajeCupon.texto}
-                  </div>
-                )}
-                {cupon && (
-                  <button type="button" className="btn btn-link btn-sm p-0 mt-1" onClick={() => { quitarCupon(); setMensajeCupon(null); }}>
-                    Quitar cupón {cupon.codigo}
-                  </button>
-                )}
-              </form>
-
-              <ResumenTotales totales={totales} cupon={cupon} />
+              <ResumenTotales totales={totales} />
+              <p className="small text-muted mt-2 mb-0">El precio final se valida nuevamente en el servidor al confirmar la compra.</p>
 
               <Link to="/checkout" className="btn btn-success w-100 mt-3">Ir a pagar</Link>
             </div>

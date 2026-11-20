@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { formatearPrecio } from "../services/productsService";
 
 const Navbar: React.FC = () => {
   const { cantidadTotal, total } = useCart();
+  const { usuario, esAdministrador, logout } = useAuth();
   const [abierto, setAbierto] = useState(false);
   const [busqueda, setBusqueda] = useState("");
   const navigate = useNavigate();
@@ -16,6 +18,12 @@ const Navbar: React.FC = () => {
     e.preventDefault();
     navigate(busqueda.trim() ? `/productos?q=${encodeURIComponent(busqueda.trim())}` : "/productos");
     cerrar();
+  };
+
+  const cerrarSesion = () => {
+    logout();
+    cerrar();
+    navigate("/");
   };
 
   return (
@@ -67,8 +75,17 @@ const Navbar: React.FC = () => {
                 </span>
               )}
             </Link>
-            <Link to="/login" className="btn btn-outline-primary" onClick={cerrar}>Iniciar Sesión</Link>
-            <Link to="/registro" className="btn btn-primary" onClick={cerrar}>Crear Cuenta</Link>
+            {usuario ? (
+              <>
+                {esAdministrador && <Link to="/admin" className="btn btn-outline-primary" onClick={cerrar}>Administración</Link>}
+                <button type="button" className="btn btn-outline-secondary" onClick={cerrarSesion}>Cerrar sesión</button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="btn btn-outline-primary" onClick={cerrar}>Iniciar sesión</Link>
+                <Link to="/registro" className="btn btn-primary" onClick={cerrar}>Crear cuenta</Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

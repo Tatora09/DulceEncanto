@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const Perfil: React.FC = () => {
@@ -10,11 +9,7 @@ const Perfil: React.FC = () => {
   const datos: [string, string][] = [
     ["Nombre", usuario.nombre],
     ["Correo", usuario.email],
-    ["RUT", usuario.rut || "—"],
-    ["Teléfono", usuario.telefono || "—"],
-    ["Región", usuario.region || "—"],
-    ["Comuna", usuario.comuna || "—"],
-    ["Miembro desde", usuario.fechaRegistro],
+    ["Rol", usuario.rol],
   ];
 
   return (
@@ -36,9 +31,7 @@ const Perfil: React.FC = () => {
           </dl>
         </div>
       </div>
-      {usuario.rol === "Administrador" && (
-        <Link to={`/admin/usuarios/${usuario.id}/editar`} className="btn btn-outline-primary mt-3">Editar mis datos</Link>
-      )}
+      <p className="small text-muted mt-3">El backend todavía no incluye un endpoint para editar el perfil.</p>
     </section>
   );
 };

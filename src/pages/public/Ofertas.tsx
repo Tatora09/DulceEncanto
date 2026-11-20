@@ -1,27 +1,20 @@
-import React, { useEffect, useState } from "react";
-import type { Producto } from "../../types";
+import React from "react";
 import ProductCard from "../../components/ProductCard";
 import { useAgregarAlCarrito } from "../../hooks/useAgregarAlCarrito";
-import { obtenerOfertas } from "../../services/productsService";
+import { useCatalogo } from "../../hooks/useCatalogo";
 
 const Ofertas: React.FC = () => {
   const alCarrito = useAgregarAlCarrito();
-  const [productos, setProductos] = useState<Producto[]>([]);
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      setProductos(await obtenerOfertas());
-      setCargando(false);
-    })();
-  }, []);
+  const { productos: catalogo, cargando, error } = useCatalogo();
+  const productos = catalogo.filter((producto) => producto.precioOferta !== undefined);
 
   if (cargando) return <p>Cargando ofertas…</p>;
 
   return (
     <section>
       <h1 className="h3 mb-1">Ofertas</h1>
-      <p className="text-muted mb-3">Precios especiales por tiempo limitado.</p>
+      <p className="text-muted mb-3">Las ofertas estarán disponibles cuando el backend incorpore precios promocionales.</p>
+      {error && <div className="alert alert-danger" role="alert">{error}</div>}
       {productos.length === 0 ? (
         <p className="text-muted">No hay ofertas disponibles en este momento.</p>
       ) : (

@@ -1,11 +1,12 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import type { Usuario } from "../types";
 import * as auth from "../services/authService";
 
 interface AuthContextValue {
   usuario: Usuario | null;
   esStaff: boolean;
-  login: (email: string) => auth.ResultadoLogin;
+  esAdministrador: boolean;
+  login: (email: string, password: string) => Promise<auth.ResultadoLogin>;
   logout: () => void;
 }
 
@@ -14,11 +15,18 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [usuario, setUsuario] = useState<Usuario | null>(() => auth.obtenerUsuarioActual());
 
+  useEffect(() => {
+    const expiroSesion = () => setUsuario(null);
+    window.addEventListener("dulce-encanto:sesion-expirada", expiroSesion);
+    return () => window.removeEventListener("dulce-encanto:sesion-expirada", expiroSesion);
+  }, []);
+
   const value: AuthContextValue = {
     usuario,
     esStaff: auth.esStaff(usuario),
-    login: (email) => {
-      const r = auth.login(email);
+    esAdministrador: auth.esAdministrador(usuario),
+    login: async (email, password) => {
+      const r = await auth.login(email, password);
       if (r.exito) setUsuario(r.usuario);
       return r;
     },
