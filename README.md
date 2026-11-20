@@ -1,25 +1,57 @@
-# Dulce Encanto — frontend
+# Dulce Encanto — Plataforma Web y Panel de Administración
 
-Aplicación React/Vite conectada a los microservicios del backend:
+Aplicación web desarrollada en **React + TypeScript + Vite** para la repostería artesanal **Dulce Encanto**[cite: 15]. El sistema funciona como interfaz pública de comercio electrónico y panel de gestión administrativa, conectándose en tiempo real con una arquitectura de microservicios en **Spring Boot + MySQL + Docker**[cite: 15].
 
-- Usuarios y autenticación: `http://localhost:8081/api/v1`
-- Productos y categorías: `http://localhost:8082/api/v1`
-- Ventas: `http://localhost:8083/api/v1`
+> **Repositorio del Backend:** [MietzeDiva/backend-dulce-encanto](https://github.com/MietzeDiva/backend-dulce-encanto)
 
-## Desarrollo local
+---
 
-1. Inicia el backend por separado con su `docker-compose`.
-2. Copia `.env.example` a `.env` si necesitas cambiar las direcciones.
-3. Ejecuta `npm install` y `npm run dev`.
+## Funcionalidades Principales
 
-Vite reenvía `/api/usuarios`, `/api/productos` y `/api/ventas` a los puertos anteriores, evitando CORS durante el desarrollo. Puedes cambiar los destinos con `VITE_BACKEND_USUARIOS_URL`, `VITE_BACKEND_PRODUCTOS_URL` y `VITE_BACKEND_VENTAS_URL`.
+### Tienda Pública (Clientes)
+* **Catálogo dinámico:** Visualización de productos y filtrado por categorías obtenidos desde el servidor[cite: 15].
+* **Carrito de compras:** Gestión de cantidades, cálculo de subtotales y confirmación visual al agregar productos.
+* **Autenticación:** Registro e inicio de sesión de usuarios con validación de contraseña y tokens **JWT**[cite: 15].
+* **Proceso de compra (Checkout):** Emisión de boletas reales en el backend con validación de precios y descuento automático de stock[cite: 15].
 
-Para desplegar el frontend, configura `VITE_API_USUARIOS_URL`, `VITE_API_PRODUCTOS_URL` y `VITE_API_VENTAS_URL` con rutas accesibles desde el navegador. El backend adjunto no configura CORS; en producción usa un proxy/reverse proxy del mismo origen o habilita CORS en los microservicios.
+### Panel de Administración (`/admin`)
+* **Dashboard:** Resumen de productos en catálogo, alertas de inventario con stock bajo y total de usuarios registrados.
+* **Gestión de Órdenes:** Listado de boletas emitidas y vista de detalle de cada compra.
+* **Productos y Categorías:** Creación, edición y eliminación de productos y categorías en la base de datos[cite: 15].
+* **Usuarios y Reportes:** Consulta de cuentas registradas y métricas de ventas totales y productos más vendidos.
 
-## Funcionalidad según la API disponible
+---
 
-El frontend crea e inicia sesión con contraseña y JWT, consulta/edita productos, administra categorías y registra ventas. El checkout requiere sesión; el backend determina el precio final y descuenta stock.
+## Conexión con Microservicios (Backend)
 
-La API actual no almacena direcciones de despacho, descuentos, tamaños de producto ni postres personalizados. Tampoco ofrece edición o eliminación de usuarios. La interfaz no presenta esos datos como si se guardaran en el servidor.
+El frontend se comunica con tres microservicios independientes orquestados en Docker[cite: 15]:
 
-El SQL inicial solo crea las bases de datos; no incluye una cuenta administradora. El registro público crea cuentas `CLIENTE`, por lo que el backend debe inicializar una cuenta `ADMIN` antes de usar las pantallas administrativas.
+| Microservicio | Ruta Proxy Frontend | Puerto Backend | Función |
+| :--- | :--- | :--- | :--- |
+| **ms-usuarios** | `/api/usuarios`[cite: 15] | `http://localhost:8081/api/v1`[cite: 15] | Registro, login JWT y control de roles (`CLIENTE` / `ADMIN`). |
+| **ms-productos** | `/api/productos`[cite: 15] | `http://localhost:8082/api/v1`[cite: 15] | CRUD de productos, categorías e inventario. |
+| **ms-ventas** | `/api/ventas`[cite: 15] | `http://localhost:8083/api/v1`[cite: 15] | Procesamiento de órdenes, boletas y descuento de stock. |
+
+*Durante el desarrollo local, Vite redirige automáticamente las peticiones `/api/...` hacia los puertos del backend para evitar bloqueos de CORS[cite: 15].*
+
+---
+
+## Instalación y Ejecución Local
+
+### 1. Levantar el Backend (Requisito previo)
+Antes de iniciar la web, asegúrate de tener corriendo los contenedores de Docker del repositorio `backend-dulce-encanto` (`docker-compose up -d`)[cite: 15].
+
+### 2. Clonar e instalar el Frontend
+```bash
+git clone [https://github.com/Tatora09/DulceEncanto.git](https://github.com/Tatora09/DulceEncanto.git)
+cd DulceEncanto
+npm install
+```
+
+### 3. Configurar variables de entorno (Opcional)
+Si necesitas modificar las URLs por defecto de los microservicios, crea un archivo `.env` a partir de la plantilla[cite: 15]:
+```bash
+cp .env.example .env
+```
+* Variables para desarrollo (proxy Vite): `VITE_BACKEND_USUARIOS_URL`, `VITE_BACKEND_PRODUCTOS_URL`, `VITE_BACKEND_VENTAS_URL`[cite: 15].
+* Variables para producción: `VITE_API_USUARIOS_URL`, `VITE_API_PRODUCTOS_URL`, `VITE_API_VENTAS_URL
