@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { obtenerProductos, obtenerSolicitudes } from '../../services/productsService';
 import { obtenerUsuarios } from '../../services/authService';
 import './Admin.css';
- 
+
 const Dashboard: React.FC = () => {
   // Estados para métricas
   const [metricas, setMetricas] = useState({
@@ -12,20 +12,20 @@ const Dashboard: React.FC = () => {
     solicitudesPendientes: 0,
     totalUsuarios: 0
   });
- 
+
   const [productosCriticos, setProductosCriticos] = useState<any[]>([]);
   const [solicitudesRecientes, setSolicitudesRecientes] = useState<any[]>([]);
   const [vitrina, setVitrina] = useState<any[]>([]);
- 
+
   useEffect(() => {
     (async () => {
       const productos = await obtenerProductos();
       const solicitudes = await obtenerSolicitudes();
       const usuarios = await obtenerUsuarios();
- 
+
       const criticos = productos.filter((p) => p.stock <= p.stockCritico);
       const pendientes = solicitudes.filter((s) => s.estado === 'Pendiente');
- 
+
       setMetricas({
         totalProductos: productos.length,
         stockCritico: criticos.length,
@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
       setVitrina(productos.slice(0, 4));
     })();
   }, []);
- 
+
   return (
       <div className="admin-main">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
@@ -49,7 +49,7 @@ const Dashboard: React.FC = () => {
             <Link to="/admin/productos/nuevo" className="btn btn-primary">➕ Nuevo Producto</Link>
           </div>
         </div>
- 
+
         {/* Tarjetas de Métricas KPI */}
         <div className="stats-grid">
           <div className="stat-card">
@@ -73,7 +73,7 @@ const Dashboard: React.FC = () => {
             <span style={{ fontSize: '0.8rem', color: '#2D6A4F', fontWeight: 500 }}>Clientes y colaboradores</span>
           </div>
         </div>
- 
+
         {/* Alertas de Stock Crítico */}
         <section style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -104,7 +104,7 @@ const Dashboard: React.FC = () => {
             )}
           </div>
         </section>
- 
+
         {/* Tablas Inferiores */}
         <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2rem' }}>
           <div className="admin-card">
@@ -131,5 +131,5 @@ const Dashboard: React.FC = () => {
       </div>
   );
 };
- 
+
 export default Dashboard;

@@ -5,21 +5,16 @@ import { borrar, escribir, leer } from "./storage";
 
 export const KEY_USUARIOS = "dulce_encanto_usuarios_lista";
 export const KEY_SESION = "dulce_encanto_usuario_actual";
-export function obtenerUsuarios(): Usuario[] {
-  return leer<Usuario[]>(KEY_USUARIOS, USUARIOS_INICIALES);
-}
-
-export function obtenerUsuarioPorId(id: string): Usuario | undefined {
-  return obtenerUsuarios().find((u) => u.id === id);
-}
-
-export function guardarUsuario(datos: Partial<Usuario> & Pick<Usuario, "email">): Usuario {
 
 export type ResultadoLogin = { exito: true; usuario: Usuario } | { exito: false; mensaje: string };
 
 // ---------- Usuarios (CRUD) ----------
 export function obtenerUsuarios(): Usuario[] {
   return leer<Usuario[]>(KEY_USUARIOS, USUARIOS_INICIALES);
+}
+
+export function obtenerUsuarioPorId(id: string): Usuario | undefined {
+  return obtenerUsuarios().find((u) => u.id === id);
 }
 
 export function guardarUsuario(datos: Partial<Usuario> & Pick<Usuario, "email">): Usuario {
