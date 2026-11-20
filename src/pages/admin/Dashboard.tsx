@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { obtenerProductos, obtenerSolicitudes } from '../../services/productsService';
+import { obtenerUsuarios } from '../../services/authService';
 import './Admin.css';
-
+ 
 const Dashboard: React.FC = () => {
   // Estados para métricas
   const [metricas, setMetricas] = useState({
@@ -10,40 +12,32 @@ const Dashboard: React.FC = () => {
     solicitudesPendientes: 0,
     totalUsuarios: 0
   });
-
+ 
   const [productosCriticos, setProductosCriticos] = useState<any[]>([]);
   const [solicitudesRecientes, setSolicitudesRecientes] = useState<any[]>([]);
   const [vitrina, setVitrina] = useState<any[]>([]);
-
+ 
   useEffect(() => {
-    // Simulación de carga de datos (Reemplazar con tus Servicios reales)
-    // const productos = ProductosService.obtenerProductos();
-    // const solicitudes = ProductosService.obtenerSolicitudes();
-    // const usuarios = AuthService.obtenerUsuarios();
-    
-    const mockProductos = [
-      { id: 1, codigo: 'TOR-001', nombre: 'Torta Chocolate', stock: 2, stockCritico: 5, precio: 15000, imagen: '' },
-      { id: 2, codigo: 'POS-002', nombre: 'Pie de Limón', stock: 10, stockCritico: 3, precio: 12000, imagen: '' }
-    ];
-    const mockSolicitudes = [
-      { codigo: 'SOL-01', clienteNombre: 'Juan Pérez', clienteEmail: 'juan@test.com', tipoPostre: 'Torta 3 Leches', porciones: 15, fechaEntrega: '2023-11-01', estado: 'Pendiente' }
-    ];
-
-    const criticos = mockProductos.filter(p => p.stock <= p.stockCritico);
-    const pendientes = mockSolicitudes.filter(s => s.estado === 'Pendiente');
-
-    setMetricas({
-      totalProductos: mockProductos.length,
-      stockCritico: criticos.length,
-      solicitudesPendientes: pendientes.length,
-      totalUsuarios: 5 // mockUsuarios.length
-    });
-
-    setProductosCriticos(criticos);
-    setSolicitudesRecientes(mockSolicitudes.slice(0, 5));
-    setVitrina(mockProductos.slice(0, 4));
+    (async () => {
+      const productos = await obtenerProductos();
+      const solicitudes = await obtenerSolicitudes();
+      const usuarios = await obtenerUsuarios();
+ 
+      const criticos = productos.filter((p) => p.stock <= p.stockCritico);
+      const pendientes = solicitudes.filter((s) => s.estado === 'Pendiente');
+ 
+      setMetricas({
+        totalProductos: productos.length,
+        stockCritico: criticos.length,
+        solicitudesPendientes: pendientes.length,
+        totalUsuarios: usuarios.length,
+      });
+      setProductosCriticos(criticos);
+      setSolicitudesRecientes(solicitudes.slice(0, 5));
+      setVitrina(productos.slice(0, 4));
+    })();
   }, []);
-
+ 
   return (
       <div className="admin-main">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
@@ -52,11 +46,10 @@ const Dashboard: React.FC = () => {
             <p style={{ margin: '0.25rem 0 0 0', color: 'var(--color-texto-secundario)', fontSize: '0.95rem' }}>Resumen diario de pedidos, niveles de stock en vitrina y solicitudes.</p>
           </div>
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <Link to="/admin/productos?action=nuevo" className="btn btn-primary">➕ Nuevo Producto</Link>
-            <Link to="/admin/solicitudes" className="btn btn-secondary">📋 Revisar Solicitudes</Link>
+            <Link to="/admin/productos/nuevo" className="btn btn-primary">➕ Nuevo Producto</Link>
           </div>
         </div>
-
+ 
         {/* Tarjetas de Métricas KPI */}
         <div className="stats-grid">
           <div className="stat-card">
@@ -80,7 +73,7 @@ const Dashboard: React.FC = () => {
             <span style={{ fontSize: '0.8rem', color: '#2D6A4F', fontWeight: 500 }}>Clientes y colaboradores</span>
           </div>
         </div>
-
+ 
         {/* Alertas de Stock Crítico */}
         <section style={{ marginBottom: '2.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -111,7 +104,7 @@ const Dashboard: React.FC = () => {
             )}
           </div>
         </section>
-
+ 
         {/* Tablas Inferiores */}
         <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2rem' }}>
           <div className="admin-card">
@@ -138,5 +131,5 @@ const Dashboard: React.FC = () => {
       </div>
   );
 };
-
+ 
 export default Dashboard;

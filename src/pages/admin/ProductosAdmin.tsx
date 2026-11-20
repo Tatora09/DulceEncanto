@@ -1,158 +1,152 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './Admin.css';
+import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import type { Producto } from "../../types";
+import {
+  eliminarProducto,
+  formatearPrecio,
+  obtenerProductos,
+  precioVigente,
+} from "../../services/productsService";
 
-const Productos: React.FC = () => {
-  const [productos, setProductos] = useState<any[]>([]);
-  const [busqueda, setBusqueda] = useState('');
-  const [filtroCategoria, setFiltroCategoria] = useState('Todos');
-  const [filtroStock, setFiltroStock] = useState('Todos');
-  
-  // Estado para el modal de CRUD
-  const [modalAbierto, setModalAbierto] = useState(false);
-  const [formData, setFormData] = useState({
-    id: '', codigo: '', nombre: '', categoria: 'Tortas Tradicionales', precio: 0, porciones: '', stock: 0, stockCritico: 0, descripcion: '', imagen: '', destacado: false
-  });
+const ProductosAdmin: React.FC = () => {
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState("");
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState("Todas");
+  const [filtroStock, setFiltroStock] = useState("Todos");
 
-  useEffect(() => {
-    // Aquí debes cargar los datos desde tu Contexto o LocalStorage
-    // setProductos(ProductosService.obtenerProductos());
+  const cargar = useCallback(async () => {
+    try {
+      setProductos(await obtenerProductos());
+      setError("");
+    } catch {
+      setError("No se pudieron cargar los productos.");
+    } finally {
+      setCargando(false);
+    }
   }, []);
 
-  const abrirModal = (producto = null) => {
-    if (producto) {
-      setFormData(producto);
-    } else {
-      setFormData({ id: '', codigo: '', nombre: '', categoria: 'Tortas Tradicionales', precio: 0, porciones: '', stock: 0, stockCritico: 0, descripcion: '', imagen: '', destacado: false });
-    }
-    setModalAbierto(true);
-  };
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-    }));
-  };
-
-  const guardarProducto = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Aquí llamas a tu función de guardado/actualización (CRUD)
-    console.log("Guardando:", formData);
-    setModalAbierto(false);
-  };
-
-  const eliminarProducto = (id: string, nombre: string) => {
-    if (window.confirm(`¿Estás seguro de que deseas eliminar permanentemente el postre "${nombre}"?`)) {
-      // Llamada al servicio de eliminación
-      console.log("Eliminar ID:", id);
+  const eliminar = async (p: Producto) => {
+    if (!window.confirm(`¿Eliminar "${p.nombre}"? Esta acción no se puede deshacer.`)) return;
+    try {
+      await eliminarProducto(p.id);
+      await cargar();
+    } catch {
+      setError("No se pudo eliminar el producto.");
     }
   };
 
-  // Filtrado de la tabla en tiempo real
-  const productosFiltrados = productos.filter(p => {
-    const cumpleBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase()) || p.codigo.toLowerCase().includes(busqueda.toLowerCase());
-    const cumpleCat = filtroCategoria === 'Todos' || p.categoria === filtroCategoria;
-    const cumpleStock = filtroStock === 'Todos' || (filtroStock === 'Critico' ? p.stock <= p.stockCritico : p.stock > p.stockCritico);
-    return cumpleBusqueda && cumpleCat && cumpleStock;
+  const categorias = [...new Set(productos.map((p) => p.categoria))].sort();
+
+  const filtrados = productos.filter((p) => {
+    const texto = busqueda.toLowerCase();
+    const cumpleTexto = p.nombre.toLowerCase().includes(texto) || p.codigo.toLowerCase().includes(texto);
+    const cumpleCategoria = filtroCategoria === "Todas" || p.categoria === filtroCategoria;
+    const critico = p.stock <= p.stockCritico;
+    const cumpleStock =
+      filtroStock === "Todos" || (filtroStock === "Critico" ? critico : !critico);
+    return cumpleTexto && cumpleCategoria && cumpleStock;
   });
 
+  if (cargando) return <p>Cargando productos…</p>;
+
   return (
-    <>
-      <div className="admin-main">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <h1 style={{ fontSize: '1.85rem', margin: 0, color: 'var(--color-texto-principal)' }}>Catálogo e Inventario</h1>
-          </div>
-          <button className="btn btn-primary" onClick={() => abrirModal()}>➕ Nuevo Postre</button>
-        </div>
-
-        {/* Filtros */}
-        <div className="admin-card" style={{ marginBottom: '1.5rem', padding: '1.25rem' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '1rem', alignItems: 'center' }}>
-            <input type="text" placeholder="🔍 Buscar por nombre o código..." value={busqueda} onChange={e => setBusqueda(e.target.value)} style={{ padding: '0.6rem 1rem', border: '1px solid var(--borde-suave)', borderRadius: '6px' }} />
-            
-            <select value={filtroCategoria} onChange={e => setFiltroCategoria(e.target.value)} style={{ padding: '0.6rem 1rem', border: '1px solid var(--borde-suave)', borderRadius: '6px' }}>
-              <option value="Todos">Todas las Categorías</option>
-              <option value="Tortas Tradicionales">Tortas Tradicionales</option>
-              <option value="Tortas en Fondant">Tortas en Fondant</option>
-            </select>
-
-            <select value={filtroStock} onChange={e => setFiltroStock(e.target.value)} style={{ padding: '0.6rem 1rem', border: '1px solid var(--borde-suave)', borderRadius: '6px' }}>
-              <option value="Todos">Todo el Stock</option>
-              <option value="Critico">⚠️ Solo Stock Crítico</option>
-              <option value="Normal">✓ Stock Normal</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Tabla */}
-        <div className="admin-card" style={{ padding: 0, overflow: 'hidden' }}>
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Nombre del Postre</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Stock / Mínimo</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productosFiltrados.length === 0 ? (
-                <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem' }}>No hay productos.</td></tr>
-              ) : (
-                productosFiltrados.map(p => (
-                  <tr key={p.id}>
-                    <td><strong>{p.codigo}</strong></td>
-                    <td>{p.nombre}</td>
-                    <td><span className="tag-badge">{p.categoria}</span></td>
-                    <td>${p.precio}</td>
-                    <td>
-                      <span className={`stock-badge ${p.stock <= p.stockCritico ? 'stock-critical' : 'stock-ok'}`}>
-                        {p.stock} un. (Mín: {p.stockCritico})
-                      </span>
-                    </td>
-                    <td>
-                      <button className="btn btn-secondary btn-sm" onClick={() => abrirModal(p)}>✏️</button>
-                      <button className="btn btn-danger btn-sm" onClick={() => eliminarProducto(p.id, p.nombre)}>🗑️</button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+    <section>
+      <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 className="h3 mb-0">Productos</h1>
+        <div className="d-flex gap-2">
+          <Link to="/admin/productos/criticos" className="btn btn-outline-danger">Stock crítico</Link>
+          <Link to="/admin/productos/nuevo" className="btn btn-primary">+ Nuevo producto</Link>
         </div>
       </div>
 
-      {/* Modal CRUD en React */}
-      {modalAbierto && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          <div style={{ background: '#fff', width: '100%', maxWidth: '680px', borderRadius: 'var(--radio-md)', padding: '2rem', position: 'relative' }}>
-            <button onClick={() => setModalAbierto(false)} style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}>&times;</button>
-            <h2>{formData.id ? 'Editar Postre' : 'Agregar Nuevo Postre'}</h2>
-            
-            <form onSubmit={guardarProducto}>
-              <div className="form-group">
-                <label>Código:</label>
-                <input type="text" name="codigo" value={formData.codigo} onChange={handleInputChange} required />
-              </div>
-              <div className="form-group">
-                <label>Nombre:</label>
-                <input type="text" name="nombre" value={formData.nombre} onChange={handleInputChange} required />
-              </div>
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-                <button type="button" className="btn btn-secondary" onClick={() => setModalAbierto(false)}>Cancelar</button>
-                <button type="submit" className="btn btn-primary">Guardar</button>
-              </div>
-            </form>
-          </div>
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      <div className="row g-2 mb-3">
+        <div className="col-12 col-md-6">
+          <input
+            className="form-control"
+            placeholder="Buscar por nombre o código"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+        </div>
+        <div className="col-6 col-md-3">
+          <select className="form-select" value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)}>
+            <option value="Todas">Todas las categorías</option>
+            {categorias.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+        <div className="col-6 col-md-3">
+          <select className="form-select" value={filtroStock} onChange={(e) => setFiltroStock(e.target.value)}>
+            <option value="Todos">Todo el stock</option>
+            <option value="Critico">Stock crítico</option>
+            <option value="Normal">Stock normal</option>
+          </select>
+        </div>
+      </div>
+
+      {filtrados.length === 0 ? (
+        <p className="text-muted">No hay productos que coincidan.</p>
+      ) : (
+        <div className="table-responsive">
+          <table className="table table-hover align-middle bg-white">
+            <thead>
+              <tr>
+                <th />
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {filtrados.map((p) => {
+                const critico = p.stock <= p.stockCritico;
+                const enOferta = precioVigente(p) < p.precio;
+                return (
+                  <tr key={p.id}>
+                    <td>
+                      {p.imagen && (
+                        <img src={p.imagen} alt="" width={48} height={48} style={{ objectFit: "cover", borderRadius: 8 }} />
+                      )}
+                    </td>
+                    <td>{p.codigo}</td>
+                    <td>{p.nombre}</td>
+                    <td>{p.categoria}</td>
+                    <td>
+                      {enOferta ? (
+                        <>
+                          <span className="text-muted text-decoration-line-through me-2">{formatearPrecio(p.precio)}</span>
+                          <strong>{formatearPrecio(precioVigente(p))}</strong>
+                        </>
+                      ) : (
+                        formatearPrecio(p.precio)
+                      )}
+                    </td>
+                    <td>
+                      <span className={`badge ${critico ? "bg-danger" : "bg-success"}`}>{p.stock}</span>
+                    </td>
+                    <td className="text-end text-nowrap">
+                      <Link to={`/admin/productos/${p.id}/editar`} className="btn btn-sm btn-outline-primary me-2">Editar</Link>
+                      <button className="btn btn-sm btn-outline-danger" onClick={() => eliminar(p)}>Eliminar</button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
-    </>
+    </section>
   );
 };
 
-export default Productos;
+export default ProductosAdmin;
