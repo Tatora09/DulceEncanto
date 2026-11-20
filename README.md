@@ -54,4 +54,4 @@ Si necesitas modificar las URLs por defecto de los microservicios, crea un archi
 cp .env.example .env
 ```
 * Variables para desarrollo (proxy Vite): `VITE_BACKEND_USUARIOS_URL`, `VITE_BACKEND_PRODUCTOS_URL`, `VITE_BACKEND_VENTAS_URL`.
-* Variables para producción: `VITE_API_USUARIOS_URL`, `VITE_API_PRODUCTOS_URL`, `VITE_API_VENTAS_URL
+* Variables para producción: `VITE_API_USUARIOS_URL`, `VITE_API_PRODUCTOS_URL`, `VITE_API_VENTAS_URL`
