@@ -6,7 +6,7 @@ import { formatearPrecio } from "../services/productsService";
 
 const Navbar: React.FC = () => {
   const { cantidadTotal, total } = useCart();
-  const { usuario, esAdministrador, logout } = useAuth();
+  const { usuario, esStaff, logout } = useAuth();
   const [abierto, setAbierto] = useState(false);
   const [busqueda, setBusqueda] = useState("");
   const navigate = useNavigate();
@@ -77,7 +77,9 @@ const Navbar: React.FC = () => {
             </Link>
             {usuario ? (
               <>
-                {esAdministrador && <Link to="/admin" className="btn btn-outline-primary" onClick={cerrar}>Administración</Link>}
+                {esStaff
+                  ? <Link to="/admin" className="btn btn-outline-primary" onClick={cerrar}>Administración</Link>
+                  : <Link to="/mis-compras" className="btn btn-outline-primary" onClick={cerrar}>Mis compras</Link>}
                 <button type="button" className="btn btn-outline-secondary" onClick={cerrarSesion}>Cerrar sesión</button>
               </>
             ) : (

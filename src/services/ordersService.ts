@@ -94,6 +94,27 @@ export async function obtenerOrdenPorId(id: string): Promise<Orden | undefined> 
   }
 }
 
+/**
+ * Anula una boleta (solo ADMIN). ms-ventas repone el stock de cada producto y responde la boleta ya anulada.
+ * Responde 409 si la boleta ya estaba anulada.
+ */
+export async function anularOrden(id: string): Promise<Orden> {
+  const venta = await apiRequest<VentaApi>("ventas", `ventas/${id}/anular`, { method: "PUT" });
+  return mapearVenta(venta, await obtenerProductos());
+}
+
+/**
+ * Compras del cliente con sesión iniciada.
+ * ms-ventas todavía no tiene GET /ventas/mias, así que se filtran por usuarioId.
+ * TODO (backend): cuando exista /ventas/mias, usarlo aquí y cerrar GET /ventas a ADMIN/VENDEDOR.
+ */
+export async function obtenerMisOrdenes(usuarioId: string): Promise<Orden[]> {
+  const ordenes = await obtenerOrdenes();
+  return ordenes
+    .filter((orden) => orden.usuarioId === usuarioId)
+    .sort((a, b) => b.fecha.localeCompare(a.fecha));
+}
+
 export async function crearOrden(datos: DatosNuevaOrden): Promise<Orden> {
   const usuarioId = Number(datos.usuarioId);
   if (!Number.isSafeInteger(usuarioId) || usuarioId <= 0) {

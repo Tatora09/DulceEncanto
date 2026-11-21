@@ -5,6 +5,9 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AdminSidebar from "./components/AdminSidebar";
 import RutaProtegida from "./components/RutaProtegida";
+import { useAuth } from "./context/AuthContext";
+import { rutaInicioAdmin } from "./auth/permisos";
+import type { Accion, Modulo } from "./auth/permisos";
 
 // Públicas
 import Home from "./pages/public/Home";
@@ -23,6 +26,7 @@ import Contacto from "./pages/public/Contacto";
 import Nosotros from "./pages/public/Nosotros";
 import Login from "./pages/public/Login";
 import Registro from "./pages/public/Registro";
+import MisCompras from "./pages/public/MisCompras";
 import NotFound from "./pages/public/NotFound";
 
 // Administración
@@ -67,6 +71,17 @@ const MarcoAdmin: React.FC = () => (
   </div>
 );
 
+/** Cada pantalla del panel exige el permiso de su módulo (ver src/auth/permisos.ts). */
+const protegida = (modulo: Modulo, elemento: React.ReactElement, accion: Accion = "ver") => (
+  <RutaProtegida modulo={modulo} accion={accion}>{elemento}</RutaProtegida>
+);
+
+/** /admin lleva a la primera pantalla permitida: el vendedor no ve el dashboard. */
+const AdminInicio: React.FC = () => {
+  const { usuario } = useAuth();
+  return <Navigate to={rutaInicioAdmin(usuario?.rol)} replace />;
+};
+
 function App() {
   return (
     <Router>
@@ -89,33 +104,34 @@ function App() {
           <Route path="/nosotros" element={<Nosotros />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+          <Route path="/mis-compras" element={<MisCompras />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 
         {/* Administración */}
         <Route path="/admin" element={<RutaProtegida><MarcoAdmin /></RutaProtegida>}>
-          <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route index element={<AdminInicio />} />
+          <Route path="dashboard" element={protegida("dashboard", <Dashboard />)} />
 
-          <Route path="ordenes" element={<OrdenesAdmin />} />
-          <Route path="ordenes/:id" element={<BoletaAdmin />} />
+          <Route path="ordenes" element={protegida("ordenes", <OrdenesAdmin />)} />
+          <Route path="ordenes/:id" element={protegida("ordenes", <BoletaAdmin />)} />
 
-          <Route path="productos" element={<ProductosAdmin />} />
-          <Route path="productos/nuevo" element={<ProductoForm />} />
-          <Route path="productos/:id/editar" element={<ProductoForm />} />
-          <Route path="productos/criticos" element={<ProductosCriticos />} />
-          <Route path="productos/reportes" element={<ReportesProductos />} />
+          <Route path="productos" element={protegida("productos", <ProductosAdmin />)} />
+          <Route path="productos/nuevo" element={protegida("productos", <ProductoForm />, "crear")} />
+          <Route path="productos/:id/editar" element={protegida("productos", <ProductoForm />, "editar")} />
+          <Route path="productos/criticos" element={protegida("productos", <ProductosCriticos />)} />
+          <Route path="productos/reportes" element={protegida("reportes", <ReportesProductos />)} />
 
-          <Route path="categorias" element={<CategoriasAdmin />} />
-          <Route path="categorias/nueva" element={<CategoriaForm />} />
-          <Route path="categorias/:id/editar" element={<CategoriaForm />} />
+          <Route path="categorias" element={protegida("categorias", <CategoriasAdmin />)} />
+          <Route path="categorias/nueva" element={protegida("categorias", <CategoriaForm />, "crear")} />
+          <Route path="categorias/:id/editar" element={protegida("categorias", <CategoriaForm />, "editar")} />
 
-          <Route path="usuarios" element={<UsuariosAdmin />} />
-          <Route path="usuarios/nuevo" element={<UsuarioForm />} />
-          <Route path="usuarios/:id/historial" element={<HistorialCompras />} />
+          <Route path="usuarios" element={protegida("usuarios", <UsuariosAdmin />)} />
+          <Route path="usuarios/nuevo" element={protegida("usuarios", <UsuarioForm />, "crear")} />
+          <Route path="usuarios/:id/historial" element={protegida("usuarios", <HistorialCompras />)} />
 
-          <Route path="reportes" element={<Reportes />} />
-          <Route path="perfil" element={<Perfil />} />
+          <Route path="reportes" element={protegida("reportes", <Reportes />)} />
+          <Route path="perfil" element={protegida("perfil", <Perfil />)} />
         </Route>
       </Routes>
     </Router>

@@ -7,9 +7,15 @@ import {
   precioVigente,
 } from "../../services/productsService";
 import { useCatalogo } from "../../hooks/useCatalogo";
+import { useAuth } from "../../context/AuthContext";
+import { puede } from "../../auth/permisos";
 
 const ProductosAdmin: React.FC = () => {
   const catalogo = useCatalogo();
+  const { usuario } = useAuth();
+  const puedeCrear = puede(usuario?.rol, "productos", "crear");
+  const puedeEditar = puede(usuario?.rol, "productos", "editar");
+  const puedeEliminar = puede(usuario?.rol, "productos", "eliminar");
   const { productos, cargando, error } = catalogo;
   const [errorAccion, setErrorAccion] = useState("");
   const [busqueda, setBusqueda] = useState("");
@@ -47,7 +53,7 @@ const ProductosAdmin: React.FC = () => {
         <h1 className="h3 mb-0">Productos</h1>
         <div className="d-flex gap-2">
           <Link to="/admin/productos/criticos" className="btn btn-outline-danger">Stock crítico</Link>
-          <Link to="/admin/productos/nuevo" className="btn btn-primary">+ Nuevo producto</Link>
+          {puedeCrear && <Link to="/admin/productos/nuevo" className="btn btn-primary">+ Nuevo producto</Link>}
         </div>
       </div>
 
@@ -115,8 +121,8 @@ const ProductosAdmin: React.FC = () => {
                       <span className={`badge ${critico ? "bg-danger" : "bg-success"}`}>{p.stock}</span>
                     </td>
                     <td className="text-end text-nowrap">
-                      <Link to={`/admin/productos/${p.id}/editar`} className="btn btn-sm btn-outline-primary me-2">Editar</Link>
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => eliminar(p)}>Eliminar</button>
+                      {puedeEditar && <Link to={`/admin/productos/${p.id}/editar`} className="btn btn-sm btn-outline-primary me-2">Editar</Link>}
+                      {puedeEliminar && <button className="btn btn-sm btn-outline-danger" onClick={() => eliminar(p)}>Eliminar</button>}
                     </td>
                   </tr>
                 );
