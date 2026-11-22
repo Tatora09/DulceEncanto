@@ -36,7 +36,7 @@ const UsuarioForm: React.FC = () => {
     <section>
       <Link to="/admin/usuarios" className="btn btn-link px-0">← Volver a usuarios</Link>
       <h1 className="h3 mb-3">Nuevo usuario</h1>
-      <p className="text-muted">El backend permite crear usuarios, pero todavía no ofrece operaciones para editar o eliminar cuentas.</p>
+      <p className="text-muted">Solo un administrador puede crear cuentas con cualquier rol (el registro público siempre crea clientes).</p>
       {error && <div className="alert alert-danger" role="alert">{error}</div>}
       <form onSubmit={enviar} noValidate className="bg-white p-4 rounded border" style={{ maxWidth: 620 }}>
         <CampoFormulario id="nombre" etiqueta="Nombre completo" valor={nombre} onCambio={setNombre} requerido />

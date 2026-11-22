@@ -104,14 +104,17 @@ export async function anularOrden(id: string): Promise<Orden> {
 }
 
 /**
- * Compras del cliente con sesión iniciada.
- * ms-ventas todavía no tiene GET /ventas/mias, así que se filtran por usuarioId.
- * TODO (backend): cuando exista /ventas/mias, usarlo aquí y cerrar GET /ventas a ADMIN/VENDEDOR.
+ * Compras del cliente con sesión iniciada: GET /ventas/mias.
+ * El backend toma al usuario del token y ya las devuelve de la más nueva a la más antigua.
+ * (El parámetro se mantiene solo para no cambiar las llamadas existentes; ya no se usa.)
  */
-export async function obtenerMisOrdenes(usuarioId: string): Promise<Orden[]> {
-  const ordenes = await obtenerOrdenes();
-  return ordenes
-    .filter((orden) => orden.usuarioId === usuarioId)
+export async function obtenerMisOrdenes(_usuarioId?: string): Promise<Orden[]> {
+  const [ventas, productos] = await Promise.all([
+    apiRequest<VentaApi[]>("ventas", "ventas/mias"),
+    obtenerProductos(),
+  ]);
+  return ventas
+    .map((venta) => mapearVenta(venta, productos))
     .sort((a, b) => b.fecha.localeCompare(a.fecha));
 }
 
@@ -126,8 +129,8 @@ export async function crearOrden(datos: DatosNuevaOrden): Promise<Orden> {
 
   const venta = await apiRequest<VentaApi>("ventas", "ventas", {
     method: "POST",
+    // El comprador lo determina el backend a partir del JWT; ya no se envía usuarioId.
     body: JSON.stringify({
-      usuarioId,
       items: datos.items.map((item) => ({ productoId: Number(item.id), cantidad: item.cantidad })),
     }),
   });

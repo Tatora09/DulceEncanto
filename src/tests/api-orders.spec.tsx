@@ -125,9 +125,9 @@ describe("ordersService", () => {
     }
   });
 
-  it("obtenerMisOrdenes debería devolver solo las del usuario, de la más nueva a la más antigua", async () => {
+  it("obtenerMisOrdenes debería pedir /ventas/mias y devolverlas de la más nueva a la más antigua", async () => {
     simularBackend([
-      { url: /ventas\/ventas$/, cuerpo: [ventaApi(1, 3, "COMPLETADA"), ventaApi(2, 9, "COMPLETADA"), ventaApi(3, 3, "ANULADA")] },
+      { url: /ventas\/ventas\/mias$/, cuerpo: [ventaApi(1, 3, "COMPLETADA"), ventaApi(3, 3, "ANULADA")] },
       { url: /productos\/productos$/, cuerpo: productosApi },
     ]);
     const mias = await obtenerMisOrdenes("3");

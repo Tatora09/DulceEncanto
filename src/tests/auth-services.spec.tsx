@@ -2,7 +2,7 @@
  * Pruebas de authService: login, adaptación de roles del backend y mensajes de error.
  * El backend se simula con un espía sobre window.fetch.
  */
-import { esAdministrador, esStaff, login, logout, obtenerUsuarioActual, registrarUsuario } from "../services/authService";
+import { KEY_SESION, esAdministrador, esStaff, login, logout, obtenerUsuarioActual, registrarUsuario } from "../services/authService";
 import { obtenerAccessToken } from "../services/api";
 import type { Usuario } from "../types";
 
@@ -14,17 +14,36 @@ const usuarioCon = (rol: Usuario["rol"]): Usuario => ({
   id: "1", rut: "", nombre: "x", email: "x@x.cl", rol, region: "", comuna: "", estado: "Activo", fechaRegistro: "",
 });
 
+/** JWT de mentira con payload legible (la firma no se valida en el front). */
+const tokenFalso = (payload: Record<string, unknown>) => `x.${btoa(JSON.stringify(payload)).replace(/=/g, "")}.y`;
+
 beforeEach(() => localStorage.clear());
 afterEach(() => localStorage.clear());
 
 describe("authService", () => {
   it("login correcto debería guardar los tokens y la sesión", async () => {
-    responder(200, { accessToken: "AT", refreshToken: "RT", usuario: { id: 4, nombre: "Ana", rol: "ADMIN" } });
+    const token = tokenFalso({ rol: "ADMIN", userId: 4 });
+    responder(200, { accessToken: token, refreshToken: "RT", usuario: { id: 4, nombre: "Ana", rol: "ADMIN" } });
     const r = await login("  ANA@Duoc.cl ", "clave123");
     expect(r.exito).toBeTrue();
-    expect(obtenerAccessToken()).toBe("AT");
+    expect(obtenerAccessToken()).toBe(token);
     expect(obtenerUsuarioActual()?.email).toBe("ana@duoc.cl");
     expect(obtenerUsuarioActual()?.rol).toBe("Administrador");
+  });
+
+  it("obtenerUsuarioActual debería tomar el rol del token y no del localStorage editable", async () => {
+    responder(200, {
+      accessToken: tokenFalso({ rol: "CLIENTE", userId: 7 }),
+      refreshToken: "RT",
+      usuario: { id: 7, nombre: "Luz", rol: "CLIENTE" },
+    });
+    await login("luz@duoc.cl", "clave123");
+
+    // Alguien edita el localStorage desde las DevTools para "hacerse administrador"
+    const guardado = JSON.parse(localStorage.getItem(KEY_SESION)!);
+    localStorage.setItem(KEY_SESION, JSON.stringify({ ...guardado, rol: "Administrador" }));
+
+    expect(obtenerUsuarioActual()?.rol).toBe("Cliente");
   });
 
   it("debería traducir el rol VENDEDOR del backend a 'Vendedor / Pastelero'", async () => {

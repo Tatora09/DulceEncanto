@@ -61,26 +61,74 @@ export async function obtenerUsuarios(): Promise<Usuario[]> {
 }
 
 export async function obtenerUsuarioPorId(id: string): Promise<Usuario | undefined> {
-  return (await obtenerUsuarios()).find((usuario) => usuario.id === id);
+  try {
+    return adaptarUsuario(await apiRequest<UsuarioApi>("usuarios", `usuarios/${id}`));
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) return undefined;
+    throw error;
+  }
 }
 
-export async function guardarUsuario(datos: Partial<Usuario> & Pick<Usuario, "email" | "nombre"> & { password: string }): Promise<Usuario> {
-  if (datos.id) throw new Error("El backend todavía no permite editar usuarios.");
-  const usuario = await apiRequest<UsuarioApi>("usuarios", "usuarios", {
-    method: "POST",
-    body: JSON.stringify({
-      nombre: datos.nombre,
-      correo: datos.email,
-      password: datos.password,
-      rol: rolApi(datos.rol ?? "Cliente"),
-    }),
-  });
+/** Crea (POST) o edita (PUT) un usuario. En edición, password vacío = conservar la actual. */
+export async function guardarUsuario(
+  datos: Partial<Usuario> & Pick<Usuario, "email" | "nombre"> & { password?: string },
+): Promise<Usuario> {
+  const cuerpo = {
+    nombre: datos.nombre,
+    correo: datos.email,
+    password: datos.password || undefined,
+    rol: rolApi(datos.rol ?? "Cliente"),
+  };
+  const usuario = datos.id
+    ? await apiRequest<UsuarioApi>("usuarios", `usuarios/${datos.id}`, { method: "PUT", body: JSON.stringify(cuerpo) })
+    : await apiRequest<UsuarioApi>("usuarios", "usuarios", { method: "POST", body: JSON.stringify(cuerpo) });
   return adaptarUsuario(usuario);
 }
 
+/** Elimina un usuario (solo ADMIN). El backend responde 409 si intentas borrar tu propia cuenta. */
+export async function eliminarUsuario(id: string): Promise<void> {
+  await apiRequest<void>("usuarios", `usuarios/${id}`, { method: "DELETE" });
+}
+
+interface DatosJwt {
+  rol?: string;
+  userId?: number;
+  exp?: number;
+}
+
+/** Lee el payload del JWT (solo lectura: la firma la valida el backend en cada petición). */
+function decodificarJwt(token: string): DatosJwt | null {
+  try {
+    const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join(""),
+    );
+    return JSON.parse(json) as DatosJwt;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Restaura la sesión al recargar la página.
+ * El rol y el id se toman del token (firmado por el backend) y NO del localStorage,
+ * que el usuario puede editar a mano desde las DevTools para "hacerse administrador".
+ */
 export function obtenerUsuarioActual(): Usuario | null {
-  if (!obtenerAccessToken()) return null;
-  return leer<Usuario | null>(KEY_SESION, null);
+  const token = obtenerAccessToken();
+  const guardado = leer<Usuario | null>(KEY_SESION, null);
+  if (!token || !guardado) return null;
+
+  const datos = decodificarJwt(token);
+  if (!datos?.rol) return null;
+  try {
+    return { ...guardado, id: String(datos.userId ?? guardado.id), rol: adaptarRol(datos.rol) };
+  } catch {
+    return null;
+  }
 }
 
 export async function login(email: string, password: string): Promise<ResultadoLogin> {
