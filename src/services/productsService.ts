@@ -36,6 +36,7 @@ interface ProductoApi {
   nombre: string;
   descripcion?: string;
   precio: number;
+  precioOferta?: number | null;
   stock: number;
   categoria: CategoriaApi;
   imagenUrl?: string;
@@ -49,6 +50,7 @@ function adaptarProducto(producto: ProductoApi): Producto {
     categoria: producto.categoria.nombre,
     categoriaId: String(producto.categoria.id),
     precio: producto.precio,
+    precioOferta: producto.precioOferta ?? undefined,
     stock: producto.stock,
     stockCritico: 5,
     porciones: "Unidad",

@@ -13,7 +13,7 @@ const Ofertas: React.FC = () => {
   return (
     <section>
       <h1 className="h3 mb-1">Ofertas</h1>
-      <p className="text-muted mb-3">Las ofertas estarán disponibles cuando el backend incorpore precios promocionales.</p>
+      <p className="text-muted mb-3">Aprovecha estos precios especiales por tiempo limitado.</p>
       {error && <div className="alert alert-danger" role="alert">{error}</div>}
       {productos.length === 0 ? (
         <p className="text-muted">No hay ofertas disponibles en este momento.</p>

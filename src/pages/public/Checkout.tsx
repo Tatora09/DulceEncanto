@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { calcularTotales } from "../../services/cartService";
 import { crearOrden } from "../../services/ordersService";
-import { formatearPrecio } from "../../services/productsService";
+import { formatearPrecio, precioVigente } from "../../services/productsService";
 import { useCatalogo } from "../../hooks/useCatalogo";
 
 const Checkout: React.FC = () => {
@@ -19,7 +19,7 @@ const Checkout: React.FC = () => {
       ? {
           ...item,
           nombre: producto.nombre,
-          precio: producto.precio,
+          precio: precioVigente(producto),
           imagen: producto.imagen,
           categoria: producto.categoria,
           porciones: "Unidad",

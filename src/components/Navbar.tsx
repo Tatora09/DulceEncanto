@@ -54,12 +54,12 @@ const Navbar: React.FC = () => {
             <li className="nav-item"><NavLink to="/contacto" className={claseLink} onClick={cerrar}>Contacto</NavLink></li>
           </ul>
 
-          <form className="d-flex me-lg-3 mb-2 mb-lg-0" role="search" onSubmit={buscar}>
+          <form className="d-flex align-items-center me-lg-3 mb-2 mb-lg-0 de-navbar-search" role="search" onSubmit={buscar}>
             <input
               type="search"
-              className="form-control me-2"
-              placeholder="Buscar"
-              aria-label="Buscar"
+              className="form-control"
+              placeholder="Buscar productos…"
+              aria-label="Buscar productos"
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
             />

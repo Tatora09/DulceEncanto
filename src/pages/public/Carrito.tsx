@@ -5,7 +5,7 @@ import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import ResumenTotales from "../../components/ResumenTotales";
 import { useCart } from "../../context/CartContext";
 import { calcularTotales } from "../../services/cartService";
-import { formatearPrecio } from "../../services/productsService";
+import { formatearPrecio, precioVigente } from "../../services/productsService";
 import { useCatalogo } from "../../hooks/useCatalogo";
 
 const Carrito: React.FC = () => {
@@ -17,7 +17,7 @@ const Carrito: React.FC = () => {
       ? {
           ...item,
           nombre: producto.nombre,
-          precio: producto.precio,
+          precio: precioVigente(producto),
           imagen: producto.imagen,
           categoria: producto.categoria,
           porciones: "Unidad",
