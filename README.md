@@ -9,16 +9,17 @@ Aplicación web desarrollada en **React + TypeScript + Vite** para la reposterí
 ## Funcionalidades Principales
 
 ### Tienda Pública (Clientes)
-* **Catálogo dinámico:** Visualización de productos y filtrado por categorías obtenidos desde el servidor.
-* **Carrito de compras:** Gestión de cantidades, cálculo de subtotales y confirmación visual al agregar productos.
-* **Autenticación:** Registro e inicio de sesión de usuarios con validación de contraseña y tokens **JWT**.
-* **Proceso de compra (Checkout):** Emisión de boletas reales en el backend con validación de precios y descuento automático de stock.
+- **Catálogo dinámico:** Visualización de productos y filtrado por categorías obtenidos desde el servidor.
+- **Sistema de Ofertas:** Sección dedicada a productos con precios promocionales aplicados desde el backend.
+- **Carrito de compras:** Gestión de cantidades, cálculo de subtotales y confirmación visual al agregar productos.
+- **Autenticación:** Registro e inicio de sesión de usuarios con validación de contraseña y tokens **JWT**.
+- **Proceso de compra (Checkout):** Emisión de boletas reales en el backend con validación de precios y descuento automático de stock.
 
 ### Panel de Administración (`/admin`)
-* **Dashboard:** Resumen de productos en catálogo, alertas de inventario con stock bajo y total de usuarios registrados.
-* **Gestión de Órdenes:** Listado de boletas emitidas y vista de detalle de cada compra.
-* **Productos y Categorías:** Creación, edición y eliminación de productos y categorías en la base de datos.
-* **Usuarios y Reportes:** Consulta de cuentas registradas y métricas de ventas totales y productos más vendidos.
+- **Dashboard:** Resumen de productos en catálogo, alertas de inventario con stock bajo y total de usuarios registrados.
+- **Gestión de Órdenes:** Listado de boletas emitidas y vista de detalle de cada compra.
+- **Productos y Categorías:** Creación, edición y eliminación de productos y categorías en la base de datos.
+- **Gestión de Usuarios y Reportes:** Creación, edición, eliminación y consulta de cuentas de usuario, además de métricas de ventas totales y productos más vendidos.
 
 ---
 
@@ -43,16 +44,15 @@ Las imágenes de productos servidas por el backend en `/images/productos/...` ta
 Antes de iniciar la web, asegúrate de tener corriendo los contenedores de Docker del repositorio `backend-dulce-encanto` (`docker-compose up -d`).
 
 ### 2. Clonar e instalar el Frontend
-```bash
-git clone [https://github.com/Tatora09/DulceEncanto.git](https://github.com/Tatora09/DulceEncanto.git)
-cd DulceEncanto
-npm install
-```
+
+    git clone https://github.com/Tatora09/DulceEncanto.git
+    cd DulceEncanto
+    npm install
 
 ### 3. Configurar variables de entorno (Opcional)
 Si necesitas modificar las URLs por defecto de los microservicios, crea un archivo `.env` a partir de la plantilla:
-```bash
-cp .env.example .env
-```
-* Variables para desarrollo (proxy Vite): `VITE_BACKEND_USUARIOS_URL`, `VITE_BACKEND_PRODUCTOS_URL`, `VITE_BACKEND_VENTAS_URL`.
-* Variables para producción: `VITE_API_USUARIOS_URL`, `VITE_API_PRODUCTOS_URL`, `VITE_API_VENTAS_URL`
+
+    cp .env.example .env
+
+- Variables para desarrollo (proxy Vite): `VITE_BACKEND_USUARIOS_URL`, `VITE_BACKEND_PRODUCTOS_URL`, `VITE_BACKEND_VENTAS_URL`.
+- Variables para producción: `VITE_API_USUARIOS_URL`, `VITE_API_PRODUCTOS_URL`, `VITE_API_VENTAS_URL`
