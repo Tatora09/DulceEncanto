@@ -6,6 +6,8 @@ import { escribir, leer } from "./storage";
 
 export const KEY_SOLICITUDES = "dulce_encanto_solicitudes";
 export const KEY_BLOGS = "dulce_encanto_blogs";
+const IMAGEN_ANTERIOR_BLOG_PRINCIPAL =
+  "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80";
 
 /** "$26.900". Siempre numérico, sirve tanto para el navbar como para tablas. */
 export function formatearPrecio(monto: number): string {
@@ -129,7 +131,18 @@ export function actualizarEstadoSolicitud(id: string, estado: EstadoSolicitud): 
 
 // ---------- Blogs ----------
 export function obtenerBlogs(): Blog[] {
-  return leer<Blog[]>(KEY_BLOGS, BLOGS_INICIALES);
+  let imagenActualizada = false;
+  const blogs = leer<Blog[]>(KEY_BLOGS, BLOGS_INICIALES).map((blog) => {
+    const inicial = BLOGS_INICIALES.find((item) => item.id === blog.id);
+    if (blog.id === "blog-001" && blog.imagen === IMAGEN_ANTERIOR_BLOG_PRINCIPAL && inicial) {
+      imagenActualizada = true;
+      return { ...blog, imagen: inicial.imagen };
+    }
+    return blog;
+  });
+
+  if (imagenActualizada) escribir(KEY_BLOGS, blogs);
+  return blogs;
 }
 
 export function obtenerBlogPorSlug(slug: string): Blog | undefined {

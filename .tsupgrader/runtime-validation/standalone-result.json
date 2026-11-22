@@ -1,0 +1,121 @@
+{
+  "planHash": "0d28a16ffa14fb96456f4517bc159793998609644bc341c4565ee64daeaa961c",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-11-22T20:08:41.9502868Z",
+  "retryCount": 0,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 0,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "typescript-check",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E react-example@0.0.0 lint\r\n\u003E tsc --noEmit\r\n\r\n",
+        "durationMs": 5241
+      },
+      {
+        "name": "production-build",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E react-example@0.0.0 build\r\n\u003E vite build\r\n\r\n\u001B[36mvite v6.4.4 \u001B[32mbuilding for production...\u001B[36m\u001B[39m\r\ntransforming...\r\n\u001B[32m\u2713\u001B[39m 102 modules transformed.\r\nrendering chunks...\r\ncomputing gzip size...\r\n\u001B[2mdist/\u001B[22m\u001B[32mindex.html                 \u001B[39m\u001B[1m\u001B[2m  0.45 kB\u001B[22m\u001B[1m\u001B[22m\u001B[2m \u2502 gzip:   0.31 kB\u001B[22m\r\n\u001B[2mdist/\u001B[22m\u001B[35massets/index-Cnph2wpb.css  \u001B[39m\u001B[1m\u001B[2m243.83 kB\u001B[22m\u001B[1m\u001B[22m\u001B[2m \u2502 gzip:  34.32 kB\u001B[22m\r\n\u001B[2mdist/\u001B[22m\u001B[36massets/index-fbHVNw0T.js   \u001B[39m\u001B[1m\u001B[2m358.40 kB\u001B[22m\u001B[1m\u001B[22m\u001B[2m \u2502 gzip: 108.29 kB\u001B[22m\r\n\u001B[32m\u2713 built in 1.71s\u001B[39m\r\n",
+        "durationMs": 3081
+      },
+      {
+        "name": "tests-pass",
+        "kind": "process",
+        "verificationMethod": "test-results",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E react-example@0.0.0 test\r\n\u003E karma start karma.conf.cjs\r\n\r\nWebpack bundling...\r\nasset \u001B[1m\u001B[32mcommons.js\u001B[39m\u001B[22m 3.33 MiB \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: commons) (id hint: commons)\r\nasset \u001B[1m\u001B[32mruntime.js\u001B[39m\u001B[22m 14 KiB \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: runtime)\r\nasset \u001B[1m\u001B[32mimagen-con-respaldo.spec.3593566346.js\u001B[39m\u001B[22m 471 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: imagen-con-respaldo.spec.3593566346)\r\nasset \u001B[1m\u001B[32mproducts-service.spec.2572540191.js\u001B[39m\u001B[22m 465 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: products-service.spec.2572540191)\r\nasset \u001B[1m\u001B[32mcampo-formulario.spec.745607716.js\u001B[39m\u001B[22m 464 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: campo-formulario.spec.745607716)\r\nasset \u001B[1m\u001B[32mauth-services.spec.3964625334.js\u001B[39m\u001B[22m 459 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: auth-services.spec.3964625334)\r\nasset \u001B[1m\u001B[32mblogs-service.spec.1035646541.js\u001B[39m\u001B[22m 459 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: blogs-service.spec.1035646541)\r\nasset \u001B[1m\u001B[32mcart-service.spec.862688365.js\u001B[39m\u001B[22m 456 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: cart-service.spec.862688365)\r\nasset \u001B[1m\u001B[32mapi-orders.spec.1947730610.js\u001B[39m\u001B[22m 453 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: api-orders.spec.1947730610)\r\nasset \u001B[1m\u001B[32mpermisos.spec.3246995831.js\u001B[39m\u001B[22m 449 bytes \u001B[1m\u001B[32m[emitted]\u001B[39m\u001B[22m (name: permisos.spec.3246995831)\r\nwebpack 5.112.0 compiled \u001B[1m\u001B[32msuccessfully\u001B[39m\u001B[22m in 918 ms\r\n\u001B[32m22 11 2026 17:08:38.820:INFO [karma-server]: \u001B[39mKarma v6.4.4 server started at http://localhost:9876/\r\n\u001B[32m22 11 2026 17:08:38.822:INFO [launcher]: \u001B[39mLaunching browsers ChromeHeadless with concurrency 1\r\n\u001B[32m22 11 2026 17:08:38.834:INFO [launcher]: \u001B[39mStarting browser ChromeHeadless\r\n\u001B[32m22 11 2026 17:08:39.341:INFO [Chrome Headless 157.0.0.0 (Windows 10)]: \u001B[39mConnected on socket cfUYbJEfcQCwfndHAAAA with id 95521600\r\nChrome Headless 157.0.0.0 (Windows 10): Executed 0 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0 secs)\r\n\u001B[33m22 11 2026 17:08:39.489:WARN [web-server]: \u001B[39m404: /images/postre-placeholder.svg\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 1 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.009 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 2 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.01 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 3 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.011 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 4 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.012 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 5 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.013 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 6 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.014 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 7 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.014 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 8 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.014 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 9 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.015 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 10 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.016 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 11 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.017 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 12 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.018 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 13 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.019 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 14 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.019 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 15 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.019 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 16 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.02 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 17 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.02 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 18 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.02 secs)\r\n\u001B[1A\u001B[2KChrome Headless 157.0.0.0 (Windows 10): Executed 19 of 69\u001B[32m SUCCESS\u001B[39m (0 secs / 0.02 secs)\r\n\u001B[1A\u001B[2KChrome\n\u2026[truncated]",
+        "durationMs": 4451,
+        "testResults": {
+          "testFramework": "jasmine",
+          "runnerDetectedFrom": "package_json",
+          "testsTotal": 0,
+          "testsPassed": 0,
+          "testsFailed": 0,
+          "testsSkipped": 0,
+          "parseFailed": true
+        }
+      },
+      {
+        "name": "blogs-route-available",
+        "kind": "http-probe",
+        "verificationMethod": "http-status",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "HTTP 200\n\u003C!DOCTYPE html\u003E\r\n\u003Chtml lang=\u0022es\u0022\u003E\r\n  \u003Chead\u003E\n    \u003Cscript type=\u0022module\u0022\u003Eimport { injectIntoGlobalHook } from \u0022/@react-refresh\u0022;\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () =\u003E {};\nwindow.$RefreshSig$ = () =\u003E (type) =\u003E type;\u003C/script\u003E\n\n    \u003Cscript type=\u0022module\u0022 src=\u0022/@vite/client\u0022\u003E\u003C/script\u003E\n\r\n    \u003Cmeta charset=\u0022UTF-8\u0022 /\u003E\r\n    \u003Cmeta name=\u0022viewport\u0022 content=\u0022width=device-width, initial-scale=1.0\u0022 /\u003E\r\n    \u003Ctitle\u003EDulce Encanto | Panader\u00EDa y Reposter\u00EDa Artesanal\u003C/title\u003E\r\n  \u003C/head\u003E\r\n  \u003Cbody\u003E\r\n    \u003Cdiv id=\u0022root\u0022\u003E\u003C/div\u003E\r\n    \u003Cscript type=\u0022module\u0022 src=\u0022/src/main.tsx?t=1795378069491\u0022\u003E\u003C/script\u003E \r\n  \u003C/body\u003E\r\n\u003C/html\u003E\n--- server output ---\n\r\n\u003E react-example@0.0.0 dev\r\n\u003E vite --port=3000 --host=0.0.0.0\r\n\r\nPort 3000 is in use, trying another one...\r\n\r\n  \u001B[32m\u001B[1mVITE\u001B[22m v6.4.4\u001B[39m  \u001B[2mready in \u001B[0m\u001B[1m662\u001B[22m\u001B[2m\u001B[0m ms\u001B[22m\r\n\r\n  \u001B[32m\u279C\u001B[39m  \u001B[1mLocal\u001B[22m:   \u001B[36mhttp://localhost:\u001B[1m3001\u001B[22m/\u001B[39m\r\n  \u001B[32m\u279C\u001B[39m  \u001B[1mNetwork\u001B[22m: \u001B[36mhttp://192.168.56.1:\u001B[1m3001\u001B[22m/\u001B[39m\r\n  \u001B[32m\u279C\u001B[39m  \u001B[1mNetwork\u001B[22m: \u001B[36mhttp://192.168.1.16:\u001B[1m3001\u001B[22m/\u001B[39m\r\n  \u001B[32m\u279C\u001B[39m  \u001B[1mNetwork\u001B[22m: \u001B[36mhttp://172.18.96.1:\u001B[1m3001\u001B[22m/\u001B[39m\r\n",
+        "durationMs": 2068
+      }
+    ],
+    "executions": [
+      {
+        "source": "typescript-check",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "lint"
+        ],
+        "cwd": "C:\\Users\\antoa\\Documents\\GitHub\\DulceEncanto",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "production-build",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "build"
+        ],
+        "cwd": "C:\\Users\\antoa\\Documents\\GitHub\\DulceEncanto",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "tests-pass",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "test"
+        ],
+        "cwd": "C:\\Users\\antoa\\Documents\\GitHub\\DulceEncanto",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "blogs-route-available",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "dev"
+        ],
+        "cwd": "C:\\Users\\antoa\\Documents\\GitHub\\DulceEncanto",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      }
+    ]
+  }
+}

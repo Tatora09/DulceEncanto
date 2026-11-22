@@ -11,6 +11,9 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
+    "types": [
+      "jasmine"
+    ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "moduleDetection": "force",

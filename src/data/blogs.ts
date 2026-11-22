@@ -9,7 +9,7 @@ export const BLOGS_INICIALES: Blog[] = [
     "autor": "Chef Pastelera Lucía Morales",
     "fecha": "10 de Septiembre, 2026",
     "categoria": "Consejos Reposteros",
-    "imagen": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=800&q=80",
+    "imagen": "https://cocinachilena.cl/wp-content/uploads/2022/08/torta-panqueques.jpg",
     "tiempoLectura": "4 min de lectura",
     "contenido": "\n      <h3>La importancia de la temperatura adecuada</h3>\n      <p>En el corazón de la repostería artesanal de <strong>Dulce Encanto</strong>, cada postre se hornea sin conservantes químicos artificiales. Por ello, la manera en que almacenas tu torta o kuchen una vez en casa determinará su frescura y suavidad.</p>\n      \n      <h4>1. Tortas con cobertura de Fondant</h4>\n      <p><strong>¡Nunca refrigeres una torta de fondant!</strong> La humedad del refrigerador condensa el azúcar exterior, provocando que el fondant sude y pierda su acabado satinado. Guárdala en una habitación fresca y ventilada, lejos de la luz solar directa.</p>\n      \n      <h4>2. Tortas con Crema Chantilly, Lúcuma y Frutas Frescas</h4>\n      <p>Debido al contenido de lácteos y pulpas frescas, estas tortas siempre requieren refrigeración continua entre 4°C y 6°C. Para disfrutarlas al máximo, retíralas del refrigerador 15 a 20 minutos antes de servirlas para que el bizcocho recupere su temperatura óptima.</p>\n      \n      <h4>3. Kuchenes Sureños y Tartas</h4>\n      <p>Nuestros kuchenes de frambuesa y pie de limón se conservan deliciosos hasta 4 días cubiertos con una campana de vidrio o film transparente.</p>\n    "
   },
