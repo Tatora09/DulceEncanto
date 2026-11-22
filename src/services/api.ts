@@ -6,6 +6,16 @@ const bases: Record<ServicioApi, string> = {
   ventas: import.meta.env.VITE_API_VENTAS_URL ?? "/api/ventas",
 };
 
+export function resolverUrlImagenProducto(imagenUrl?: string): string {
+  const imagen = imagenUrl?.trim() ?? "";
+  if (!imagen) return "";
+  if (/^(https?:|data:|blob:|\/\/)/i.test(imagen)) return imagen;
+
+  const ruta = imagen.startsWith("/") ? imagen : `/${imagen}`;
+  const baseProductos = bases.productos;
+  return /^https?:\/\//i.test(baseProductos) ? new URL(ruta, baseProductos).toString() : ruta;
+}
+
 const ACCESS_TOKEN_KEY = "dulce_encanto_access_token";
 const REFRESH_TOKEN_KEY = "dulce_encanto_refresh_token";
 

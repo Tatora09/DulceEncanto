@@ -1,7 +1,7 @@
 import type { Blog, EstadoSolicitud, OpcionPorcion, Producto, Solicitud } from "../types";
 import { SOLICITUDES_INICIALES } from "../data/solicitudes";
 import { BLOGS_INICIALES } from "../data/blogs";
-import { apiRequest, ApiError } from "./api";
+import { apiRequest, ApiError, resolverUrlImagenProducto } from "./api";
 import { escribir, leer } from "./storage";
 
 export const KEY_SOLICITUDES = "dulce_encanto_solicitudes";
@@ -53,7 +53,7 @@ function adaptarProducto(producto: ProductoApi): Producto {
     descripcion: producto.descripcion ?? "",
     ingredientes: [],
     alergenos: [],
-    imagen: producto.imagenUrl ?? "",
+    imagen: resolverUrlImagenProducto(producto.imagenUrl),
     opcionesPorciones: [{ etiqueta: "Unidad", precio: producto.precio }],
   };
 }

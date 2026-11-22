@@ -29,6 +29,10 @@ export default defineConfig(({mode}) => {
           changeOrigin: true,
           rewrite: (url) => url.replace(/^\/api\/productos/, '/api/v1'),
         },
+        '/images/productos': {
+          target: env.VITE_BACKEND_PRODUCTOS_URL || 'http://localhost:8082',
+          changeOrigin: true,
+        },
         '/api/ventas': {
           target: env.VITE_BACKEND_VENTAS_URL || 'http://localhost:8083',
           changeOrigin: true,

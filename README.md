@@ -33,6 +33,7 @@ El frontend se comunica con tres microservicios independientes orquestados en Do
 | **ms-ventas** | `/api/ventas` | `http://localhost:8083/api/v1` | Procesamiento de órdenes, boletas y descuento de stock. |
 
 *Durante el desarrollo local, Vite redirige automáticamente las peticiones `/api/...` hacia los puertos del backend para evitar bloqueos de CORS.*
+Las imágenes de productos servidas por el backend en `/images/productos/...` también se redirigen a `ms-productos`. En producción, configura `VITE_API_PRODUCTOS_URL` con la URL del servicio para resolver esas rutas en el mismo host.
 
 ---
 
