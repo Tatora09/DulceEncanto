@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Producto } from "../../types";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import { obtenerUsuarios } from "../../services/authService";
 import { useCatalogo } from "../../hooks/useCatalogo";
 import "./Admin.css";
@@ -57,7 +58,7 @@ const Dashboard: React.FC = () => {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
             {productosCriticos.map((producto) => (
               <div key={producto.id} className="stock-alert-item">
-                {producto.imagen && <img src={producto.imagen} alt="" style={{ width: 52, height: 52, borderRadius: 8, objectFit: "cover" }} />}
+                <ImagenConRespaldo src={producto.imagen} alt="" style={{ width: 52, height: 52, borderRadius: 8, objectFit: "cover" }} />
                 <div style={{ flexGrow: 1 }}>
                   <strong style={{ display: "block" }}>{producto.nombre}</strong>
                   <span className="small text-muted">ID: {producto.id}</span>

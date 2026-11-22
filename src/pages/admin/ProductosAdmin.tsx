@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import type { Producto } from "../../types";
 import {
   eliminarProducto,
@@ -107,9 +108,7 @@ const ProductosAdmin: React.FC = () => {
                 return (
                   <tr key={p.id}>
                     <td>
-                      {p.imagen && (
-                        <img src={p.imagen} alt="" width={48} height={48} style={{ objectFit: "cover", borderRadius: 8 }} />
-                      )}
+                      <ImagenConRespaldo src={p.imagen} alt="" width={48} height={48} style={{ objectFit: "cover", borderRadius: 8 }} />
                     </td>
                     <td>{p.codigo}</td>
                     <td>{p.nombre}</td>

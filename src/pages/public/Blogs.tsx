@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import type { Blog } from "../../types";
 import { obtenerBlogs } from "../../services/productsService";
 
@@ -24,7 +25,7 @@ const Blogs: React.FC = () => {
         {blogs.map((b) => (
           <div className="col-12 col-md-6 col-lg-4" key={b.id}>
             <article className="card h-100 shadow-sm">
-              <img src={b.imagen} alt={b.titulo} className="card-img-top" style={{ objectFit: "cover", height: 190 }} />
+              <ImagenConRespaldo src={b.imagen} alt={b.titulo} className="card-img-top" style={{ objectFit: "cover", height: 190 }} />
               <div className="card-body d-flex flex-column">
                 <span className="badge text-bg-light align-self-start mb-2">{b.categoria}</span>
                 <h2 className="h5">{b.titulo}</h2>

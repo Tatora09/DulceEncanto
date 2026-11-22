@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CantidadControl from "../../components/CantidadControl";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import ResumenTotales from "../../components/ResumenTotales";
 import { useCart } from "../../context/CartContext";
 import { calcularTotales } from "../../services/cartService";
@@ -60,7 +61,7 @@ const Carrito: React.FC = () => {
                     <tr key={`${i.id}-${i.opcionPorcion}`} data-testid="fila-carrito">
                       <td>
                         <div className="d-flex align-items-center gap-2">
-                          <img src={i.imagen} alt="" width={56} height={56} className="rounded object-fit-cover" />
+                          <ImagenConRespaldo src={i.imagen} alt="" width={56} height={56} className="rounded object-fit-cover" />
                           <div>
                             <div className="fw-semibold">{i.nombre}</div>
                             <small className="text-muted">{i.opcionPorcion ?? i.porciones}</small>

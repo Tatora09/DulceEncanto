@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="titulo">
+  <title id="titulo">Postre de Dulce Encanto</title>
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff5f2"/>
+      <stop offset="1" stop-color="#f8dce2"/>
+    </linearGradient>
+    <linearGradient id="crema" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf8"/>
+      <stop offset="1" stop-color="#f2d8ca"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#fondo)"/>
+  <circle cx="128" cy="118" r="52" fill="#ffffff" opacity=".38"/>
+  <circle cx="680" cy="160" r="76" fill="#ffffff" opacity=".32"/>
+  <ellipse cx="400" cy="433" rx="226" ry="33" fill="#b96d77" opacity=".18"/>
+  <path d="M205 385h390l-30 55H235z" fill="#fffdf8"/>
+  <path d="M260 284h280v101H260z" fill="#d99080"/>
+  <path d="M260 326h280v24H260z" fill="#fff2df"/>
+  <path d="M260 284c20-27 40-27 60 0s40 27 60 0 40-27 60 0 40 27 60 0 40-27 40 0v30H260z" fill="url(#crema)"/>
+  <path d="M333 283c0-35 22-57 50-57s50 22 50 57" fill="#fffdf8"/>
+  <path d="M382 228c-26-30-13-61 8-66 26 19 24 48-8 66z" fill="#c84e61"/>
+  <path d="M389 219c-2-25 12-40 29-39-1 22-10 34-29 39z" fill="#6d9a69"/>
+  <circle cx="294" cy="365" r="8" fill="#bd5362"/>
+  <circle cx="506" cy="365" r="8" fill="#bd5362"/>
+  <text x="400" y="510" text-anchor="middle" fill="#70454c" font-family="Georgia,serif" font-size="32">Dulce Encanto</text>
+</svg>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import type { Producto } from "../../types";
 import CantidadControl from "../../components/CantidadControl";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import { useCart } from "../../context/CartContext";
 import { formatearPrecio, obtenerProductoPorId, precioOpcion, precioVigente } from "../../services/productsService";
 
@@ -65,7 +66,7 @@ const DetalleProducto: React.FC = () => {
 
       <div className="row g-4">
         <div className="col-12 col-md-6">
-          {producto.imagen && <img src={producto.imagen} alt={producto.nombre} className="img-fluid rounded-4 shadow-sm w-100" style={{ maxHeight: 480, objectFit: "cover" }} />}
+          <ImagenConRespaldo src={producto.imagen} alt={producto.nombre} className="img-fluid rounded-4 shadow-sm w-100" style={{ maxHeight: 480, objectFit: "cover" }} />
         </div>
 
         <div className="col-12 col-md-6">

@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "../../components/ProductCard";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import { useAgregarAlCarrito } from "../../hooks/useAgregarAlCarrito";
 import { useCatalogo } from "../../hooks/useCatalogo";
 
 const PORTADA_POR_DEFECTO =
-  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80";
+  "/images/postre-placeholder.svg";
 
 const EMOJI_CATEGORIA: Record<string, string> = {
   Tortas: "🎂",
@@ -23,7 +24,7 @@ const Home: React.FC = () => {
   const destacadosCatalogo = productos.filter((p) => p.destacado);
   const destacados = (destacadosCatalogo.length ? destacadosCatalogo : productos).slice(0, 3);
   const categorias = [...new Set(productos.map((producto) => producto.categoria))].sort((a, b) => a.localeCompare(b, "es"));
-  const portada = destacados[0]?.imagen ?? PORTADA_POR_DEFECTO;
+  const portada = destacados.find((producto) => producto.imagen.trim())?.imagen || PORTADA_POR_DEFECTO;
 
   return (
     <>
@@ -46,7 +47,7 @@ const Home: React.FC = () => {
 
           <div className="de-hero-visual">
             <div className="de-hero-img">
-              <img src={portada} alt="Postre destacado de Dulce Encanto" />
+              <ImagenConRespaldo src={portada} alt="Postre destacado de Dulce Encanto" />
             </div>
             <div className="de-hero-badge">
               <span className="icon">🍓</span>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import ImagenConRespaldo from "./ImagenConRespaldo";
 import type { Producto } from "../types";
 import { formatearPrecio, precioVigente } from "../services/productsService";
 
@@ -23,14 +24,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ producto, onAgregar }) => {
 
   return (
     <div className="card h-100 shadow-sm" data-testid="product-card">
-      {producto.imagen && (
-        <img
-          src={producto.imagen}
-          className="card-img-top"
-          alt={producto.nombre}
-          style={{ objectFit: "cover", height: 200 }}
-        />
-      )}
+      <ImagenConRespaldo
+        src={producto.imagen}
+        className="card-img-top"
+        alt={producto.nombre}
+        style={{ objectFit: "cover", height: 200 }}
+      />
       <div className="card-body d-flex flex-column">
         <span className="badge text-bg-light align-self-start mb-2">{producto.categoria}</span>
         <h5 className="card-title">

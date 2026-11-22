@@ -101,28 +101,8 @@ export async function obtenerCategorias(): Promise<string[]> {
   return categorias.map((categoria) => categoria.nombre).sort((a, b) => a.localeCompare(b, "es"));
 }
 
-export async function obtenerProductosPorCategoria(categoria: string): Promise<Producto[]> {
-  return (await obtenerProductos()).filter((producto) => producto.categoria === categoria);
-}
-
-export async function obtenerOfertas(): Promise<Producto[]> {
-  return (await obtenerProductos()).filter((producto) => producto.precioOferta !== undefined);
-}
-
 export async function obtenerProductosCriticos(): Promise<Producto[]> {
   return (await obtenerProductos()).filter((producto) => producto.stock <= producto.stockCritico);
-}
-
-export async function buscarProductos(texto: string): Promise<Producto[]> {
-  const q = texto.trim().toLowerCase();
-  const productos = await obtenerProductos();
-  if (!q) return productos;
-  return productos.filter(
-    (producto) =>
-      producto.nombre.toLowerCase().includes(q) ||
-      producto.categoria.toLowerCase().includes(q) ||
-      producto.descripcion.toLowerCase().includes(q),
-  );
 }
 
 // ---------- Solicitudes de postres personalizados ----------

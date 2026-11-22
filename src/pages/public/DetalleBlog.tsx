@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import ImagenConRespaldo from "../../components/ImagenConRespaldo";
 import type { Blog } from "../../types";
 import { obtenerBlogPorSlug } from "../../services/productsService";
 
@@ -31,7 +32,7 @@ const DetalleBlog: React.FC = () => {
       <span className="badge text-bg-light d-block align-self-start mb-2" style={{ width: "fit-content" }}>{blog.categoria}</span>
       <h1 className="h2">{blog.titulo}</h1>
       <p className="text-muted">{blog.autor} · {blog.fecha} · {blog.tiempoLectura}</p>
-      <img src={blog.imagen} alt={blog.titulo} className="img-fluid rounded mb-4" />
+      <ImagenConRespaldo src={blog.imagen} alt={blog.titulo} className="img-fluid rounded mb-4" />
       {/* El contenido viene de los datos propios de la app (HTML ya preparado), no de usuarios. */}
       <div dangerouslySetInnerHTML={{ __html: blog.contenido }} />
     </article>
