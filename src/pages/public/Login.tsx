@@ -26,7 +26,7 @@ const Login: React.FC = () => {
         setError(r.mensaje);
         return;
       }
-      navigate(desde ?? (r.usuario.rol === "Administrador" ? "/admin" : "/"), { replace: true });
+      navigate(desde ?? (r.usuario.rol !== "Cliente" ? "/admin" : "/"), { replace: true });
     } catch (e) {
       setError(e instanceof Error ? e.message : "No se pudo iniciar sesión.");
     } finally {
