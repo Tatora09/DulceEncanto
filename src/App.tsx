@@ -128,6 +128,7 @@ function App() {
 
           <Route path="usuarios" element={protegida("usuarios", <UsuariosAdmin />)} />
           <Route path="usuarios/nuevo" element={protegida("usuarios", <UsuarioForm />, "crear")} />
+          <Route path="usuarios/:id/editar" element={protegida("usuarios", <UsuarioForm />, "editar")} />
           <Route path="usuarios/:id/historial" element={protegida("usuarios", <HistorialCompras />)} />
 
           <Route path="reportes" element={protegida("reportes", <Reportes />)} />

@@ -12,6 +12,12 @@ describe("permisos por rol", () => {
       }
     });
 
+    it("debería poder hacer todas las acciones CRUD de usuarios", () => {
+      for (const accion of ["ver", "crear", "editar", "eliminar"] as const) {
+        expect(puede("Administrador", "usuarios", accion)).toBeTrue();
+      }
+    });
+
     it("debería poder anular órdenes", () => {
       expect(puede("Administrador", "ordenes", "anular")).toBeTrue();
     });

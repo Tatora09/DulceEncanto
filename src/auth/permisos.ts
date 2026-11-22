@@ -20,7 +20,7 @@ const PERMISOS: Record<Rol, Partial<Record<Modulo, Accion[]>>> = {
     ordenes: ["ver", "anular"],
     productos: ["ver", "crear", "editar", "eliminar"],
     categorias: ["ver", "crear", "editar", "eliminar"],
-    usuarios: ["ver", "crear"],
+    usuarios: ["ver", "crear", "editar", "eliminar"],
     reportes: ["ver"],
     perfil: ["ver"],
   },

@@ -2,7 +2,17 @@
  * Pruebas de authService: login, adaptación de roles del backend y mensajes de error.
  * El backend se simula con un espía sobre window.fetch.
  */
-import { KEY_SESION, esAdministrador, esStaff, login, logout, obtenerUsuarioActual, registrarUsuario } from "../services/authService";
+import {
+  KEY_SESION,
+  eliminarUsuario,
+  esAdministrador,
+  esStaff,
+  guardarUsuario,
+  login,
+  logout,
+  obtenerUsuarioActual,
+  registrarUsuario,
+} from "../services/authService";
 import { obtenerAccessToken } from "../services/api";
 import type { Usuario } from "../types";
 
@@ -82,6 +92,24 @@ describe("authService", () => {
       expect(r.campo).toBe("email");
       expect(r.mensaje).toBe("Ya existe una cuenta con este correo.");
     }
+  });
+
+  it("guardarUsuario con id debería actualizar mediante PUT en el endpoint del usuario", async () => {
+    const fetch = responder(200, { id: 12, nombre: "Ana", correo: "ana@duoc.cl", rol: "ADMIN" });
+
+    await guardarUsuario({ id: "12", nombre: "Ana", email: "ana@duoc.cl", rol: "Administrador" });
+
+    expect(fetch.calls.mostRecent().args[0]).toContain("/usuarios/usuarios/12");
+    expect(fetch.calls.mostRecent().args[1]?.method).toBe("PUT");
+  });
+
+  it("eliminarUsuario debería enviar DELETE al endpoint del usuario", async () => {
+    const fetch = responder(204);
+
+    await eliminarUsuario("12");
+
+    expect(fetch.calls.mostRecent().args[0]).toContain("/usuarios/usuarios/12");
+    expect(fetch.calls.mostRecent().args[1]?.method).toBe("DELETE");
   });
 
   it("esStaff debería ser verdadero para Administrador y Vendedor, y falso para Cliente o sin sesión", () => {
